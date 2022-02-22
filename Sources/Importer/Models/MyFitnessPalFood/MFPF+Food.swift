@@ -83,7 +83,7 @@ extension MyFitnessPalFood {
             let baseWeight = secondTotal * baseSize.multiplier
             
             let size = Food.Size()
-            size.name = baseSize.cleanedName
+            size.name = baseSize.cleanedName.capitalized
             size.unit = .g
             size.amount = baseWeight / baseSize.value
             food.sizes.append(size)
