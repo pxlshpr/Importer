@@ -133,7 +133,7 @@ extension MyFitnessPalFood {
         food.servingAmount = baseSize.value
         
         let size = Food.Size()
-        size.name = baseSize.cleanedName
+        size.name = baseSize.cleanedName.capitalized
         
         let total: Double
         /// check if we have any weight size
@@ -174,9 +174,9 @@ extension MyFitnessPalFood {
         }.map { scrapedSize -> Food.Size in
             let remainingSize = Food.Size()
             if let parsed = ServingType.parseServingWithServing(scrapedSize.name) {
-                remainingSize.name = parsed.serving
+                remainingSize.name = parsed.serving.capitalized
             } else {
-                remainingSize.name = scrapedSize.cleanedName
+                remainingSize.name = scrapedSize.cleanedName.capitalized
             }
             remainingSize.unit = .size
             remainingSize.amount = total * scrapedSize.multiplier * baseSize.value
@@ -199,7 +199,7 @@ extension MyFitnessPalFood {
         food.servingUnit = .size
         
         let size = Food.Size()
-        size.name = parsed.name.cleaned
+        size.name = parsed.name.cleaned.capitalized
         size.unit = .g
         size.amount = baseSize.processedSize.g(for: parsed.value, unit: parsed.unit) / baseSize.value
         
@@ -222,9 +222,9 @@ extension MyFitnessPalFood {
         }.map { scrapedSize -> Food.Size in
             let remainingSize = Food.Size()
             if let parsed = ServingType.parseServingWithServing(scrapedSize.name) {
-                remainingSize.name = parsed.serving
+                remainingSize.name = parsed.serving.capitalized
             } else {
-                remainingSize.name = scrapedSize.cleanedName
+                remainingSize.name = scrapedSize.cleanedName.capitalized
             }
             remainingSize.unit = .size
             remainingSize.amount = baseSize.multiplier * scrapedSize.multiplier * baseSize.value
@@ -247,7 +247,7 @@ extension MyFitnessPalFood {
         food.servingUnit = .size
         
         let size = Food.Size()
-        size.name = parsed.name
+        size.name = parsed.name.capitalized
         size.unit = .mL
         size.amount = baseSize.processedSize.ml(for: parsed.value, unit: parsed.unit) / baseSize.value
         
@@ -270,9 +270,9 @@ extension MyFitnessPalFood {
         }.map { scrapedSize -> Food.Size in
             let remainingSize = Food.Size()
             if let parsed = ServingType.parseServingWithServing(scrapedSize.name) {
-                remainingSize.name = parsed.serving
+                remainingSize.name = parsed.serving.capitalized
             } else {
-                remainingSize.name = scrapedSize.cleanedName
+                remainingSize.name = scrapedSize.cleanedName.capitalized
             }
             remainingSize.unit = .size
             remainingSize.amount = baseSize.multiplier * scrapedSize.multiplier * baseSize.value
@@ -298,7 +298,7 @@ extension MyFitnessPalFood {
         let baseWeight = baseSize.processedSize.g(for: baseSize.value, unit: parsed.unit)
         
         let size = Food.Size()
-        size.name = parsed.servingName
+        size.name = parsed.servingName.capitalized
         size.unit = .g
         size.amount = baseWeight / parsed.servingValue
         
@@ -365,7 +365,7 @@ extension MyFitnessPalFood {
         let baseVolume = baseSize.processedSize.ml(for: baseSize.value, unit: parsed.unit)
         
         let size = Food.Size()
-        size.name = parsed.servingName
+        size.name = parsed.servingName.capitalized
         size.unit = .mL
         size.amount = baseVolume / parsed.servingValue
         
@@ -438,7 +438,7 @@ extension MyFitnessPalFood {
         if volumeUnit == .cup {
             /// add this as a size in case it has a description
             let size = Food.Size()
-            size.name = parsed.volumeString
+            size.name = parsed.volumeString.capitalized
             size.amount = 1.0/baseSize.value
             size.unit = .serving
             food.sizes.append(size)
@@ -492,7 +492,7 @@ extension MyFitnessPalFood {
         if parsed.volumeUnit == .cup {
             /// add this as a size in case it has a description
             let size = Food.Size()
-            size.name = parsed.volumeUnit.description
+            size.name = parsed.volumeUnit.description.capitalized
             size.amount = 1.0/parsed.volume
             size.unit = .serving
             food.sizes.append(size)
