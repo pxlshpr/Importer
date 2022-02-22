@@ -533,13 +533,13 @@ extension MyFitnessPalFood {
         for scrapedSize in scrapedSizes {
             let size = Food.Size()
             if scrapedSize.type == .servingWithWeight, let parsed = ServingType.parseServingWithWeight(scrapedSize.name) {
-                size.name = parsed.name
+                size.name = parsed.name.capitalized
             } else if scrapedSize.type == .servingWithVolume, let parsed = ServingType.parseServingWithVolume(scrapedSize.name) {
-                size.name = parsed.name
+                size.name = parsed.name.capitalized
             } else if scrapedSize.type == .servingWithServing, let parsed = ServingType.parseServingWithServing(scrapedSize.name) {
-                size.name = parsed.serving
+                size.name = parsed.serving.capitalized
             } else {
-                size.name = scrapedSize.cleanedName
+                size.name = scrapedSize.cleanedName.capitalized
             }
             size.unit = unit
             size.amount = amount * scrapedSize.multiplier
