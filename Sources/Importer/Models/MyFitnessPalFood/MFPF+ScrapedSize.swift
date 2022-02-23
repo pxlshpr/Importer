@@ -148,3 +148,50 @@ extension MyFitnessPalFood.ScrapedSize: CustomStringConvertible {
         return cleanedName.cleaned
     }
 }
+
+extension MyFitnessPalFood.ScrapedSize {
+    
+    var density: Density? {
+        if type == .volumeWithWeight,
+            let parsed = ServingType.parseVolumeWithWeight(name),
+            let volumeUnit = parsed.volumeUnit
+        {
+            let volume = processedSize.ml(for: value, unit: volumeUnit)
+            let weight = processedSize.g(for: parsed.weight, unit: parsed.weightUnit)
+            return Density(volume: volume, weight: weight)
+        } else if type == .weightWithVolume,
+                  let parsed = ServingType.parseWeightWithVolume(name),
+                  let weightUnit = parsed.weightUnit
+        {
+            let weight = processedSize.g(for: value, unit: weightUnit)
+            let volume = processedSize.ml(for: parsed.volume, unit: parsed.volumeUnit)
+            return Density(volume: volume, weight: weight)
+        }
+        return nil
+    }
+}
+
+extension Food {
+    var density: Density? {
+        Density(volume: densityVolume, weight: densityWeight)
+    }
+}
+
+struct Density {
+    let volume: Double
+    let weight: Double
+    
+    init?(volume: Double, weight: Double) {
+        guard volume > 0 && weight > 0 else {
+            return nil
+        }
+        self.volume = volume
+        self.weight = weight
+    }
+}
+
+extension Density: Equatable {
+    static func ==(lhs: Density, rhs: Density) -> Bool {
+        lhs.volume / lhs.weight == rhs.volume / rhs.weight
+    }
+}
