@@ -73,7 +73,7 @@ extension MyFitnessPalFood {
         )
         
 //        food.scaleNutrientsBy(scale: (food.amount * baseSize.multiplier))
-        food.scaleNutrientsBy(scale: food.amount)
+        food.scaleNutrientsBy(scale: food.amount / baseSize.multiplier)
         return food
     }
     
