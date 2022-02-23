@@ -50,10 +50,12 @@ extension MyFitnessPalFood {
         let food = baseFood
         food.servingUnit = .g
         
-        let weight = (g * baseSize.value)
+        let weight = g * baseSize.value * baseSize.multiplier
+        
+        //TODO: Try setting amount to weight and not setting a serving value
         food.setAmount(basedOn: weight)
 //        food.amount = weight < 100 ? 100 / weight : 1
-        food.servingAmount = (g * baseSize.value)
+        food.servingAmount = weight
         
         let sizesToAdd = scrapedSizes.dropFirst().filter {
             $0.type != .weight && $0.type != .volume
