@@ -48,6 +48,8 @@ extension MyFitnessPalFood {
         }
         
         let food = baseFood
+        //TODO: Make food volume based for those starting with volume too
+        food.unit = .g
         food.servingUnit = .g
         
         //TODO: We weren't correctly considering the multiplier—so check all other cases for this. Check the weight being set correctly, then used correctly in sizes and when scaling nutrients
