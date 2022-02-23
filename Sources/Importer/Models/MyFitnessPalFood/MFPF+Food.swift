@@ -112,23 +112,26 @@ extension MyFitnessPalFood {
             )
             
         } else {
-            let volume = (ml * baseSize.value)
-            food.setAmount(basedOn: volume)
-//            food.amount = volume < 100 ? 100 / volume : 1
-            food.servingAmount = (ml * baseSize.value)
-            food.servingUnit = .mL
+            let volume = ml * baseSize.value / baseSize.multiplier
+            food.unit = .mL
+            food.amount = volume
+            food.servingAmount = 0
+            
+//            food.setAmount(basedOn: volume)
+//            food.servingAmount = volume
+//            food.servingUnit = .mL
             
             let sizesToAdd = scrapedSizes.dropFirst().filter {
                 $0.type != .weight && $0.type != .volume
             }
             food.sizes.append(
                 contentsOf: createSizes(
-                    from: sizesToAdd, unit: .mL, amount: (ml * baseSize.value)
+                    from: sizesToAdd, unit: .mL, amount: volume
                 )
             )
         }
         
-        food.scaleNutrientsBy(scale: (food.amount * baseSize.multiplier))
+        food.scaleNutrientsBy(scale: food.amount * baseSize.multiplier)
         return food
     }
     
