@@ -116,25 +116,45 @@ extension MyFitnessPalFood {
             
         } else {
             let volume = ml * baseSize.value / baseSize.multiplier
-            food.unit = .mL
-            food.amount = volume
-            food.servingAmount = 0
-            
-//            food.setAmount(basedOn: volume)
-//            food.servingAmount = volume
-//            food.servingUnit = .mL
-            
-            let sizesToAdd = scrapedSizes.dropFirst().filter {
-                $0.type != .weight && $0.type != .volume
-            }
-            food.sizes.append(
-                contentsOf: createSizes(
-                    from: sizesToAdd, unit: .mL, amount: volume
+
+            /// if any sizes indicate a density
+            if let volumeWithWeightSize = scrapedSizes.first(where: { $0.type == .volumeWithWeight }),
+               let parsed = ServingType.parseVolumeWithWeight(volumeWithWeightSize.name), let volumeUnit = parsed.volumeUnit {
+
+                let volume = ml * baseSize.value / baseSize.multiplier
+
+                /// determine the density of that particular size
+                food.densityVolume = volumeWithWeightSize.processedSize.ml(for: volumeWithWeightSize.value, unit: volumeUnit)
+                food.densityWeight = baseSize.processedSize.g(for: parsed.weight, unit: parsed.weightUnit)
+
+                let weight = volume * food.densityWeight / food.densityVolume
+                                
+                /// create the food based on weight
+                food.unit = .g
+                food.amount = weight
+                food.servingAmount = 0
+                let sizesToAdd = scrapedSizes.dropFirst().filter {
+                    $0.type != .weight && $0.type != .volume
+                }
+                food.sizes.append(
+                    contentsOf: createSizes(
+                        from: sizesToAdd, unit: .g, amount: weight
+                    )
                 )
-            )
-            
+            } else {
+                food.unit = .mL
+                food.amount = volume
+                food.servingAmount = 0
+                let sizesToAdd = scrapedSizes.dropFirst().filter {
+                    $0.type != .weight && $0.type != .volume
+                }
+                food.sizes.append(
+                    contentsOf: createSizes(
+                        from: sizesToAdd, unit: .mL, amount: volume
+                    )
+                )
+            }
             food.scaleNutrientsBy(scale: food.amount / volume)
-//            food.scaleNutrientsBy(scale: food.amount / volume * baseSize.multiplier)
         }
         
         return food
