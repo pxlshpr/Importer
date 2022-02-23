@@ -568,6 +568,10 @@ extension MyFitnessPalFood {
     func createSizes(from scrapedSizes: [ScrapedSize], unit: SizeUnit, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
         var sizes: [Food.Size] = []
         for scrapedSize in scrapedSizes {
+            
+            /// skip sizes with blank names
+            guard !scrapedSize.name.isEmpty else { continue }
+            
             let size = Food.Size()
             if scrapedSize.type == .servingWithWeight, let parsed = ServingType.parseServingWithWeight(scrapedSize.name) {
                 size.name = parsed.name.capitalized
