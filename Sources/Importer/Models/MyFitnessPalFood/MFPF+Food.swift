@@ -73,7 +73,7 @@ extension MyFitnessPalFood {
         )
         
 //        food.scaleNutrientsBy(scale: (food.amount * baseSize.multiplier))
-        food.scaleNutrientsBy(scale: food.amount * baseSize.multiplier)
+        food.scaleNutrientsBy(scale: food.amount / weight * baseSize.multiplier)
         return food
     }
     
@@ -111,6 +111,8 @@ extension MyFitnessPalFood {
                                 createSizes(from: sizesToAdd, unit: .g, amount: secondTotal, baseFoodSize: size)
             )
             
+            food.scaleNutrientsBy(scale: food.amount * baseSize.multiplier)
+            
         } else {
             let volume = ml * baseSize.value / baseSize.multiplier
             food.unit = .mL
@@ -129,9 +131,10 @@ extension MyFitnessPalFood {
                     from: sizesToAdd, unit: .mL, amount: volume
                 )
             )
+            
+            food.scaleNutrientsBy(scale: food.amount / volume * baseSize.multiplier)
         }
         
-        food.scaleNutrientsBy(scale: food.amount * baseSize.multiplier)
         return food
     }
     
