@@ -4,11 +4,16 @@ import PrepUnits
 public class Food {
     public var name: String = ""
     public var brand: String? = ""
+    
     public var amount: Double = 0.0
     public var unit: FoodUnit = .g
+    public var volumeUnit: VolumeUserUnit? = nil
+    
     public var servingAmount: Double = 0.0
     public var servingUnit: SizeUnit = .g
+    public var servingVolumeUnit: VolumeUserUnit? = nil
     public var servingSize: Size? = nil
+    
     public var energy: Double = 0
     public var carbohydrate: Double = 0
     public var fat: Double = 0
