@@ -76,7 +76,7 @@ extension MyFitnessPalFood {
                 food.amount = volume
                 food.servingAmount = 0
                 
-                let volumeUnit = ServingType.volumeUnit(of: cleanedName)
+                let volumeUnit = ServingType.volumeUnit(of: baseSize.cleanedName)
                 
                 let sizesToAdd = scrapedSizes.dropFirst().filter {
                     $0.type != .weight && $0.type != .volume
