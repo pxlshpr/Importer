@@ -1,4 +1,3 @@
-#if !os(macOS)
 import Foundation
 
 public extension Double {
@@ -21,4 +20,3 @@ public extension Double {
         return (self * divisor).rounded() / divisor
     }
 }
-#endif
