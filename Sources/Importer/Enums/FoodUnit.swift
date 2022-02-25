@@ -5,7 +5,7 @@ public enum FoodUnit: Int16, CaseIterable {
     case mL
     case serving
     
-    var description: String {
+    public var description: String {
         switch self {
         case .g:
             return "g"
