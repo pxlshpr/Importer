@@ -1,4 +1,5 @@
 import Foundation
+import SwiftSugar
 
 let RxFileWithTimestamp = #"([0-9]+)_(.*).txt"#
 let RxContainsTwoNumbers =  #"[^0-9,.\/]+[0-9,.\/]+[^0-9,.\/]+( |\()[0-9,.\/]+[^0-9,.\/]+ea.\)$"#

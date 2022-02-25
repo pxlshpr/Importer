@@ -4,9 +4,11 @@ import SwiftSugar
 public typealias MfpSearchCompletionHandler = (_ foods: [Food]) -> Void
 
 public class Engine: NSObject, ObservableObject {
-    public static let shared = Engine()
-    
-    func getProductName(forUpc upc: String) -> String? {
+//    public static let shared = Engine()
+}
+
+public extension Engine {
+    static func getProductName(forUpc upc: String) -> String? {
         let urlString = "https://www.upcitemdb.com/upc/\(upc)"
         guard let html = urlString.htmlContents, let name = html.secondCapturedGroup(using: RxUpcLookup) else {
             print("Couldn't parse UPC HTML: \(urlString)")
@@ -15,7 +17,7 @@ public class Engine: NSObject, ObservableObject {
         return name
     }
     
-    func getMfpSearchResults(for searchString: String, completion: MfpSearchCompletionHandler? = nil) {
+    static func getMfpSearchResults(for searchString: String, completion: MfpSearchCompletionHandler? = nil) {
         let urlString = searchString.mfpSearchUrlString
         guard let html = urlString.htmlContents, let jsonString = html.secondCapturedGroup(using: RxMfpResults) else {
             print("Couldn't parse MFP HTML: \(urlString)")
@@ -48,7 +50,7 @@ public class Engine: NSObject, ObservableObject {
 //        NotificationCenter.default.post(name: .didGetFoodResults, object: nil, userInfo: userInfo)
     }
     
-    func findScannedUPC(_ upc: String) {
+    static func findScannedUPC(_ upc: String) {
         guard let name = getProductName(forUpc: upc) else {
             print("Couldn't find any results for that UPC")
             NotificationCenter.default.post(name: .didGetFoodResults, object: nil)
