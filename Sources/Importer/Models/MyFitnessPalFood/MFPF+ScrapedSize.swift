@@ -16,7 +16,7 @@ extension MyFitnessPalFood {
     }
 }
 
-extension MyFitnessPalFood.ScrapedSize {
+public extension MyFitnessPalFood.ScrapedSize {
     var processedSize: ProcessedSize {
         ProcessedSize(servingSize: self)
     }

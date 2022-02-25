@@ -5,7 +5,7 @@ public struct ProcessedSize {
     public var correctType: ServingType? = nil
     public var foods: [MyFitnessPalFood] = []
     
-    init(servingSize: MyFitnessPalFood.ScrapedSize) {
+    public init(servingSize: MyFitnessPalFood.ScrapedSize) {
         self.name = servingSize.name
         self.type = servingSize.type
     }

@@ -1,7 +1,7 @@
 import Foundation
 
 extension MyFitnessPalFood {
-    var food: Food? {
+    public var food: Food? {
         guard let firstType = firstType else {
             print("No firstType from: \(scrapedSizes.count) sizes")
             return nil
