@@ -1,4 +1,5 @@
 import Foundation
+import PrepUnits
 
 extension MyFitnessPalFood {
     public var food: Food? {
@@ -42,7 +43,7 @@ extension MyFitnessPalFood {
     
     //MARK: - Helpers
     
-    func createSizes(from scrapedSizes: [ScrapedSize], unit: ImporterSizeUnit, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
+    func createSizes(from scrapedSizes: [ScrapedSize], unit: SizeUnit, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
         var sizes: [Food.Size] = []
         for scrapedSize in scrapedSizes {
             

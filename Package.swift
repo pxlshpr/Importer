@@ -18,6 +18,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/pxlshpr/SwiftSugar", from: "0.0.1"),
+        .package(url: "https://github.com/pxlshpr/PrepUnits", from: "0.0.1"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -25,7 +26,8 @@ let package = Package(
         .target(
             name: "Importer",
             dependencies: [
-                .product(name: "SwiftSugar", package: "swiftsugar")
+                .product(name: "SwiftSugar", package: "swiftsugar"),
+                .product(name: "PrepUnits", package: "prepunits")
             ]),
         .testTarget(
             name: "ImporterTests",

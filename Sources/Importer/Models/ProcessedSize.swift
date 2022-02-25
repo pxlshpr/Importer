@@ -1,4 +1,5 @@
 import SwiftSugar
+import PrepUnits
 
 public struct ProcessedSize {
     public var name: String
@@ -86,21 +87,20 @@ extension ProcessedSize {
         return value * multiplier
     }
 
-    func ml(for value: Double, unit: ImporterVolumeUnit) -> Double {
+    func ml(for value: Double, unit: VolumeUnit) -> Double {
         let multiplier: Double
         switch unit {
-        case .ml:
+        case .mL:
             multiplier = 1
-        case .l:
-            multiplier = 1000
+//        case .l:
+//            multiplier = 1000
         case .cup:
-            // TODO: Handle Metric vs Imperial etc.
             multiplier = 236.588
-        case .tsp:
+        case .teaspoon:
             multiplier = 4.92892
-        case .tbsp:
+        case .tablespoon:
             multiplier = 14.7868
-        case .floz:
+        case .fluidOunce:
             multiplier = 29.5735
         case .gallon:
             multiplier = 3785.411784

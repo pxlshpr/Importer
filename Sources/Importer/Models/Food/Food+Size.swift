@@ -1,11 +1,12 @@
 import Foundation
+import PrepUnits
 
 extension Food {
     public class Size: Identifiable {
         public var id = UUID()
         public var name: String = ""
         public var amount: Double = 0
-        public var unit: ImporterSizeUnit = .g
+        public var unit: SizeUnit = .g
         public var size: Food.Size? = nil
     }
 }

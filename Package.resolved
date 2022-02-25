@@ -2,12 +2,21 @@
   "object": {
     "pins": [
       {
+        "package": "PrepUnits",
+        "repositoryURL": "https://github.com/pxlshpr/PrepUnits",
+        "state": {
+          "branch": null,
+          "revision": "9495a86c748dabe51f2100b64ad3385d701035b2",
+          "version": "0.0.3"
+        }
+      },
+      {
         "package": "SwiftSugar",
         "repositoryURL": "https://github.com/pxlshpr/SwiftSugar",
         "state": {
           "branch": null,
-          "revision": "808962681d6cb2e576dd12e9959ccdeb62fe06de",
-          "version": "0.0.20"
+          "revision": "02cdd87161c81161222d3a1f46494642efdd5e9d",
+          "version": "0.0.23"
         }
       }
     ]
