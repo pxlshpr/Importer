@@ -6,7 +6,7 @@ public enum SizeUnit: Int16, CaseIterable {
     case serving
     case size
     
-    var description: String {
+    public var description: String {
         switch self {
         case .g:
             return "g"

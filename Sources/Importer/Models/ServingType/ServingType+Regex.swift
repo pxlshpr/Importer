@@ -1,7 +1,7 @@
 import Foundation
 
 extension ServingType {
-    var regex: String {
+    public var regex: String {
         switch self {
         case .weight:
             return Rx.weight
@@ -29,12 +29,12 @@ extension ServingType {
     }
 }
 
-extension ServingType {
+public extension ServingType {
     struct Rx {
     }
 }
 
-extension ServingType.Rx {
+public extension ServingType.Rx {
     //MARK: - Components
     
     static let pluralSuffix =

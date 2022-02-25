@@ -1,6 +1,6 @@
 import Foundation
 
-extension MyFitnessPalFood {
+public extension MyFitnessPalFood {
     var firstType: ServingType? {
         scrapedSizes.sorted { $0.index < $1.index }.first?.type
     }

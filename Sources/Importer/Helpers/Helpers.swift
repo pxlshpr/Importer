@@ -13,6 +13,21 @@ public func scrapeHtml(from urlString: String) -> String {
     }
 }
 
+public func getJson(from jsonString: String) -> [String: Any] {
+    guard let data = jsonString.data(using: .utf8)
+    else {
+        fatalError("Couldn't scrape JSON object for food")
+    }
+    do {
+        guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+            fatalError("Couldn't parse JSON")
+        }
+        return json
+    } catch let error as NSError {
+        fatalError("Failed to parse JSON: \(error.localizedDescription)")
+    }
+}
+
 //public func writeHtmlFiles(_ htmls: [String: String]) {
 //    for urlString in htmls.keys {
 //        guard let html = htmls[urlString] else {
@@ -109,20 +124,6 @@ public func scrapeHtml(from urlString: String) -> String {
 //    html.extractSecondCapturedGroup(using: RegEx.Food)
 //}
 //
-public func getJson(from jsonString: String) -> [String: Any] {
-    guard let data = jsonString.data(using: .utf8)
-    else {
-        fatalError("Couldn't scrape JSON object for food")
-    }
-    do {
-        guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-            fatalError("Couldn't parse JSON")
-        }
-        return json
-    } catch let error as NSError {
-        fatalError("Failed to parse JSON: \(error.localizedDescription)")
-    }
-}
 
 //func copyFilesFromBundleToDocumentsFolderWith(fileExtension: String) {
 //    guard let resourcesPath = Bundle.main.resourcePath else {

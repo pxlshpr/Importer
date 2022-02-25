@@ -13,7 +13,7 @@ public struct MyFitnessPalFood: Identifiable {
     public let createdAt: Date
     public var processedSizes: [ProcessedSize] = []
 
-    mutating func appendSize(processedSize: ProcessedSize) {
+    public mutating func appendSize(processedSize: ProcessedSize) {
         guard !processedSizes.contains(processedSize) else {
             return
         }
