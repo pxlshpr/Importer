@@ -1,4 +1,5 @@
 import Foundation
+import PrepUnits
 
 extension MyFitnessPalFood {
     var foodStartingWithVolume: Food? {
@@ -72,11 +73,12 @@ extension MyFitnessPalFood {
                     )
                 )
             } else {
-                food.unit = .mL
-                food.amount = volume
-                food.servingAmount = 0
+                food.unit = .serving
+                food.amount = 1
                 
+                food.servingAmount = baseSize.value / baseSize.multiplier
                 let volumeUnit = ServingType.volumeUnit(of: baseSize.cleanedName)
+                food.servingVolumeUnit = volumeUnit?.volumeUserUnit
                 
                 let sizesToAdd = scrapedSizes.dropFirst().filter {
                     $0.type != .weight && $0.type != .volume
@@ -91,5 +93,29 @@ extension MyFitnessPalFood {
         }
         
         return food
+    }
+}
+
+extension VolumeUnit {
+    
+    var volumeUserUnit: VolumeUserUnit? {
+        switch self {
+        case .mL:
+            return VolumeMilliliterUserUnit.ml
+        case .teaspoon:
+            return VolumeTeaspoonUserUnit.teaspoonMetric
+        case .tablespoon:
+            return VolumeTablespoonUserUnit.tablespoonMetric
+        case .fluidOunce:
+            return VolumeFluidOunceUserUnit.fluidOunceUSNutritionLabeling
+        case .cup:
+            return VolumeCupUserUnit.cupUSLegal
+        case .pint:
+            return VolumePintUserUnit.pintImperial
+        case .quart:
+            return VolumeQuartUserUnit.quartImperial
+        case .gallon:
+            return VolumeGallonUserUnit.gallonUSLiquid
+        }
     }
 }
