@@ -4,7 +4,7 @@ import SwiftSugar
 public typealias MfpSearchCompletionHandler = (_ foods: [Food]) -> Void
 
 public class Engine: NSObject, ObservableObject {
-    static let shared = Engine()
+    public static let shared = Engine()
     
     func getProductName(forUpc upc: String) -> String? {
         let urlString = "https://www.upcitemdb.com/upc/\(upc)"
