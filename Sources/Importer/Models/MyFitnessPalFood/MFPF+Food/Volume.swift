@@ -76,6 +76,7 @@ extension MyFitnessPalFood {
                 food.unit = .serving
                 food.amount = 1
                 
+                food.servingUnit = .mL
                 food.servingAmount = baseSize.value / baseSize.multiplier
                 let volumeUnit = ServingType.volumeUnit(of: baseSize.cleanedName)
                 food.servingVolumeUnit = volumeUnit?.volumeUserUnit
