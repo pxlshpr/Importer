@@ -47,7 +47,7 @@ extension MyFitnessPalFood {
                 }
                 var cleanedUnit = unit
                 
-                if let doubleBrackets = unit.extractFirstCapturedGroup(using: ServingType.Rx.doubleBracketedServing) {
+                if let doubleBrackets = unit.firstCapturedGroup(using: ServingType.Rx.doubleBracketedServing) {
                     cleanedUnit = unit.replacingOccurrences(of: doubleBrackets, with: "")
                     print("🧹 Clean Unit: \(unit) → \(cleanedUnit)")
 //                    print("Consider: \(servingSizes.first!["unit"]!)")
@@ -60,8 +60,8 @@ extension MyFitnessPalFood {
         }
         self.scrapedSizes = sizes
         
-        if let timestamp = urlString.extractFirstCapturedGroup(using: RxFileWithTimestamp),
-           let urlSlug = urlString.extractSecondCapturedGroup(using: RxFileWithTimestamp),
+        if let timestamp = urlString.firstCapturedGroup(using: RxFileWithTimestamp),
+           let urlSlug = urlString.secondCapturedGroup(using: RxFileWithTimestamp),
            let date = timestamp.dateFromTimestamp
         {
             self.urlSlug = urlSlug

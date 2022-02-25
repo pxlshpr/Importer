@@ -42,7 +42,7 @@ extension MyFitnessPalFood.ScrapedSize {
     
     var type: ServingType {
         for type in ServingType.allCases {
-            if name.matchesRegex(type.regex, caseInsensitive: true) {
+            if name.matchesRegex(type.regex) {
                 return type
             }
         }

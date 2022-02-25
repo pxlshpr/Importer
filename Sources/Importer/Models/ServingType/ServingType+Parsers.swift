@@ -5,7 +5,7 @@ extension ServingType {
     //MARK: - Weight
     static func weightUnit(of string: String) -> WeightUnit? {
         for unit in WeightUnit.allCases {
-            if string.matchesRegex(unit.regex, caseInsensitive: true) {
+            if string.matchesRegex(unit.regex) {
                 return unit
             }
         }
@@ -13,10 +13,10 @@ extension ServingType {
     }
     
     static func parseWeightWithServing(_ string: String) -> (unit: WeightUnit, servingValue: Double, servingName: String)? {
-        var groups = string.extractCapturedGroups(using: Rx.weightWithServingExtractor)
+        var groups = string.capturedGroups(using: Rx.weightWithServingExtractor)
         var unit: String, servingAmount: String, servingName: String
         if groups.count < 4 {
-            groups = string.extractCapturedGroups(using: Rx.weightWithServingHavingSizeNumberExtractor)
+            groups = string.capturedGroups(using: Rx.weightWithServingHavingSizeNumberExtractor)
             guard groups.count > 2 else {
                 return nil
             }
@@ -52,7 +52,7 @@ extension ServingType {
     }
     
     static func parseServingWithWeight(_ string: String) -> (name: String, value: Double, unit: WeightUnit)? {
-        let groups = string.extractCapturedGroups(using: Rx.servingWithWeightExtractor)
+        let groups = string.capturedGroups(using: Rx.servingWithWeightExtractor)
         guard groups.count > 1 else {
             return nil
         }
@@ -79,7 +79,7 @@ extension ServingType {
     }
     
     static func parseServingWithVolume(_ string: String) -> (name: String, value: Double, unit: VolumeUnit)? {
-        let groups = string.extractCapturedGroups(using: Rx.servingWithVolumeExtractor)
+        let groups = string.capturedGroups(using: Rx.servingWithVolumeExtractor)
         guard groups.count > 1 else {
             return nil
         }
@@ -116,7 +116,7 @@ extension ServingType {
     }
     
     static func parseVolumeWithWeight(_ string: String) -> (volumeUnit: VolumeUnit?, volumeString: String, weight: Double, weightUnit: WeightUnit)? {
-        let groups = string.extractCapturedGroups(using: Rx.volumeWithWeightExtractor)
+        let groups = string.capturedGroups(using: Rx.volumeWithWeightExtractor)
         guard groups.count > 2 else {
             return nil
         }
@@ -141,7 +141,7 @@ extension ServingType {
     }
     
     static func parseWeightWithVolume(_ string: String) -> (weightUnit: WeightUnit?, weightString: String, volume: Double, volumeUnit: VolumeUnit)? {
-        let groups = string.extractCapturedGroups(using: Rx.weightWithVolumeExtractor)
+        let groups = string.capturedGroups(using: Rx.weightWithVolumeExtractor)
         guard groups.count > 2 else {
             return nil
         }
@@ -169,7 +169,7 @@ extension ServingType {
     
     static func volumeUnit(of string: String) -> VolumeUnit? {
         for unit in VolumeUnit.allCases {
-            if string.matchesRegex(unit.regex, caseInsensitive: true) {
+            if string.matchesRegex(unit.regex) {
                 return unit
             }
         }
@@ -177,10 +177,10 @@ extension ServingType {
     }
 
     static func parseVolumeWithServing(_ string: String) -> (unit: VolumeUnit, servingValue: Double, servingName: String)? {
-        var groups = string.extractCapturedGroups(using: Rx.volumeWithServingExtractor)
+        var groups = string.capturedGroups(using: Rx.volumeWithServingExtractor)
         var unit: String, servingAmount: String, servingName: String
         if groups.count < 4 {
-            groups = string.extractCapturedGroups(using: Rx.volumeWithServingHavingSizeNumberExtractor)
+            groups = string.capturedGroups(using: Rx.volumeWithServingHavingSizeNumberExtractor)
             guard groups.count > 2 else {
                 return nil
             }
@@ -216,7 +216,7 @@ extension ServingType {
     }
     
     static func parseServingWithServing(_ string: String) -> (serving: String, constituentAmount: Double, constituentName: String)? {
-        let groups = string.extractCapturedGroups(using: Rx.servingWithServingExtractor)
+        let groups = string.capturedGroups(using: Rx.servingWithServingExtractor)
         guard groups.count > 2 else {
             return nil
         }

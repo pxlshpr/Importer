@@ -1,3 +1,5 @@
+import SwiftSugar
+
 public struct ProcessedSize {
     public var name: String
     public var type: ServingType

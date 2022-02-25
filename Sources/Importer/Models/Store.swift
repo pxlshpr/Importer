@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftSugar
 
 public typealias MfpSearchCompletionHandler = (_ foods: [Food]) -> Void
 
@@ -7,8 +8,7 @@ public class Engine: NSObject, ObservableObject {
     
     func getProductName(forUpc upc: String) -> String? {
         let urlString = "https://www.upcitemdb.com/upc/\(upc)"
-        let html = scrapeHtml(from: urlString)
-        guard let name = html.extractSecondCapturedGroup(using: RxUpcLookup) else {
+        guard let html = urlString.htmlContents, let name = html.secondCapturedGroup(using: RxUpcLookup) else {
             print("Couldn't parse UPC HTML: \(urlString)")
             return nil
         }
@@ -17,15 +17,14 @@ public class Engine: NSObject, ObservableObject {
     
     func getMfpSearchResults(for searchString: String, completion: MfpSearchCompletionHandler? = nil) {
         let urlString = searchString.mfpSearchUrlString
-        let html = scrapeHtml(from: urlString)
-        guard let jsonString = html.extractSecondCapturedGroup(using: RxMfpResults) else {
+        guard let html = urlString.htmlContents, let jsonString = html.secondCapturedGroup(using: RxMfpResults) else {
             print("Couldn't parse MFP HTML: \(urlString)")
             NotificationCenter.default.post(name: .didGetFoodResults, object: nil)
             return
         }
         
-        let json = getJson(from: "\(jsonString)}")
-        guard let items = json["items"] as? [Any] else {
+        let fixedJsonString = "\(jsonString)}"
+        guard let json = fixedJsonString.asJson, let items = json["items"] as? [Any] else {
             NotificationCenter.default.post(name: .didGetFoodResults, object: nil)
             return
         }
