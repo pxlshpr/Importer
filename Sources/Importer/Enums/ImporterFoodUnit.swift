@@ -1,6 +1,6 @@
 import Foundation
 
-public enum FoodUnit: Int16, CaseIterable {
+public enum ImporterFoodUnit: Int16, CaseIterable {
     case g = 1
     case mL
     case serving

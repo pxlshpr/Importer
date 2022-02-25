@@ -1,6 +1,6 @@
 import Foundation
 
-public enum SizeUnit: Int16, CaseIterable {
+public enum ImporterSizeUnit: Int16, CaseIterable {
     case g = 1
     case mL
     case serving

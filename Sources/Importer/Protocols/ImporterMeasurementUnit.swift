@@ -1,5 +1,5 @@
 import Foundation
 
-protocol MeasurementUnit {
+protocol ImporterMeasurementUnit {
     var regex: String { get }
 }

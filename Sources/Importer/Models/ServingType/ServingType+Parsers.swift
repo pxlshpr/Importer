@@ -3,8 +3,8 @@ import Foundation
 extension ServingType {
 
     //MARK: - Weight
-    static func weightUnit(of string: String) -> WeightUnit? {
-        for unit in WeightUnit.allCases {
+    static func weightUnit(of string: String) -> ImporterWeightUnit? {
+        for unit in ImporterWeightUnit.allCases {
             if string.matchesRegex(unit.regex) {
                 return unit
             }
@@ -12,7 +12,7 @@ extension ServingType {
         return nil
     }
     
-    static func parseWeightWithServing(_ string: String) -> (unit: WeightUnit, servingValue: Double, servingName: String)? {
+    static func parseWeightWithServing(_ string: String) -> (unit: ImporterWeightUnit, servingValue: Double, servingName: String)? {
         var groups = string.capturedGroups(using: Rx.weightWithServingExtractor)
         var unit: String, servingAmount: String, servingName: String
         if groups.count < 4 {
@@ -51,7 +51,7 @@ extension ServingType {
         return (weightUnit, servingAmountValue, servingName)
     }
     
-    static func parseServingWithWeight(_ string: String) -> (name: String, value: Double, unit: WeightUnit)? {
+    static func parseServingWithWeight(_ string: String) -> (name: String, value: Double, unit: ImporterWeightUnit)? {
         let groups = string.capturedGroups(using: Rx.servingWithWeightExtractor)
         guard groups.count > 1 else {
             return nil
@@ -78,7 +78,7 @@ extension ServingType {
         return (name, amountValue, weightUnit)
     }
     
-    static func parseServingWithVolume(_ string: String) -> (name: String, value: Double, unit: VolumeUnit)? {
+    static func parseServingWithVolume(_ string: String) -> (name: String, value: Double, unit: ImporterVolumeUnit)? {
         let groups = string.capturedGroups(using: Rx.servingWithVolumeExtractor)
         guard groups.count > 1 else {
             return nil
@@ -115,7 +115,7 @@ extension ServingType {
         return (name, amountValue, volumeUnit)
     }
     
-    static func parseVolumeWithWeight(_ string: String) -> (volumeUnit: VolumeUnit?, volumeString: String, weight: Double, weightUnit: WeightUnit)? {
+    static func parseVolumeWithWeight(_ string: String) -> (volumeUnit: ImporterVolumeUnit?, volumeString: String, weight: Double, weightUnit: ImporterWeightUnit)? {
         let groups = string.capturedGroups(using: Rx.volumeWithWeightExtractor)
         guard groups.count > 2 else {
             return nil
@@ -140,7 +140,7 @@ extension ServingType {
         return (volumeUnit(of: volume), volume, amountValue, weightUnit)
     }
     
-    static func parseWeightWithVolume(_ string: String) -> (weightUnit: WeightUnit?, weightString: String, volume: Double, volumeUnit: VolumeUnit)? {
+    static func parseWeightWithVolume(_ string: String) -> (weightUnit: ImporterWeightUnit?, weightString: String, volume: Double, volumeUnit: ImporterVolumeUnit)? {
         let groups = string.capturedGroups(using: Rx.weightWithVolumeExtractor)
         guard groups.count > 2 else {
             return nil
@@ -167,8 +167,8 @@ extension ServingType {
     
     //MARK: - Volume
     
-    static func volumeUnit(of string: String) -> VolumeUnit? {
-        for unit in VolumeUnit.allCases {
+    static func volumeUnit(of string: String) -> ImporterVolumeUnit? {
+        for unit in ImporterVolumeUnit.allCases {
             if string.matchesRegex(unit.regex) {
                 return unit
             }
@@ -176,7 +176,7 @@ extension ServingType {
         return nil
     }
 
-    static func parseVolumeWithServing(_ string: String) -> (unit: VolumeUnit, servingValue: Double, servingName: String)? {
+    static func parseVolumeWithServing(_ string: String) -> (unit: ImporterVolumeUnit, servingValue: Double, servingName: String)? {
         var groups = string.capturedGroups(using: Rx.volumeWithServingExtractor)
         var unit: String, servingAmount: String, servingName: String
         if groups.count < 4 {

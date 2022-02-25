@@ -1,6 +1,6 @@
 import Foundation
 
-enum WeightUnit: CaseIterable, MeasurementUnit {
+enum ImporterWeightUnit: CaseIterable, ImporterMeasurementUnit {
 
     case g, kg, mg, oz, lb
     

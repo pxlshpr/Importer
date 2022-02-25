@@ -1,6 +1,6 @@
 import Foundation
 
-enum VolumeUnit: CaseIterable, MeasurementUnit {
+enum ImporterVolumeUnit: CaseIterable, ImporterMeasurementUnit {
 
     case ml, l, cup, tsp, tbsp, floz, gallon, quart, pint
     
