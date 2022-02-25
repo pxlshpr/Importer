@@ -98,7 +98,7 @@ extension String {
     }
 }
 
-extension String {
+public extension String {
     func matchesRegex(_ regex: String, caseInsensitive: Bool = false) -> Bool {
         let options: String.CompareOptions = caseInsensitive ? [.regularExpression, .caseInsensitive] : [.regularExpression]
         return range(of: regex, options: options, range: nil, locale: nil) != nil

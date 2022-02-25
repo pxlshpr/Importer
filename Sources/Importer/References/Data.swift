@@ -1,4 +1,3 @@
-#if !os(macOS)
 import Foundation
 
 public struct Data {
@@ -149,4 +148,3 @@ public struct Data {
         "https://www.myfitnesspal.com/food/calories/mcdonalds-southwest-dressing-188825450"
     ]
 }
-#endif

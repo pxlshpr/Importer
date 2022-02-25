@@ -1,7 +1,7 @@
 import Foundation
 
 extension MyFitnessPalFood {
-    init?(json: [String: Any], urlString: String) {
+    public init?(json: [String: Any], urlString: String) {
         guard
             let item = json["item"] as? [String: Any],
             let nutrients = item["nutritional_contents"] as? [String: Any],

@@ -25,29 +25,6 @@ public func scrapeHtml(from urlString: String) -> String {
 //    }
 //}
 //
-extension String {
-    var mfpPrefix: String {
-        "https://www.myfitnesspal.com/food/calories/"
-    }
-    var filenameForMfpFile: String {
-        return "\(Int(Date().timeIntervalSince1970))_"
-            .appending(filenameForMfpFileWithoutTimestamp)
-    }
-    
-    var filenameForMfpFileWithoutTimestamp: String {
-        return replacingOccurrences(of: mfpPrefix, with: "")
-            .appending(".txt")
-    }
-
-    var urlForMfp: URL {
-        URL(string: "\(mfpPrefix)\(self.replacingOccurrences(of: ".txt", with: ""))")
-        ?? defaultUrl
-    }
-}
-
-var defaultUrl: URL {
-    URL(string: "https://www.myfitnesspal.com")!
-}
 
 //func urlHasBeenDownloaded(_ urlString: String) -> Bool {
 //    fileUrlForExistingMfpFood(withUrlString: urlString) != nil

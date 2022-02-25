@@ -31,7 +31,7 @@ extension ProcessedSize: Hashable, Equatable {
 
 extension ProcessedSize {
 
-    var measurementString: String? {
+    public var measurementString: String? {
         if let g = g {
             if type == .volumeWithWeight {
                 guard let parsed = ServingType.parseVolumeWithWeight(name) else {
