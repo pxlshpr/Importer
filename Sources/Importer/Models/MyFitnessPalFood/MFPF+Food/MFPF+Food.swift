@@ -44,29 +44,50 @@ extension MyFitnessPalFood {
     //MARK: - Helpers
     
     func createSizes(from scrapedSizes: [ScrapedSize], unit: SizeUnit, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
-        var sizes: [Food.Size] = []
-        for scrapedSize in scrapedSizes {
-            
-            /// skip sizes with blank names
-            guard !scrapedSize.name.isEmpty else { continue }
-            
-            let size = Food.Size()
-            if scrapedSize.type == .servingWithWeight, let parsed = ServingType.parseServingWithWeight(scrapedSize.name) {
-                size.name = parsed.name.capitalized
-            } else if scrapedSize.type == .servingWithVolume, let parsed = ServingType.parseServingWithVolume(scrapedSize.name) {
-                size.name = parsed.name.capitalized
-            } else if scrapedSize.type == .servingWithServing, let parsed = ServingType.parseServingWithServing(scrapedSize.name) {
-                size.name = parsed.serving.capitalized
-            } else {
-                size.name = scrapedSize.cleanedName.capitalized
-            }
-            size.unit = unit
-            size.amount = amount * scrapedSize.multiplier
-            
-            if !sizes.contains(size) && size != baseFoodSize {
-                sizes.append(size)
-            }
+        scrapedSizes
+            .filter { !$0.name.isEmpty }
+            .map { Food.Size($0) }
+            .removingDuplicates()
+            .filter { $0 != baseFoodSize }
+    }
+}
+
+extension Food.Size {
+    convenience init(_ scrapedSize: MyFitnessPalFood.ScrapedSize) {
+        self.init()
+        
+        let size = Food.Size()
+
+        size.name = scrapedSize.cleanedName.capitalized
+        
+        if scrapedSize.type == .servingWithWeight, let parsed = ServingType.parseServingWithWeight(scrapedSize.name)
+        {
+            size.name = parsed.name.capitalized
         }
-        return sizes
+        else if scrapedSize.type == .servingWithVolume, let parsed = ServingType.parseServingWithVolume(scrapedSize.name)
+        {
+            size.name = parsed.name.capitalized
+        }
+        else if scrapedSize.type == .servingWithServing, let parsed = ServingType.parseServingWithServing(scrapedSize.name)
+        {
+            size.name = parsed.serving.capitalized
+        }
+        
+        size.unit = unit
+        size.amount = amount * scrapedSize.multiplier
+    }
+}
+
+extension Array where Element: Hashable {
+    func removingDuplicates() -> [Element] {
+        var addedDict = [Element: Bool]()
+
+        return filter {
+            addedDict.updateValue(true, forKey: $0) == nil
+        }
+    }
+
+    mutating func removeDuplicates() {
+        self = self.removingDuplicates()
     }
 }
