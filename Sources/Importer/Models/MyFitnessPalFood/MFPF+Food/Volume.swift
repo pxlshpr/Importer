@@ -47,7 +47,7 @@ extension MyFitnessPalFood {
             food.servingUnit = .mL
             food.servingAmount = baseSize.value / baseSize.multiplier
             let volumeUnit = ServingType.volumeUnit(of: baseSize.cleanedName)
-            food.servingVolumeUnit = volumeUnit?.volumeUserUnit
+            food.servingVolumeUnit = volumeUnit.volume?.unit?.volumeUserUnit
             
             //TODO: Do this for weight too
             /// if any sizes indicate a density

@@ -136,7 +136,7 @@ extension ServingType {
         unit = unit.trimmingCharacters(in: .whitespaces)
 
         guard let amountValue = amount.doubleFromExtractedNumber,
-                let volumeUnit = volumeUnit(of: unit) else {
+              let volumeUnit = volumeUnit(of: unit).volume?.unit else {
             return nil
         }
         
@@ -164,7 +164,7 @@ extension ServingType {
         
         guard let amountValue = amount.doubleFromExtractedNumber,
               let weightUnit = weightUnit(of: weight).weight?.unit,
-              let volumeUnit = volumeUnit(of: volume)
+              let volumeUnit = volumeUnit(of: volume).volume?.unit
         else {
             return nil
         }
@@ -192,7 +192,7 @@ extension ServingType {
         volume = volume.trimmingCharacters(in: .whitespaces)
         
         guard let amountValue = amount.doubleFromExtractedNumber,
-              let volumeUnit = volumeUnit(of: volume),
+              let volumeUnit = volumeUnit(of: volume).volume?.unit,
               let weightUnit = weightUnit(of: weight).weight?.unit
         else {
             return nil
@@ -204,13 +204,13 @@ extension ServingType {
     
     //MARK: - Volume
     
-    static func volumeUnit(of string: String) -> VolumeUnit? {
+    static func volumeUnit(of string: String) -> (volume: ParsedVolume?, placeholder: String?) {
         for unit in VolumeUnit.allCases {
             if string.matchesRegex(unit.regex) {
-                return unit
+                return ((unit, nil, nil), nil)
             }
         }
-        return nil
+        return (nil, nil)
     }
 
     static func parseVolumeWithServing(_ string: String) -> (unit: VolumeUnit, servingValue: Double, servingName: String)? {
@@ -245,7 +245,7 @@ extension ServingType {
         servingAmount = servingAmount.trimmingCharacters(in: .whitespaces)
         servingName = servingName.trimmingCharacters(in: .whitespaces)
         
-        guard let servingAmountValue = servingAmount.doubleFromExtractedNumber, let volumeUnit = volumeUnit(of: unit) else {
+        guard let servingAmountValue = servingAmount.doubleFromExtractedNumber, let volumeUnit = volumeUnit(of: unit).volume?.unit else {
             return nil
         }
         

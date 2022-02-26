@@ -179,7 +179,7 @@ extension ProcessedSize {
     var ml: Double? {
         switch type {
         case .volume:
-            if let unit = ServingType.volumeUnit(of: name) {
+            if let unit = ServingType.volumeUnit(of: name).volume?.unit {
                 return ml(for: 1.0, unit: unit)
             }
             return nil
