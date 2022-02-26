@@ -124,7 +124,7 @@ extension ProcessedSize {
                 print("⚠️ Got: 'nil' for: \(name)")
                 return nil
             }
-            return g(for: parsed.value, unit: parsed.unit)
+            return g(for: parsed.servingAmount, unit: parsed.weightUnit)
         case .volumeWithWeight:
             guard let parsed = ServingType.parseVolumeWithWeight(name) else {
                 print("⚠️ Got: 'nil' for: \(name)")
@@ -169,11 +169,14 @@ extension ProcessedSize {
             }
             return nil
         case .servingWithVolume:
-            guard let parsed = ServingType.parseServingWithVolume(name) else {
+            guard let parsed = ServingType.parseServingWithVolume(name),
+                  let servingAmount = parsed.servingAmount,
+                  let volumeUnit = parsed.volumeUnit
+            else {
                 print("⚠️ Got: 'nil' for: \(name)")
                 return nil
             }
-            return ml(for: parsed.value, unit: parsed.unit)
+            return ml(for: servingAmount, unit: volumeUnit)
         case .weightWithVolume:
             guard let parsed = ServingType.parseWeightWithVolume(name) else {
                 print("⚠️ Got: 'nil' for: \(name)")

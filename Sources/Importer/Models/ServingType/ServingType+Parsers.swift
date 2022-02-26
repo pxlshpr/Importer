@@ -15,10 +15,11 @@ import PrepUnits
 //typealias parseVolumeWithServing = (unit: VolumeUnit, servingValue: Double, servingName: String)?
 //typealias servingWithServing = (serving: String, constituentAmount: Double, constituentName: String)?
 
-typealias ParseResult = (weightAmount: Double?, weightUnit: ImporterWeightUnit?, weightString: String?,
-                         volumeAmount: Double?, volumeUnit: VolumeUnit?, volumeString: String?,
-                         servingAmount: Double?, servingName: String?,
-                         sizeAmount: Double?, sizeName: String?)
+typealias ParsedWeight = (amount: Double?, unit: ImporterWeightUnit?, string: String?)
+typealias ParsedVolume = (amount: Double?, unit: VolumeUnit?, string: String?)
+typealias ParsedServing = (amount: Double?, name: String?)
+
+typealias ParseResult = (weight: ParsedWeight?, volume: ParsedVolume?, serving: ParsedServing?, servingSize: ParsedServing?)
 
 extension ServingType {
 
@@ -71,7 +72,7 @@ extension ServingType {
         return (weightUnit, servingAmountValue, servingName)
     }
     
-    static func parseServingWithWeight(_ string: String) -> (name: String, value: Double, unit: ImporterWeightUnit)? {
+    static func parseServingWithWeight(_ string: String) -> (servingName: String, servingAmount: Double, weightUnit: ImporterWeightUnit)? {
         let groups = string.capturedGroups(using: Rx.servingWithWeightExtractor)
         guard groups.count > 1 else {
             return nil
@@ -98,7 +99,7 @@ extension ServingType {
         return (name, amountValue, weightUnit)
     }
     
-    static func parseServingWithVolume(_ string: String) -> (name: String, value: Double, unit: VolumeUnit)? {
+    static func parseServingWithVolume(_ string: String) -> (servingName: String?, servingAmount: Double?, volumeUnit: VolumeUnit?)? {
         let groups = string.capturedGroups(using: Rx.servingWithVolumeExtractor)
         guard groups.count > 1 else {
             return nil

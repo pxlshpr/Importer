@@ -41,7 +41,7 @@ extension MyFitnessPalFood {
                 print("Couldn't parse servingWithWeight: \(scrapedSize)")
                 return nil
             }
-            s.name = parsed.name
+            s.name = parsed.servingName
             s.unit = .size
             s.amount = baseSize.multiplier * scrapedSize.multiplier * baseWeight / size.amount
             s.size = size

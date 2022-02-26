@@ -12,9 +12,9 @@ extension MyFitnessPalFood {
         food.servingUnit = .size
         
         let size = Food.Size()
-        size.name = parsed.name.cleaned.capitalized
+        size.name = parsed.servingName.cleaned.capitalized
         size.unit = .g
-        size.amount = baseSize.processedSize.g(for: parsed.value, unit: parsed.unit) / baseSize.value
+        size.amount = baseSize.processedSize.g(for: parsed.servingAmount, unit: parsed.weightUnit) / baseSize.value
         
         food.setAmount(basedOn: size.amount)
 //        food.amount = size.amount < 100 ? 100 / size.amount : 1

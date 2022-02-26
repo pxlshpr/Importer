@@ -81,7 +81,7 @@ extension Food.Size {
         guard let parsed = ServingType.parseServingWithWeight(name) else {
             throw ParseError.unableToParse
         }
-        self.name = parsed.name
+        self.name = parsed.servingName
     }
 
     func processServingWithServing(name: String) throws {
@@ -92,14 +92,18 @@ extension Food.Size {
     }
     
     func processServingWithVolume(scrapedSize: MyFitnessPalFood.ScrapedSize, unit: SizeUnit, amount: Double) throws {
-        guard let parsed = ServingType.parseServingWithVolume(scrapedSize.name) else {
+        guard let parsed = ServingType.parseServingWithVolume(scrapedSize.name),
+              let servingName = parsed.servingName,
+              let servingAmount = parsed.servingAmount,
+              let volumeUnit = parsed.volumeUnit
+        else {
             throw ParseError.unableToParse
         }
         
-        self.name = parsed.name
+        self.name = servingName
         self.unit = .mL
-        self.volumeUnit = parsed.unit
-        self.amount = parsed.value
+        self.volumeUnit = volumeUnit
+        self.amount = servingAmount
     }
 
     enum ParseError: Error {

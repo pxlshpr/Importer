@@ -35,7 +35,7 @@ extension MyFitnessPalFood {
                     print("Couldn't parse servingWithVolume: \(scrapedSize)")
                     return nil
                 }
-                s.name = parsed.name
+                s.name = parsed.servingName
                 s.unit = .size
                 s.amount = baseSize.multiplier * scrapedSize.multiplier * baseSize.value
                 s.size = size
