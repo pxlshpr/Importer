@@ -23,13 +23,13 @@ typealias ParseResult = (weightAmount: Double?, weightUnit: ImporterWeightUnit?,
 extension ServingType {
 
     //MARK: - Weight
-    static func weightUnit(of string: String) -> ImporterWeightUnit? {
+    static func weightUnit(of string: String) -> (weightUnit: ImporterWeightUnit?, placeholder: String?) {
         for unit in ImporterWeightUnit.allCases {
             if string.matchesRegex(unit.regex) {
-                return unit
+                return (unit, nil)
             }
         }
-        return nil
+        return (nil, nil)
     }
     
     static func parseWeightWithServing(_ string: String) -> (unit: ImporterWeightUnit, servingValue: Double, servingName: String)? {
@@ -64,7 +64,7 @@ extension ServingType {
         servingAmount = servingAmount.trimmingCharacters(in: .whitespaces)
         servingName = servingName.trimmingCharacters(in: .whitespaces)
         
-        guard let servingAmountValue = servingAmount.doubleFromExtractedNumber, let weightUnit = weightUnit(of: unit) else {
+        guard let servingAmountValue = servingAmount.doubleFromExtractedNumber, let weightUnit = weightUnit(of: unit).weightUnit else {
             return nil
         }
         
@@ -92,7 +92,7 @@ extension ServingType {
         unit = unit.trimmingCharacters(in: .whitespaces)
         
         guard let amountValue = amount.doubleFromExtractedNumber,
-                let weightUnit = weightUnit(of: unit) else {
+                let weightUnit = weightUnit(of: unit).weightUnit else {
             return nil
         }
         return (name, amountValue, weightUnit)
@@ -153,7 +153,7 @@ extension ServingType {
         weight = weight.trimmingCharacters(in: .whitespaces)
         
         guard let amountValue = amount.doubleFromExtractedNumber,
-              let weightUnit = weightUnit(of: weight)
+              let weightUnit = weightUnit(of: weight).weightUnit
         else {
             return nil
         }
@@ -182,7 +182,7 @@ extension ServingType {
         else {
             return nil
         }
-        return (weightUnit(of: weight), weight, amountValue, volumeUnit)
+        return (weightUnit(of: weight).weightUnit, weight, amountValue, volumeUnit)
     }
     
     //MARK: - Volume

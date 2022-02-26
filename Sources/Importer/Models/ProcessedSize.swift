@@ -115,7 +115,7 @@ extension ProcessedSize {
     var g: Double? {
         switch type {
         case .weight:
-            if let unit = ServingType.weightUnit(of: name) {
+            if let unit = ServingType.weightUnit(of: name).weightUnit {
                 return g(for: 1.0, unit: unit)
             }
             return nil
