@@ -57,22 +57,24 @@ extension MyFitnessPalFood {
 
                 let sizesToAdd = scrapedSizes.dropFirst().filter {
                     $0.type != .weight && $0.type != .volume
-                }.filter { sizeToAdd in
-                    /// filter out other sizes with a different density
-                    if let sizeDensity = sizeToAdd.density, let foodDensity = food.density, sizeDensity != foodDensity {
-                        return false
-                    }
-                    
-                    /// filter out sizes with the same ratio/multiplier and volumeUnit
-//                    if sizeToAdd.multiplier == baseSize.multiplier,
-//                       let volumeUnit = sizeToAdd.volumeUnit,
-//                        {
+                }
+                .removingSizesWithDifferentDensityToBaseSize()
+//                .filter { sizeToAdd in
+//                    /// filter out other sizes with a different density
+//                    if let sizeDensity = sizeToAdd.density, let foodDensity = food.density, sizeDensity != foodDensity {
 //                        return false
 //                    }
-                    
-                    /// keep any that don't have densities
-                    return true
-                }
+//
+//                    /// filter out sizes with the same ratio/multiplier and volumeUnit
+////                    if sizeToAdd.multiplier == baseSize.multiplier,
+////                       let volumeUnit = sizeToAdd.volumeUnit,
+////                        {
+////                        return false
+////                    }
+//
+//                    /// keep any that don't have densities
+//                    return true
+//                }
                 
                 food.sizes.append(
                     contentsOf: createSizes(
@@ -139,6 +141,51 @@ extension MyFitnessPalFood {
         }
         
         return food
+    }
+}
+
+public extension Array where Element == MyFitnessPalFood.ScrapedSize {
+    
+    func removingSizesWithDifferentDensityToBaseSize() -> [Element] {
+        return filter { size in
+            if let sizeDensity = size.density,
+               let baseDensity = baseDensity,
+               sizeDensity != baseDensity
+            {
+                /// has a density that is different to baseDensity, so do not include it
+                return false
+            }
+            
+            /// either has no density or matches density of baseDensity, so include it
+            return true
+        }
+    }
+    
+    /// Multiplier/VolumeUnit duplicates
+    func removingDuplicatesWithSameMultiplierAndVolumeUnit() -> [Element] {
+        var addedArray = [Element]()
+
+        return filter { size in
+            if !addedArray.contains(where: { addedSize in
+                addedSize.multiplier == size.multiplier
+                && addedSize.volumeUnit == size.volumeUnit
+            }) {
+                addedArray.append(size)
+                /// new multiplier/volumeUnit combo—so include it
+                return true
+            } else {
+                /// we already have that multiplier/volumeUnit combo—so do not include it
+                return false
+            }
+        }
+    }
+
+    mutating func removeDuplicates() {
+        self = self.removingDuplicatesWithSameMultiplierAndVolumeUnit()
+    }
+    
+    mutating func removeSizesWithDifferentDensityToBaseSize() {
+        self = self.removingSizesWithDifferentDensityToBaseSize()
     }
 }
 
