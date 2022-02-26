@@ -38,7 +38,7 @@ extension MyFitnessPalFood {
         }.compactMap { scrapedSize -> Food.Size? in
             let s = Food.Size()
             guard let parsed = ServingType.parseServingWithVolume(scrapedSize.name),
-                  let servingName = parsed.servingName
+                  let servingName = parsed.serving?.name
             else {
                 print("Couldn't parse servingWithVolume: \(scrapedSize)")
                 return nil

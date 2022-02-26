@@ -42,10 +42,12 @@ extension ProcessedSize {
                     return nil
                 }
                 //TODO: remove this conditional and make volumeUnit (and weightUnit in the mirrored one non-optional), since it can't fail
-                if let volumeUnit = parsed.volumeUnit {
+                if let volumeUnit = parsed.volume?.unit {
                     return "\(ml(for: 1.0, unit: volumeUnit)) mL = \(g.cleanWithoutRounding) g"
+                } else if let volumeString = parsed.volume?.string {
+                    return "\(volumeString) = \(g.cleanWithoutRounding) g"
                 } else {
-                    return "\(parsed.volumeString) = \(g.cleanWithoutRounding) g"
+                    return "Unsupported"
                 }
             } else {
                 return "\(g.cleanWithoutRounding) g"
@@ -120,17 +122,23 @@ extension ProcessedSize {
             }
             return nil
         case .servingWithWeight:
-            guard let parsed = ServingType.parseServingWithWeight(name) else {
+            guard let parsed = ServingType.parseServingWithWeight(name),
+                  let servingAmount = parsed.serving?.amount,
+                  let weightUnit = parsed.weight?.unit
+            else {
                 print("⚠️ Got: 'nil' for: \(name)")
                 return nil
             }
-            return g(for: parsed.servingAmount, unit: parsed.weightUnit)
+            return g(for: servingAmount, unit: weightUnit)
         case .volumeWithWeight:
-            guard let parsed = ServingType.parseVolumeWithWeight(name) else {
+            guard let parsed = ServingType.parseVolumeWithWeight(name),
+                  let weightAmount = parsed.weight?.amount,
+                  let weightUnit = parsed.weight?.unit
+            else {
                 print("⚠️ Got: 'nil' for: \(name)")
                 return nil
             }
-            return g(for: parsed.weight, unit: parsed.weightUnit)
+            return g(for: weightAmount, unit: weightUnit)
         default:
             return nil
         }
@@ -173,8 +181,8 @@ extension ProcessedSize {
             return nil
         case .servingWithVolume:
             guard let parsed = ServingType.parseServingWithVolume(name),
-                  let servingAmount = parsed.servingAmount,
-                  let volumeUnit = parsed.volumeUnit
+                  let servingAmount = parsed.serving?.amount,
+                  let volumeUnit = parsed.volume?.unit
             else {
                 print("⚠️ Got: 'nil' for: \(name)")
                 return nil

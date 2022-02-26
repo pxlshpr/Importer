@@ -40,11 +40,13 @@ extension MyFitnessPalFood {
             scrapedSize.type == .servingWithWeight
         }.compactMap { scrapedSize -> Food.Size? in
             let s = Food.Size()
-            guard let parsed = ServingType.parseServingWithWeight(scrapedSize.name) else {
+            guard let parsed = ServingType.parseServingWithWeight(scrapedSize.name),
+                  let serving = parsed.serving
+            else {
                 print("Couldn't parse servingWithWeight: \(scrapedSize)")
                 return nil
             }
-            s.name = parsed.servingName
+            s.name = serving.name
             s.unit = .size
             s.amount = baseSize.multiplier * scrapedSize.multiplier * baseWeight / size.amount
             s.size = size

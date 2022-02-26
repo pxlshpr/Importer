@@ -5,9 +5,9 @@ extension MyFitnessPalFood {
         /// protect against division by 0 with baseSize.value check
         guard let baseSize = baseSize, baseSize.value > 0,
               let parsed = ServingType.parseServingWithVolume(baseSize.name),
-              let servingName = parsed.servingName,
-              let servingAmount = parsed.servingAmount,
-              let volumeUnit = parsed.volumeUnit
+              let serving = parsed.serving,
+              let servingAmount = serving.amount,
+              let volumeUnit = parsed.volume?.unit
         else {
             return nil
         }
@@ -16,7 +16,7 @@ extension MyFitnessPalFood {
         food.servingUnit = .size
         
         let size = Food.Size()
-        size.name = servingName.capitalized
+        size.name = serving.name.capitalized
         size.unit = .mL
         size.amount = baseSize.processedSize.ml(for: servingAmount, unit: volumeUnit) / baseSize.value
         

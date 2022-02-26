@@ -154,10 +154,12 @@ extension MyFitnessPalFood.ScrapedSize {
     var density: Density? {
         if type == .volumeWithWeight,
             let parsed = ServingType.parseVolumeWithWeight(name),
-            let volumeUnit = parsed.volumeUnit
+            let volumeUnit = parsed.volume?.unit,
+            let weightAmount = parsed.weight?.amount,
+            let weightUnit = parsed.weight?.unit
         {
             let volume = processedSize.ml(for: value, unit: volumeUnit)
-            let weight = processedSize.g(for: parsed.weight, unit: parsed.weightUnit)
+            let weight = processedSize.g(for: weightAmount, unit: weightUnit)
             return Density(volume: volume, weight: weight)
         } else if type == .weightWithVolume,
                   let parsed = ServingType.parseWeightWithVolume(name),

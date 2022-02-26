@@ -3,7 +3,11 @@ import Foundation
 extension MyFitnessPalFood {
     var foodStartingWithServingWithWeight: Food? {
         /// protect against division by 0 with baseSize.value check
-        guard let baseSize = baseSize, baseSize.value > 0, let parsed = ServingType.parseServingWithWeight(baseSize.name)
+        guard let baseSize = baseSize, baseSize.value > 0,
+              let parsed = ServingType.parseServingWithWeight(baseSize.name),
+              let serving = parsed.serving,
+              let servingAmount = serving.amount,
+              let weightUnit = parsed.weight?.unit
         else {
             return nil
         }
@@ -12,9 +16,9 @@ extension MyFitnessPalFood {
         food.servingUnit = .size
         
         let size = Food.Size()
-        size.name = parsed.servingName.cleaned.capitalized
+        size.name = serving.name.cleaned.capitalized
         size.unit = .g
-        size.amount = baseSize.processedSize.g(for: parsed.servingAmount, unit: parsed.weightUnit) / baseSize.value
+        size.amount = baseSize.processedSize.g(for: servingAmount, unit: weightUnit) / baseSize.value
         
         food.setAmount(basedOn: size.amount)
 //        food.amount = size.amount < 100 ? 100 / size.amount : 1

@@ -3,7 +3,12 @@ import Foundation
 extension MyFitnessPalFood {
     var foodStartingWithVolumeWithWeight: Food? {
         /// protect against division by 0 with baseSize.value check
-        guard let baseSize = baseSize, baseSize.value > 0, let parsed = ServingType.parseVolumeWithWeight(baseSize.name), let volumeUnit = parsed.volumeUnit
+        guard let baseSize = baseSize, baseSize.value > 0,
+              let parsed = ServingType.parseVolumeWithWeight(baseSize.name),
+              let volumeUnit = parsed.volume?.unit,
+              let volumeString = parsed.volume?.string,
+              let weightAmount = parsed.weight?.amount,
+              let weightUnit = parsed.weight?.unit
         else {
             return nil
         }
@@ -16,13 +21,13 @@ extension MyFitnessPalFood {
 //        food.amount = food.servingAmount < 100 ? 100 / food.servingAmount : 1
         
         /// now get the weight unit
-        food.densityWeight = baseSize.processedSize.g(for: parsed.weight, unit: parsed.weightUnit)
+        food.densityWeight = baseSize.processedSize.g(for: weightAmount, unit: weightUnit)
         food.densityVolume = food.servingAmount
         
         if volumeUnit == .cup {
             /// add this as a size in case it has a description
             let size = Food.Size()
-            size.name = parsed.volumeString.capitalized
+            size.name = volumeString.capitalized
             size.amount = 1.0/baseSize.value
             size.unit = .serving
             food.sizes.append(size)
@@ -33,7 +38,7 @@ extension MyFitnessPalFood {
                 let s = Food.Size()
                 guard
                     let parsed = ServingType.parseServingWithVolume(scrapedSize.name),
-                        let servingName = parsed.servingName
+                    let servingName = parsed.serving?.name
                 else {
                     print("Couldn't parse servingWithVolume: \(scrapedSize)")
                     return nil
