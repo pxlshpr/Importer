@@ -1,9 +1,11 @@
 import Foundation
 import PrepUnits
 
-//extension String {
-//    var parseServing(type: ServingType) ->
-//}
+extension String {
+    func parseServing(type: ServingType) -> ParsedServingName {
+        ParsedServingName(self, type: type)
+    }
+}
 
 //typealias weight = (ImporterWeightUnit)?
 //typealias weightWithServing = (unit: ImporterWeightUnit, servingValue: Double, servingName: String)?
@@ -20,6 +22,371 @@ typealias ParsedVolume = (unit: VolumeUnit?, amount: Double?, string: String?)
 typealias ParsedServing = (name: String, amount: Double?)
 
 typealias ParseResult = (weight: ParsedWeight?, volume: ParsedVolume?, serving: ParsedServing?, servingSize: ParsedServing?)
+
+struct ParsedServingName {
+    struct ParsedWeight {
+        let unit: ImporterWeightUnit?
+        let amount: Double?
+        let string: String?
+        init(unit: ImporterWeightUnit? = nil, amount: Double? = nil, string: String? = nil) {
+            self.unit = unit
+            self.amount = amount
+            self.string = string
+        }
+    }
+    
+    struct ParsedVolume {
+        let unit: VolumeUnit?
+        let amount: Double?
+        let string: String?
+        init(unit: VolumeUnit? = nil, amount: Double? = nil, string: String? = nil) {
+            self.unit = unit
+            self.amount = amount
+            self.string = string
+        }
+    }
+    
+    struct ParsedServing {
+        let name: String
+        let amount: Double?
+        init(name: String, amount: Double? = nil) {
+            self.name = name
+            self.amount = amount
+        }
+    }
+    
+    let weight: ParsedWeight?
+    let volume: ParsedVolume?
+    let serving: ParsedServing?
+    let servingSize: ParsedServing?
+
+    init(weight: ParsedWeight? = nil, volume: ParsedVolume? = nil, serving: ParsedServing? = nil, sevingSize: ParsedServing? = nil) {
+        self.weight = weight
+        self.volume = volume
+        self.serving = serving
+        self.servingSize = serving
+    }
+    
+    init(_ name: String, type: ServingType) {
+        var weight: ParsedWeight? = nil
+        var volume: ParsedVolume? = nil
+        var serving: ParsedServing? = nil
+        var servingSize: ParsedServing? = nil
+        
+        switch type {
+        case .weight:
+            weight = Self.parseWeight(from: name)
+            
+        case .volume:
+            volume = Self.parseVolume(from: name)
+            
+        case .serving:
+            serving = ParsedServing(name: name)
+            
+        case .servingWithWeight:
+            let parsed = Self.parseServingWithWeight(from: name)
+            serving = parsed?.serving
+            weight = parsed?.weight
+            
+        case .servingWithVolume:
+            let parsed = Self.parseServingWithVolume(from: name)
+            serving = parsed?.serving
+            volume = parsed?.volume
+            
+        case .weightWithServing:
+            let parsed = Self.parseWeightWithServing(from: name)
+            weight = parsed?.weight
+            serving = parsed?.serving
+            
+        case .volumeWithServing:
+            let parsed = Self.parseVolumeWithServing(from: name)
+            volume = parsed?.volume
+            serving = parsed?.serving
+            
+        case .servingWithServing:
+            let parsed = Self.parseServingWithServing(from: name)
+            serving = parsed?.serving
+            servingSize = parsed?.servingSize
+            
+        case .volumeWithWeight:
+            let parsed = Self.parseVolumeWithWeight(from: name)
+            volume = parsed?.volume
+            weight = parsed?.weight
+            
+        case .weightWithVolume:
+            let parsed = Self.parseWeightWithVolume(from: name)
+            weight = parsed?.weight
+            volume = parsed?.volume
+            
+        default:
+            break
+        }
+        self.init(weight: weight, volume: volume, serving: serving, sevingSize: servingSize)
+    }
+    
+    static func parseWeight(from string: String) -> ParsedWeight? {
+        for unit in ImporterWeightUnit.allCases {
+            if string.matchesRegex(unit.regex) {
+                return ParsedWeight(unit: unit)
+            }
+        }
+        return nil
+    }
+
+    static func parseVolume(from string: String) -> ParsedVolume? {
+        for unit in VolumeUnit.allCases {
+            if string.matchesRegex(unit.regex) {
+                return ParsedVolume(unit: unit)
+            }
+        }
+        return nil
+    }
+    
+    static func parseWeightWithServing(from string: String) -> (weight: ParsedWeight, serving: ParsedServing)? {
+        var groups = string.capturedGroups(using: ServingType.Rx.weightWithServingExtractor)
+        var unit: String, servingAmount: String, servingName: String
+        if groups.count < 4 {
+            groups = string.capturedGroups(using: ServingType.Rx.weightWithServingHavingSizeNumberExtractor)
+            guard groups.count > 2 else {
+                return nil
+            }
+            unit = groups[0]
+            servingAmount = "1"
+            servingName = groups[2]
+            
+        } else {
+            unit = groups[0]
+            if groups.count == 5 {
+                servingAmount = groups[3]
+                servingName = groups[4]
+            } else {
+                servingAmount = groups[2]
+                servingName = groups[3]
+            }
+        }
+        if servingName.hasPrefix("(") {
+            servingName.removeFirst(1)
+        }
+        if servingName.hasSuffix(")") {
+            servingName.removeLast(1)
+        }
+        
+        servingAmount = servingAmount.trimmingCharacters(in: .whitespaces)
+        servingName = servingName.trimmingCharacters(in: .whitespaces)
+        
+        guard let servingAmountValue = servingAmount.doubleFromExtractedNumber, let weightUnit = parseWeight(from: unit)?.unit else {
+            return nil
+        }
+        
+        let weight = ParsedWeight(unit: weightUnit)
+        let serving = ParsedServing(name: servingName, amount: servingAmountValue)
+        return (weight, serving)
+    }
+
+    static func parseServingWithWeight(from string: String) -> (serving: ParsedServing, weight: ParsedWeight)? {
+        let groups = string.capturedGroups(using: ServingType.Rx.servingWithWeightExtractor)
+        guard groups.count > 1 else {
+            return nil
+        }
+        var name, amount, unit: String
+        name = groups[0]
+        amount = groups[1]
+        unit = groups[2]
+
+        if name.hasSuffix("(") {
+            name.removeLast(1)
+        }
+        if name.hasSuffix("-") {
+            name.removeLast(1)
+        }
+        name = name.trimmingCharacters(in: .whitespaces)
+        amount = amount.trimmingCharacters(in: .whitespaces)
+        unit = unit.trimmingCharacters(in: .whitespaces)
+        
+        guard let amountValue = amount.doubleFromExtractedNumber,
+              let weightUnit = parseWeight(from: unit)?.unit else {
+            return nil
+        }
+        
+        let serving = ParsedServing(name: name, amount: amountValue)
+        let weight = ParsedWeight(unit: weightUnit)
+        return (serving, weight)
+    }
+    
+    static func parseServingWithVolume(from string: String) -> (serving: ParsedServing, volume: ParsedVolume)? {
+        let groups = string.capturedGroups(using: ServingType.Rx.servingWithVolumeExtractor)
+        guard groups.count > 1 else {
+            return nil
+        }
+        var name, amount, unit: String
+        name = groups[0]
+        if groups.count == 4 {
+            /// check if mixedNumber first (in which case take the first match)
+            if string.containsMixedNumber {
+                amount = groups[1]
+            } else {
+                amount = groups[2]
+            }
+            unit = groups[3]
+        } else {
+            amount = groups[1]
+            unit = groups[2]
+        }
+
+        if name.hasSuffix("(") {
+            name.removeLast(1)
+        }
+        if name.hasSuffix("-") {
+            name.removeLast(1)
+        }
+        name = name.trimmingCharacters(in: .whitespaces)
+        amount = amount.trimmingCharacters(in: .whitespaces)
+        unit = unit.trimmingCharacters(in: .whitespaces)
+
+        guard let amountValue = amount.doubleFromExtractedNumber,
+              let volumeUnit = parseVolume(from: unit)?.unit else {
+            return nil
+        }
+        
+        let serving = ParsedServing(name: name, amount: amountValue)
+        let volume = ParsedVolume(unit: volumeUnit)
+        return (serving, volume)
+    }
+
+    static func parseVolumeWithWeight(from string: String) -> (volume: ParsedVolume?, weight: ParsedWeight?)? {
+        let groups = string.capturedGroups(using: ServingType.Rx.volumeWithWeightExtractor)
+        guard groups.count > 2 else {
+            return nil
+        }
+        var volume, amount, weight: String
+        volume = groups[0].cleaned
+        amount = groups[1]
+        weight = groups[2]
+        if groups.count == 4, groups[3].count > 0 {
+            volume += " " + groups[3]
+        }
+        
+        volume = volume.trimmingCharacters(in: .whitespaces)
+        amount = amount.trimmingCharacters(in: .whitespaces)
+        weight = weight.trimmingCharacters(in: .whitespaces)
+        
+        guard let amountValue = amount.doubleFromExtractedNumber,
+              let weightUnit = parseWeight(from: weight)?.unit,
+              let volumeUnit = parseVolume(from: volume)?.unit
+        else {
+            return nil
+        }
+        
+        let parsedVolume = ParsedVolume(unit: volumeUnit, string: volume)
+        let parsedWeight = ParsedWeight(unit: weightUnit, amount: amountValue)
+        return (parsedVolume, parsedWeight)
+    }
+    
+    static func parseWeightWithVolume(from string: String) -> (weight: ParsedWeight?, volume: ParsedVolume?)? {
+        let groups = string.capturedGroups(using: ServingType.Rx.weightWithVolumeExtractor)
+        guard groups.count > 2 else {
+            return nil
+        }
+        var volume, amount, weight: String
+        weight = groups[0]
+        amount = groups[1]
+        volume = groups[2]
+        if groups.count == 4, groups[3].count > 0 {
+            weight += " " + groups[3]
+        }
+
+        weight = weight.trimmingCharacters(in: .whitespaces)
+        amount = amount.trimmingCharacters(in: .whitespaces)
+        volume = volume.trimmingCharacters(in: .whitespaces)
+        
+        guard let amountValue = amount.doubleFromExtractedNumber,
+              let volumeUnit = parseVolume(from: volume)?.unit,
+              let weightUnit = parseWeight(from: weight)?.unit
+        else {
+            return nil
+        }
+        let parsedWeight = ParsedWeight(unit: weightUnit, string: weight)
+        let parsedVolume = ParsedVolume(unit: volumeUnit, amount: amountValue)
+        return (parsedWeight, parsedVolume)
+    }
+    
+    static func parseVolumeWithServing(from string: String) -> (volume: ParsedVolume?, serving: ParsedServing?)? {
+        var groups = string.capturedGroups(using: ServingType.Rx.volumeWithServingExtractor)
+        var unit: String, servingAmount: String, servingName: String
+        if groups.count < 4 {
+            groups = string.capturedGroups(using: ServingType.Rx.volumeWithServingHavingSizeNumberExtractor)
+            guard groups.count > 2 else {
+                return nil
+            }
+            unit = groups[0]
+            servingAmount = "1"
+            servingName = groups[2]
+            
+        } else {
+            unit = groups[0]
+            if groups.count == 5 {
+                servingAmount = groups[3]
+                servingName = groups[4]
+            } else {
+                servingAmount = groups[2]
+                servingName = groups[3]
+            }
+        }
+        if servingName.hasPrefix("(") {
+            servingName.removeFirst(1)
+        }
+        if servingName.hasSuffix(")") {
+            servingName.removeLast(1)
+        }
+        
+        servingAmount = servingAmount.trimmingCharacters(in: .whitespaces)
+        servingName = servingName.trimmingCharacters(in: .whitespaces)
+        
+        guard let servingAmountValue = servingAmount.doubleFromExtractedNumber,
+              let volumeUnit = parseVolume(from: unit)?.unit
+        else {
+            return nil
+        }
+        
+        let volume = ParsedVolume(unit: volumeUnit)
+        let serving = ParsedServing(name: servingName, amount: servingAmountValue)
+        return (volume, serving)
+    }
+    
+    static func parseServingWithServing(from string: String) -> (serving: ParsedServing?, servingSize: ParsedServing?)? {
+        let groups = string.capturedGroups(using: ServingType.Rx.servingWithServingExtractor)
+        guard groups.count > 2 else {
+            return nil
+        }
+        var serving: String, servingSizeValue: String, servingSizeName: String
+        serving = groups[0]
+        servingSizeValue = groups[1]
+        servingSizeName = groups[2]
+        
+        if servingSizeName.hasSuffix(" )") {
+            servingSizeName.removeLast(2)
+        }
+        /// trims `taco wraps)` but leaves `leaf (large)` alone
+        if servingSizeName.hasSuffix(")"), !servingSizeName.contains("(") {
+            servingSizeName.removeLast(1)
+        }
+        /// `of pan` → `pan`
+        if servingSizeName.hasPrefix("of ") {
+            servingSizeName.removeFirst(3)
+        }
+        
+        servingSizeName = servingSizeName.trimmingCharacters(in: .whitespaces)
+        servingSizeValue = servingSizeValue.trimmingCharacters(in: .whitespaces)
+
+        guard let constituentValue = servingSizeValue.doubleFromExtractedNumber else {
+            return nil
+        }
+        
+        let parsedServing = ParsedServing(name: serving)
+        let parsedServingSize = ParsedServing(name: servingSizeName, amount: constituentValue)
+        return (parsedServing, parsedServingSize)
+    }
+}
 
 extension ServingType {
 
