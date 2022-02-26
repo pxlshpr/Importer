@@ -57,8 +57,10 @@ extension MyFitnessPalFood {
             scrapedSize.type == .servingWithServing
         }.map { scrapedSize -> Food.Size in
             let s = Food.Size()
-            if let parsed = ServingType.parseServingWithServing(scrapedSize.name) {
-                s.name = parsed.serving
+            if let parsed = ServingType.parseServingWithServing(scrapedSize.name),
+               let servingName = parsed.serving?.name
+            {
+                s.name = servingName
             } else {
                 s.name = scrapedSize.cleanedName
             }

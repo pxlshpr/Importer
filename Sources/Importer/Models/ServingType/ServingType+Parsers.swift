@@ -213,7 +213,7 @@ extension ServingType {
         return (nil, nil)
     }
 
-    static func parseVolumeWithServing(_ string: String) -> (unit: VolumeUnit, servingValue: Double, servingName: String)? {
+    static func parseVolumeWithServing(_ string: String) -> (volume: ParsedVolume?, serving: ParsedServing?)? {
         var groups = string.capturedGroups(using: Rx.volumeWithServingExtractor)
         var unit: String, servingAmount: String, servingName: String
         if groups.count < 4 {
@@ -249,10 +249,12 @@ extension ServingType {
             return nil
         }
         
-        return (volumeUnit, servingAmountValue, servingName)
+        let volume: ParsedVolume = (volumeUnit, nil, nil)
+        let serving: ParsedServing = (servingName, servingAmountValue)
+        return (volume, serving)
     }
     
-    static func parseServingWithServing(_ string: String) -> (serving: String, constituentAmount: Double, constituentName: String)? {
+    static func parseServingWithServing(_ string: String) -> (serving: ParsedServing?, servingSize: ParsedServing?)? {
         let groups = string.capturedGroups(using: Rx.servingWithServingExtractor)
         guard groups.count > 2 else {
             return nil
@@ -281,6 +283,8 @@ extension ServingType {
             return nil
         }
         
-        return (serving, constituentValue, constituentName)
+        let parsedServing: ParsedServing = (serving, nil)
+        let parsedServingSize: ParsedServing = (constituentName, constituentValue)
+        return (parsedServing, parsedServingSize)
     }
 }

@@ -160,17 +160,23 @@ extension ProcessedSize {
             }
             return "\(servingAmount.cleanWithoutRounding) \(serving.name)"
         case .volumeWithServing:
-            guard let parsed = ServingType.parseVolumeWithServing(name) else {
+            guard let parsed = ServingType.parseVolumeWithServing(name),
+                  let servingName = parsed.serving?.name,
+                  let servingAmount = parsed.serving?.amount
+            else {
                 print("⚠️ Got: 'nil' for: \(name)")
                 return nil
             }
-            return "\(parsed.servingValue.cleanWithoutRounding) \(parsed.servingName)"
+            return "\(servingAmount.cleanWithoutRounding) \(servingName)"
         case .servingWithServing:
-            guard let parsed = ServingType.parseServingWithServing(name) else {
+            guard let parsed = ServingType.parseServingWithServing(name),
+                  let servingSize = parsed.servingSize,
+                  let servingSizeAmount = servingSize.amount
+            else {
                 print("⚠️ Got: 'nil' for: \(name)")
                 return nil
             }
-            return "\(parsed.constituentAmount.cleanWithoutRounding) \(parsed.constituentName)"
+            return "\(servingSizeAmount.cleanWithoutRounding) \(servingSize.name)"
         default:
             return nil
         }

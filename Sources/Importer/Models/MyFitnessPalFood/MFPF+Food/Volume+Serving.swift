@@ -4,20 +4,23 @@ extension MyFitnessPalFood {
     var foodStartingWithVolumeWithServing: Food? {
         /// protect against division by 0 with baseSize.value check
         guard let baseSize = baseSize, baseSize.value > 0,
-                let parsed = ServingType.parseVolumeWithServing(baseSize.name)
+              let parsed = ServingType.parseVolumeWithServing(baseSize.name),
+              let servingName = parsed.serving?.name,
+              let servingAmount = parsed.serving?.amount,
+              let volumeUnit = parsed.volume?.unit
         else {
             return nil
         }
         let food = baseFood
-        food.servingAmount = parsed.servingValue
+        food.servingAmount = servingAmount
         food.servingUnit = .size
         
-        let baseVolume = baseSize.processedSize.ml(for: baseSize.value, unit: parsed.unit)
+        let baseVolume = baseSize.processedSize.ml(for: baseSize.value, unit: volumeUnit)
         
         let size = Food.Size()
-        size.name = parsed.servingName.capitalized
+        size.name = servingName.capitalized
         size.unit = .mL
-        size.amount = baseVolume / parsed.servingValue
+        size.amount = baseVolume / servingAmount
         
         food.setAmount(basedOn: baseVolume)
 //        food.amount = baseVolume < 100 ? 100 / baseVolume : 1
@@ -30,7 +33,7 @@ extension MyFitnessPalFood {
             $0.type == .serving || ($0.type == .volume && $0.isDescriptiveCups)
         }
         food.sizes.append(
-            contentsOf: createSizes(from: sizesToAdd, unit: .mL, amount: size.amount * parsed.servingValue, baseFoodSize: size)
+            contentsOf: createSizes(from: sizesToAdd, unit: .mL, amount: size.amount * servingAmount, baseFoodSize: size)
         )
 
         food.sizes.append(contentsOf: scrapedSizes.filter { scrapedSize in
@@ -54,8 +57,8 @@ extension MyFitnessPalFood {
             scrapedSize.type == .servingWithServing
         }.map { scrapedSize -> Food.Size in
             let s = Food.Size()
-            if let parsed = ServingType.parseServingWithServing(scrapedSize.name) {
-                s.name = parsed.serving
+            if let parsed = ServingType.parseServingWithServing(scrapedSize.name), let servingName = parsed.serving?.name {
+                s.name = servingName
             } else {
                 s.name = scrapedSize.cleanedName
             }
