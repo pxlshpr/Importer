@@ -43,36 +43,36 @@ extension MyFitnessPalFood {
 
             //TODO: Do this for weight too
             /// if any sizes indicate a density
-            if let volumeWithWeightSize = scrapedSizes.first(where: { $0.type == .volumeWithWeight }),
-               let parsed = ServingType.parseVolumeWithWeight(volumeWithWeightSize.name), let volumeUnit = parsed.volumeUnit {
-
-                /// determine the density of that particular size
-                food.densityVolume = volumeWithWeightSize.processedSize.ml(for: volumeWithWeightSize.value, unit: volumeUnit)
-                food.densityWeight = baseSize.processedSize.g(for: parsed.weight, unit: parsed.weightUnit)
-
-                let weight = volume * food.densityWeight / food.densityVolume
-                                
-                /// create the food based on weight
-                food.unit = .g
-                food.amount = weight
-                food.servingAmount = 0
-                let sizesToAdd = scrapedSizes.dropFirst().filter {
-                    $0.type != .weight && $0.type != .volume
-                }.filter { sizeToAdd in
-                    /// filter out other sizes with a different density
-                    if let sizeDensity = sizeToAdd.density, let foodDensity = food.density, sizeDensity != foodDensity {
-                        return false
-                    }
-                    /// keep any that don't have densities
-                    return true
-                }
-                
-                food.sizes.append(
-                    contentsOf: createSizes(
-                        from: sizesToAdd, unit: .g, amount: weight
-                    )
-                )
-            } else {
+//            if let volumeWithWeightSize = scrapedSizes.first(where: { $0.type == .volumeWithWeight }),
+//               let parsed = ServingType.parseVolumeWithWeight(volumeWithWeightSize.name), let volumeUnit = parsed.volumeUnit {
+//
+//                /// determine the density of that particular size
+//                food.densityVolume = volumeWithWeightSize.processedSize.ml(for: volumeWithWeightSize.value, unit: volumeUnit)
+//                food.densityWeight = baseSize.processedSize.g(for: parsed.weight, unit: parsed.weightUnit)
+//
+//                let weight = volume * food.densityWeight / food.densityVolume
+//
+//                /// create the food based on weight
+//                food.unit = .g
+//                food.amount = weight
+//                food.servingAmount = 0
+//                let sizesToAdd = scrapedSizes.dropFirst().filter {
+//                    $0.type != .weight && $0.type != .volume
+//                }.filter { sizeToAdd in
+//                    /// filter out other sizes with a different density
+//                    if let sizeDensity = sizeToAdd.density, let foodDensity = food.density, sizeDensity != foodDensity {
+//                        return false
+//                    }
+//                    /// keep any that don't have densities
+//                    return true
+//                }
+//
+//                food.sizes.append(
+//                    contentsOf: createSizes(
+//                        from: sizesToAdd, unit: .g, amount: weight
+//                    )
+//                )
+//            } else {
                 food.unit = .serving
                 food.amount = 1
                 
@@ -89,7 +89,7 @@ extension MyFitnessPalFood {
                         from: sizesToAdd, unit: .mL, amount: volume
                     )
                 )
-            }
+//            }
             food.scaleNutrientsBy(scale: food.amount / volume)
         }
         
