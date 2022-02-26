@@ -56,25 +56,23 @@ extension Food.Size {
     convenience init(_ scrapedSize: MyFitnessPalFood.ScrapedSize) {
         self.init()
         
-        let size = Food.Size()
-
-        size.name = scrapedSize.cleanedName.capitalized
+        name = scrapedSize.cleanedName.capitalized
         
         if scrapedSize.type == .servingWithWeight, let parsed = ServingType.parseServingWithWeight(scrapedSize.name)
         {
-            size.name = parsed.name.capitalized
+            name = parsed.name.capitalized
         }
         else if scrapedSize.type == .servingWithVolume, let parsed = ServingType.parseServingWithVolume(scrapedSize.name)
         {
-            size.name = parsed.name.capitalized
+            name = parsed.name.capitalized
         }
         else if scrapedSize.type == .servingWithServing, let parsed = ServingType.parseServingWithServing(scrapedSize.name)
         {
-            size.name = parsed.serving.capitalized
+            name = parsed.serving.capitalized
         }
         
-        size.unit = unit
-        size.amount = amount * scrapedSize.multiplier
+        unit = unit
+        amount = amount * scrapedSize.multiplier
     }
 }
 
