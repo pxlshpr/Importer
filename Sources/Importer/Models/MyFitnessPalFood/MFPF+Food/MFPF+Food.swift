@@ -110,17 +110,3 @@ extension Food.Size {
         case unableToParse
     }
 }
-
-//996935C8
-extension MyFitnessPalFood.ScrapedSize {
-    var volumeUnit: VolumeUnit? {
-//        switch type {
-//        case .servingWithVolume:
-//        case .volumeWithServing:
-//        case .volumeWithWeight:
-//        case .weightWithVolume:
-//        case .volume:
-//        }
-        return nil
-    }
-}

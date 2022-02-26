@@ -72,3 +72,9 @@ extension Food: Hashable {
         hasher.combine(sizes)
     }
 }
+
+extension Food {
+    var density: Density? {
+        Density(volume: densityVolume, weight: densityWeight)
+    }
+}

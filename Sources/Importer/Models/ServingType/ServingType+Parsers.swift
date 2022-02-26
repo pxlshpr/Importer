@@ -2,7 +2,7 @@ import Foundation
 import PrepUnits
 
 extension String {
-    func parseServing(type: ServingType) -> ParsedServingName {
+    func parsedServing(type: ServingType) -> ParsedServingName {
         ParsedServingName(self, type: type)
     }
     
