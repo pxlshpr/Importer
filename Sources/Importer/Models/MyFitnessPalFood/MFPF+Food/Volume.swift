@@ -59,6 +59,7 @@ extension MyFitnessPalFood {
                     $0.type != .weight && $0.type != .volume
                 }
                 .removingSizesWithDifferentDensityToBaseSize()
+                .removingDuplicatesSharingMultiplierAndVolumeUnit()
 //                .filter { sizeToAdd in
 //                    /// filter out other sizes with a different density
 //                    if let sizeDensity = sizeToAdd.density, let foodDensity = food.density, sizeDensity != foodDensity {
@@ -162,7 +163,7 @@ public extension Array where Element == MyFitnessPalFood.ScrapedSize {
     }
     
     /// Multiplier/VolumeUnit duplicates
-    func removingDuplicatesWithSameMultiplierAndVolumeUnit() -> [Element] {
+    func removingDuplicatesSharingMultiplierAndVolumeUnit() -> [Element] {
         var addedArray = [Element]()
 
         return filter { size in
@@ -181,7 +182,7 @@ public extension Array where Element == MyFitnessPalFood.ScrapedSize {
     }
 
     mutating func removeDuplicates() {
-        self = self.removingDuplicatesWithSameMultiplierAndVolumeUnit()
+        self = self.removingDuplicatesSharingMultiplierAndVolumeUnit()
     }
     
     mutating func removeSizesWithDifferentDensityToBaseSize() {
