@@ -78,7 +78,7 @@ extension MyFitnessPalFood {
                 
                 food.sizes.append(
                     contentsOf: createSizes(
-                        from: sizesToAdd, unit: .g, amount: weight
+                        from: sizesToAdd, unit: .mL, amount: volume
                     )
                 )
 
