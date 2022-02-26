@@ -143,7 +143,7 @@ extension ProcessedSize {
                 print("⚠️ Got: 'nil' for: \(name)")
                 return nil
             }
-            return "\(parsed.servingValue.cleanWithoutRounding) \(parsed.servingName)"
+            return "\(parsed.servingAmount.cleanWithoutRounding) \(parsed.servingName)"
         case .volumeWithServing:
             guard let parsed = ServingType.parseVolumeWithServing(name) else {
                 print("⚠️ Got: 'nil' for: \(name)")

@@ -32,7 +32,7 @@ extension ServingType {
         return (nil, nil)
     }
     
-    static func parseWeightWithServing(_ string: String) -> (unit: ImporterWeightUnit, servingValue: Double, servingName: String)? {
+    static func parseWeightWithServing(_ string: String) -> (weightUnit: ImporterWeightUnit, servingAmount: Double, servingName: String)? {
         var groups = string.capturedGroups(using: Rx.weightWithServingExtractor)
         var unit: String, servingAmount: String, servingName: String
         if groups.count < 4 {
