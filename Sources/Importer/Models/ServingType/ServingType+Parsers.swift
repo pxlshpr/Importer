@@ -174,7 +174,7 @@ extension ServingType {
         return (parsedVolume, parsedWeight)
     }
     
-    static func parseWeightWithVolume(_ string: String) -> (weightUnit: ImporterWeightUnit?, weightString: String, volume: Double, volumeUnit: VolumeUnit)? {
+    static func parseWeightWithVolume(_ string: String) -> (weight: ParsedWeight?, volume: ParsedVolume?)? {
         let groups = string.capturedGroups(using: Rx.weightWithVolumeExtractor)
         guard groups.count > 2 else {
             return nil
@@ -192,11 +192,14 @@ extension ServingType {
         volume = volume.trimmingCharacters(in: .whitespaces)
         
         guard let amountValue = amount.doubleFromExtractedNumber,
-              let volumeUnit = volumeUnit(of: volume)
+              let volumeUnit = volumeUnit(of: volume),
+              let weightUnit = weightUnit(of: weight).weight?.unit
         else {
             return nil
         }
-        return (weightUnit(of: weight).weight?.unit, weight, amountValue, volumeUnit)
+        let parsedWeight: ParsedWeight = (weightUnit, nil, weight)
+        let parsedVolume: ParsedVolume = (volumeUnit, amountValue, nil)
+        return (parsedWeight, parsedVolume)
     }
     
     //MARK: - Volume

@@ -161,12 +161,15 @@ extension MyFitnessPalFood.ScrapedSize {
             let volume = processedSize.ml(for: value, unit: volumeUnit)
             let weight = processedSize.g(for: weightAmount, unit: weightUnit)
             return Density(volume: volume, weight: weight)
-        } else if type == .weightWithVolume,
-                  let parsed = ServingType.parseWeightWithVolume(name),
-                  let weightUnit = parsed.weightUnit
+        } else if
+            type == .weightWithVolume,
+            let parsed = ServingType.parseWeightWithVolume(name),
+            let weightUnit = parsed.weight?.unit,
+            let volumeAmount = parsed.volume?.amount,
+            let volumeUnit = parsed.volume?.unit
         {
             let weight = processedSize.g(for: value, unit: weightUnit)
-            let volume = processedSize.ml(for: parsed.volume, unit: parsed.volumeUnit)
+            let volume = processedSize.ml(for: volumeAmount, unit: volumeUnit)
             return Density(volume: volume, weight: weight)
         }
         return nil

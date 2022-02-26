@@ -37,31 +37,35 @@ extension ProcessedSize {
     public var measurementString: String? {
         if let g = g {
             if type == .volumeWithWeight {
-                guard let parsed = ServingType.parseVolumeWithWeight(name) else {
+                guard let parsed = ServingType.parseVolumeWithWeight(name),
+                      let volume = parsed.volume,
+                      let volumeString = volume.string
+                else {
                     print("⚠️ Got: 'nil' for: \(name)")
                     return nil
                 }
                 //TODO: remove this conditional and make volumeUnit (and weightUnit in the mirrored one non-optional), since it can't fail
                 if let volumeUnit = parsed.volume?.unit {
                     return "\(ml(for: 1.0, unit: volumeUnit)) mL = \(g.cleanWithoutRounding) g"
-                } else if let volumeString = parsed.volume?.string {
-                    return "\(volumeString) = \(g.cleanWithoutRounding) g"
                 } else {
-                    return "Unsupported"
+                    return "\(volumeString) = \(g.cleanWithoutRounding) g"
                 }
             } else {
                 return "\(g.cleanWithoutRounding) g"
             }
         } else if let ml = ml {
             if type == .weightWithVolume {
-                guard let parsed = ServingType.parseWeightWithVolume(name) else {
+                guard let parsed = ServingType.parseWeightWithVolume(name),
+                      let weight = parsed.weight,
+                      let weightString = weight.string
+                else {
                     print("⚠️ Got: 'nil' for: \(name)")
                     return nil
                 }
-                if let weightUnit = parsed.weightUnit {
+                if let weightUnit = weight.unit {
                     return "\(g(for: 1.0, unit: weightUnit)) g = \(ml.cleanWithoutRounding) mL"
                 } else {
-                    return "\(parsed.weightString) g = \(ml.cleanWithoutRounding) mL"
+                    return "\(weightString) g = \(ml.cleanWithoutRounding) mL"
                 }
             } else {
                 return "\(ml.cleanWithoutRounding) mL"
@@ -189,11 +193,14 @@ extension ProcessedSize {
             }
             return ml(for: servingAmount, unit: volumeUnit)
         case .weightWithVolume:
-            guard let parsed = ServingType.parseWeightWithVolume(name) else {
+            guard let parsed = ServingType.parseWeightWithVolume(name),
+                  let volumeAmount = parsed.volume?.amount,
+                  let volumeUnit = parsed.volume?.unit
+            else {
                 print("⚠️ Got: 'nil' for: \(name)")
                 return nil
             }
-            return ml(for: parsed.volume, unit: parsed.volumeUnit)
+            return ml(for: volumeAmount, unit: volumeUnit)
 
         default:
             return nil

@@ -3,7 +3,11 @@ import Foundation
 extension MyFitnessPalFood {
     var foodStartingWithWeightWithVolume: Food? {
         /// protect against division by 0 with baseSize.value check
-        guard let baseSize = baseSize, baseSize.value > 0, let parsed = ServingType.parseWeightWithVolume(baseSize.name), let weightUnit = parsed.weightUnit
+        guard let baseSize = baseSize, baseSize.value > 0,
+              let parsed = ServingType.parseWeightWithVolume(baseSize.name),
+              let weightUnit = parsed.weight?.unit,
+              let volumeAmount = parsed.volume?.amount,
+              let volumeUnit = parsed.volume?.unit
         else {
             return nil
         }
@@ -17,13 +21,13 @@ extension MyFitnessPalFood {
         
         /// now get the weight unit
         food.densityWeight = food.servingAmount
-        food.densityVolume = baseSize.processedSize.ml(for: parsed.volume, unit: parsed.volumeUnit)
+        food.densityVolume = baseSize.processedSize.ml(for: volumeAmount, unit: volumeUnit)
         
-        if parsed.volumeUnit == .cup {
+        if volumeUnit == .cup {
             /// add this as a size in case it has a description
             let size = Food.Size()
-            size.name = parsed.volumeUnit.description.capitalized
-            size.amount = 1.0/parsed.volume
+            size.name = volumeUnit.description.capitalized
+            size.amount = 1.0/volumeAmount
             size.unit = .serving
             food.sizes.append(size)
             
