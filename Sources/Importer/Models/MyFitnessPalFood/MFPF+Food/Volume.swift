@@ -46,17 +46,16 @@ extension MyFitnessPalFood {
             
             food.servingUnit = .mL
             food.servingAmount = baseSize.value / baseSize.multiplier
-            let volumeUnit = ServingType.volumeUnit(of: baseSize.cleanedName)
-            food.servingVolumeUnit = volumeUnit.volume?.unit?.volumeUserUnit
+            food.servingVolumeUnit = baseSize.cleanedName.parsedVolume.volume?.unit?.volumeUserUnit
             
             //TODO: Do this for weight too
             /// if any sizes indicate a density
             if let volumeWithWeightSize = scrapedSizes.first(where: { $0.type == .volumeWithWeight }),
-               let parsed = ServingType.parseVolumeWithWeight(volumeWithWeightSize.name),
-               let volumeUnit = parsed.volume?.unit,
-               let weightAmount = parsed.weight?.amount,
-               let weightUnit = parsed.weight?.unit
+               let volumeUnit = volumeWithWeightSize.name.parsedVolumeWithWeight.volume?.unit,
+               let weightAmount = volumeWithWeightSize.name.parsedVolumeWithWeight.weight?.amount,
+               let weightUnit = volumeWithWeightSize.name.parsedVolumeWithWeight.weight?.unit
             {
+
                 /// determine the density of that particular size
                 food.densityVolume = volumeWithWeightSize.processedSize.ml(for: volumeWithWeightSize.value, unit: volumeUnit)
                 food.densityWeight = baseSize.processedSize.g(for: weightAmount, unit: weightUnit)

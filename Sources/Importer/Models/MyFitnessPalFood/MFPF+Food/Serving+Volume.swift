@@ -3,14 +3,17 @@ import Foundation
 extension MyFitnessPalFood {
     var foodStartingWithServingWithVolume: Food? {
         /// protect against division by 0 with baseSize.value check
-        guard let baseSize = baseSize, baseSize.value > 0,
-              let parsed = ServingType.parseServingWithVolume(baseSize.name),
-              let serving = parsed.serving,
+        guard let baseSize = baseSize, baseSize.value > 0 else {
+            return nil
+        }
+        let parsed = baseSize.name.parsedServingWithVolume
+        guard let serving = parsed.serving,
               let servingAmount = serving.amount,
               let volumeUnit = parsed.volume?.unit
         else {
             return nil
         }
+        
         let food = baseFood
         food.servingAmount = baseSize.value
         food.servingUnit = .size
@@ -38,9 +41,8 @@ extension MyFitnessPalFood {
             scrapedSize.type == .servingWithServing
         }.map { scrapedSize -> Food.Size in
             let remainingSize = Food.Size()
-            if let parsed = ServingType.parseServingWithServing(scrapedSize.name),
-               let servingName = parsed.serving?.name
-            {
+            let parsed = scrapedSize.name.parsedServingWithServing
+            if let servingName = parsed.serving?.name {
                 remainingSize.name = servingName.capitalized
             } else {
                 remainingSize.name = scrapedSize.cleanedName.capitalized

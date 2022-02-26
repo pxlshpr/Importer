@@ -152,26 +152,32 @@ extension MyFitnessPalFood.ScrapedSize: CustomStringConvertible {
 extension MyFitnessPalFood.ScrapedSize {
     
     var density: Density? {
-        if type == .volumeWithWeight,
-            let parsed = ServingType.parseVolumeWithWeight(name),
-            let volumeUnit = parsed.volume?.unit,
-            let weightAmount = parsed.weight?.amount,
-            let weightUnit = parsed.weight?.unit
-        {
+        if type == .volumeWithWeight {
+            let parsed = name.parsedVolumeWithWeight
+            guard let volumeUnit = parsed.volume?.unit,
+                  let weightAmount = parsed.weight?.amount,
+                  let weightUnit = parsed.weight?.unit
+            else {
+                return nil
+            }
             let volume = processedSize.ml(for: value, unit: volumeUnit)
             let weight = processedSize.g(for: weightAmount, unit: weightUnit)
             return Density(volume: volume, weight: weight)
-        } else if
-            type == .weightWithVolume,
-            let parsed = ServingType.parseWeightWithVolume(name),
-            let weightUnit = parsed.weight?.unit,
-            let volumeAmount = parsed.volume?.amount,
-            let volumeUnit = parsed.volume?.unit
-        {
+        }
+        
+        if type == .weightWithVolume {
+            let parsed = name.parsedWeightWithVolume
+            guard let weightUnit = parsed.weight?.unit,
+                  let volumeAmount = parsed.volume?.amount,
+                  let volumeUnit = parsed.volume?.unit
+            else {
+                return nil
+            }
             let weight = processedSize.g(for: value, unit: weightUnit)
             let volume = processedSize.ml(for: volumeAmount, unit: volumeUnit)
             return Density(volume: volume, weight: weight)
         }
+
         return nil
     }
 }

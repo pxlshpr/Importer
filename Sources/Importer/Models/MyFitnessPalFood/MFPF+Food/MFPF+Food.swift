@@ -78,26 +78,22 @@ extension Food.Size {
     }
     
     func processServingWithWeight(name: String) throws {
-        guard let parsed = ServingType.parseServingWithWeight(name),
-              let serving = parsed.serving
-        else {
+        guard let servingName = name.parsedServingWithWeight.serving?.name else {
             throw ParseError.unableToParse
         }
-        self.name = serving.name
+        self.name = servingName
     }
 
     func processServingWithServing(name: String) throws {
-        guard let parsed = ServingType.parseServingWithServing(name),
-              let servingName = parsed.serving?.name
-        else {
+        guard let servingName = name.parsedServingWithServing.serving?.name else {
             throw ParseError.unableToParse
         }
         self.name = servingName
     }
     
     func processServingWithVolume(scrapedSize: MyFitnessPalFood.ScrapedSize, unit: SizeUnit, amount: Double) throws {
-        guard let parsed = ServingType.parseServingWithVolume(scrapedSize.name),
-              let serving = parsed.serving,
+        let parsed = scrapedSize.name.parsedServingWithVolume
+        guard let serving = parsed.serving,
               let servingAmount = serving.amount,
               let volumeUnit = parsed.volume?.unit
         else {
@@ -115,6 +111,7 @@ extension Food.Size {
     }
 }
 
+//996935C8
 extension MyFitnessPalFood.ScrapedSize {
     var volumeUnit: VolumeUnit? {
 //        switch type {

@@ -3,14 +3,18 @@ import Foundation
 extension MyFitnessPalFood {
     var foodStartingWithVolumeWithServing: Food? {
         /// protect against division by 0 with baseSize.value check
-        guard let baseSize = baseSize, baseSize.value > 0,
-              let parsed = ServingType.parseVolumeWithServing(baseSize.name),
-              let servingName = parsed.serving?.name,
+        guard let baseSize = baseSize, baseSize.value > 0 else {
+            return nil
+        }
+        
+        let parsed = baseSize.name.parsedVolumeWithServing
+        guard let servingName = parsed.serving?.name,
               let servingAmount = parsed.serving?.amount,
               let volumeUnit = parsed.volume?.unit
         else {
             return nil
         }
+        
         let food = baseFood
         food.servingAmount = servingAmount
         food.servingUnit = .size
@@ -40,9 +44,8 @@ extension MyFitnessPalFood {
             scrapedSize.type == .servingWithVolume
         }.compactMap { scrapedSize -> Food.Size? in
             let s = Food.Size()
-            guard let parsed = ServingType.parseServingWithVolume(scrapedSize.name),
-                  let servingName = parsed.serving?.name
-            else {
+            let parsed = scrapedSize.name.parsedServingWithVolume
+            guard let servingName = parsed.serving?.name else {
                 print("Couldn't parse servingWithVolume: \(scrapedSize)")
                 return nil
             }
@@ -57,7 +60,7 @@ extension MyFitnessPalFood {
             scrapedSize.type == .servingWithServing
         }.map { scrapedSize -> Food.Size in
             let s = Food.Size()
-            if let parsed = ServingType.parseServingWithServing(scrapedSize.name), let servingName = parsed.serving?.name {
+            if let servingName = scrapedSize.name.parsedServingWithServing.serving?.name {
                 s.name = servingName
             } else {
                 s.name = scrapedSize.cleanedName

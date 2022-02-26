@@ -37,8 +37,8 @@ extension ProcessedSize {
     public var measurementString: String? {
         if let g = g {
             if type == .volumeWithWeight {
-                guard let parsed = ServingType.parseVolumeWithWeight(name),
-                      let volume = parsed.volume,
+                let parsed = name.parsedVolumeWithWeight
+                guard let volume = parsed.volume,
                       let volumeString = volume.string
                 else {
                     print("⚠️ Got: 'nil' for: \(name)")
@@ -55,8 +55,8 @@ extension ProcessedSize {
             }
         } else if let ml = ml {
             if type == .weightWithVolume {
-                guard let parsed = ServingType.parseWeightWithVolume(name),
-                      let weight = parsed.weight,
+                let parsed = name.parsedWeightWithVolume
+                guard let weight = parsed.weight,
                       let weightString = weight.string
                 else {
                     print("⚠️ Got: 'nil' for: \(name)")
@@ -121,13 +121,13 @@ extension ProcessedSize {
     var g: Double? {
         switch type {
         case .weight:
-            if let unit = ServingType.weightUnit(of: name).weight?.unit {
+            if let unit = name.parsedWeight.weight?.unit {
                 return g(for: 1.0, unit: unit)
             }
             return nil
         case .servingWithWeight:
-            guard let parsed = ServingType.parseServingWithWeight(name),
-                  let servingAmount = parsed.serving?.amount,
+            let parsed = name.parsedServingWithWeight
+            guard let servingAmount = parsed.serving?.amount,
                   let weightUnit = parsed.weight?.unit
             else {
                 print("⚠️ Got: 'nil' for: \(name)")
@@ -135,8 +135,8 @@ extension ProcessedSize {
             }
             return g(for: servingAmount, unit: weightUnit)
         case .volumeWithWeight:
-            guard let parsed = ServingType.parseVolumeWithWeight(name),
-                  let weightAmount = parsed.weight?.amount,
+            let parsed = name.parsedVolumeWithWeight
+            guard let weightAmount = parsed.weight?.amount,
                   let weightUnit = parsed.weight?.unit
             else {
                 print("⚠️ Got: 'nil' for: \(name)")
@@ -151,8 +151,8 @@ extension ProcessedSize {
     var serving: String? {
         switch type {
         case .weightWithServing:
-            guard let parsed = ServingType.parseWeightWithServing(name),
-                  let serving = parsed.serving,
+            let parsed = name.parsedWeightWithServing
+            guard let serving = parsed.serving,
                   let servingAmount = serving.amount
             else {
                 print("⚠️ Got: 'nil' for: \(name)")
@@ -160,8 +160,8 @@ extension ProcessedSize {
             }
             return "\(servingAmount.cleanWithoutRounding) \(serving.name)"
         case .volumeWithServing:
-            guard let parsed = ServingType.parseVolumeWithServing(name),
-                  let servingName = parsed.serving?.name,
+            let parsed = name.parsedVolumeWithServing
+            guard let servingName = parsed.serving?.name,
                   let servingAmount = parsed.serving?.amount
             else {
                 print("⚠️ Got: 'nil' for: \(name)")
@@ -169,8 +169,8 @@ extension ProcessedSize {
             }
             return "\(servingAmount.cleanWithoutRounding) \(servingName)"
         case .servingWithServing:
-            guard let parsed = ServingType.parseServingWithServing(name),
-                  let servingSize = parsed.servingSize,
+            let parsed = name.parsedServingWithServing
+            guard let servingSize = parsed.servingSize,
                   let servingSizeAmount = servingSize.amount
             else {
                 print("⚠️ Got: 'nil' for: \(name)")
@@ -185,13 +185,13 @@ extension ProcessedSize {
     var ml: Double? {
         switch type {
         case .volume:
-            if let unit = ServingType.volumeUnit(of: name).volume?.unit {
+            if let unit = name.parsedVolume.volume?.unit {
                 return ml(for: 1.0, unit: unit)
             }
             return nil
         case .servingWithVolume:
-            guard let parsed = ServingType.parseServingWithVolume(name),
-                  let servingAmount = parsed.serving?.amount,
+            let parsed = name.parsedServingWithVolume
+            guard let servingAmount = parsed.serving?.amount,
                   let volumeUnit = parsed.volume?.unit
             else {
                 print("⚠️ Got: 'nil' for: \(name)")
@@ -199,8 +199,8 @@ extension ProcessedSize {
             }
             return ml(for: servingAmount, unit: volumeUnit)
         case .weightWithVolume:
-            guard let parsed = ServingType.parseWeightWithVolume(name),
-                  let volumeAmount = parsed.volume?.amount,
+            let parsed = name.parsedWeightWithVolume
+            guard let volumeAmount = parsed.volume?.amount,
                   let volumeUnit = parsed.volume?.unit
             else {
                 print("⚠️ Got: 'nil' for: \(name)")
