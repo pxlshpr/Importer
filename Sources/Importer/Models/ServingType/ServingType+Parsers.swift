@@ -15,9 +15,9 @@ import PrepUnits
 //typealias parseVolumeWithServing = (unit: VolumeUnit, servingValue: Double, servingName: String)?
 //typealias servingWithServing = (serving: String, constituentAmount: Double, constituentName: String)?
 
-typealias ParsedWeight = (amount: Double?, unit: ImporterWeightUnit?, string: String?)
-typealias ParsedVolume = (amount: Double?, unit: VolumeUnit?, string: String?)
-typealias ParsedServing = (amount: Double?, name: String?)
+typealias ParsedWeight = (unit: ImporterWeightUnit, amount: Double?, string: String?)
+typealias ParsedVolume = (unit: VolumeUnit, amount: Double?, string: String?)
+typealias ParsedServing = (name: String, amount: Double?)
 
 typealias ParseResult = (weight: ParsedWeight?, volume: ParsedVolume?, serving: ParsedServing?, servingSize: ParsedServing?)
 
@@ -27,14 +27,14 @@ extension ServingType {
     static func weightUnit(of string: String) -> (weight: ParsedWeight?, placeholder: String?) {
         for unit in ImporterWeightUnit.allCases {
             if string.matchesRegex(unit.regex) {
-                let weight: ParsedWeight = (nil, unit, nil)
+                let weight: ParsedWeight = (unit, nil, nil)
                 return (weight, nil)
             }
         }
         return (nil, nil)
     }
     
-    static func parseWeightWithServing(_ string: String) -> (weightUnit: ImporterWeightUnit, servingAmount: Double, servingName: String)? {
+    static func parseWeightWithServing(_ string: String) -> (weight: ParsedWeight?, serving: ParsedServing?)? {
         var groups = string.capturedGroups(using: Rx.weightWithServingExtractor)
         var unit: String, servingAmount: String, servingName: String
         if groups.count < 4 {
@@ -70,7 +70,9 @@ extension ServingType {
             return nil
         }
         
-        return (weightUnit, servingAmountValue, servingName)
+        let weight: ParsedWeight = (weightUnit, nil, nil)
+        let serving: ParsedServing = (servingName, servingAmountValue)
+        return (weight, serving)
     }
     
     static func parseServingWithWeight(_ string: String) -> (servingName: String, servingAmount: Double, weightUnit: ImporterWeightUnit)? {

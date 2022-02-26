@@ -139,11 +139,14 @@ extension ProcessedSize {
     var serving: String? {
         switch type {
         case .weightWithServing:
-            guard let parsed = ServingType.parseWeightWithServing(name) else {
+            guard let parsed = ServingType.parseWeightWithServing(name),
+                  let serving = parsed.serving,
+                  let servingAmount = serving.amount
+            else {
                 print("⚠️ Got: 'nil' for: \(name)")
                 return nil
             }
-            return "\(parsed.servingAmount.cleanWithoutRounding) \(parsed.servingName)"
+            return "\(servingAmount.cleanWithoutRounding) \(serving.name)"
         case .volumeWithServing:
             guard let parsed = ServingType.parseVolumeWithServing(name) else {
                 print("⚠️ Got: 'nil' for: \(name)")

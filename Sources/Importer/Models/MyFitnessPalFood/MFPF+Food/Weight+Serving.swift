@@ -4,20 +4,23 @@ extension MyFitnessPalFood {
     var foodStartingWithWeightWithServing: Food? {
         /// protect against division by 0 with baseSize.value check
         guard let baseSize = baseSize, baseSize.value > 0,
-                let parsed = ServingType.parseWeightWithServing(baseSize.name)
+              let parsed = ServingType.parseWeightWithServing(baseSize.name),
+              let serving = parsed.serving,
+              let servingAmount = serving.amount,
+              let weightUnit = parsed.weight?.unit
         else {
             return nil
         }
         let food = baseFood
-        food.servingAmount = parsed.servingAmount
+        food.servingAmount = servingAmount
         food.servingUnit = .size
         
-        let baseWeight = baseSize.processedSize.g(for: baseSize.value, unit: parsed.weightUnit)
+        let baseWeight = baseSize.processedSize.g(for: baseSize.value, unit: weightUnit)
         
         let size = Food.Size()
-        size.name = parsed.servingName.capitalized
+        size.name = serving.name.capitalized
         size.unit = .g
-        size.amount = baseWeight / parsed.servingAmount
+        size.amount = baseWeight / servingAmount
         
         food.setAmount(basedOn: baseWeight)
 //        food.amount = baseWeight < 100 ? 100 / baseWeight : 1
@@ -30,7 +33,7 @@ extension MyFitnessPalFood {
             $0.type == .serving || ($0.type == .volume && $0.isDescriptiveCups)
         }
         food.sizes.append(
-            contentsOf: createSizes(from: sizesToAdd, unit: .g, amount: size.amount * parsed.servingAmount, baseFoodSize: size)
+            contentsOf: createSizes(from: sizesToAdd, unit: .g, amount: size.amount * servingAmount, baseFoodSize: size)
         )
 
         food.sizes.append(contentsOf: scrapedSizes.filter { scrapedSize in
