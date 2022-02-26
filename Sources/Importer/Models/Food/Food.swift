@@ -75,6 +75,12 @@ extension Food: Hashable {
 
 extension Food {
     var density: Density? {
-        Density(volume: densityVolume, weight: densityWeight)
+        get {
+            Density(volume: densityVolume, weight: densityWeight)
+        }
+        set {
+            densityVolume = newValue?.volume ?? 0
+            densityWeight = newValue?.weight ?? 0
+        }
     }
 }

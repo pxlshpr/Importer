@@ -50,24 +50,11 @@ extension MyFitnessPalFood {
             
             //TODO: Do this for weight too
             /// if any sizes indicate a density
-            if let volumeWithWeightSize = scrapedSizes.first(where: { $0.type == .volumeWithWeight }),
-               let volumeUnit = volumeWithWeightSize.name.parsedVolumeWithWeight.volume?.unit,
-               let weightAmount = volumeWithWeightSize.name.parsedVolumeWithWeight.weight?.amount,
-               let weightUnit = volumeWithWeightSize.name.parsedVolumeWithWeight.weight?.unit
-            {
-
-                /// determine the density of that particular size
-                food.densityVolume = volumeWithWeightSize.processedSize.ml(for: volumeWithWeightSize.value, unit: volumeUnit)
-                food.densityWeight = baseSize.processedSize.g(for: weightAmount, unit: weightUnit)
-
+            
+            if let baseDensity = scrapedSizes.baseDensity {
+                food.density = baseDensity
                 let weight = volume * food.densityWeight / food.densityVolume
-                                
-//                /// create the food based on weight
-//                food.unit = .g
-//                food.amount = weight
-//                food.servingAmount = 0
-                
-                
+
                 let sizesToAdd = scrapedSizes.dropFirst().filter {
                     $0.type != .weight && $0.type != .volume
                 }.filter { sizeToAdd in
@@ -77,11 +64,11 @@ extension MyFitnessPalFood {
                     }
                     
                     /// filter out sizes with the same ratio/multiplier and volumeUnit
-                    if sizeToAdd.multiplier == baseSize.multiplier,
-                       let sizeToAddVolumeUnit = sizeToAdd.volumeUnit,
-                       sizeToAddVolumeUnit == volumeUnit {
-                        return false
-                    }
+//                    if sizeToAdd.multiplier == baseSize.multiplier,
+//                       let volumeUnit = sizeToAdd.volumeUnit,
+//                        {
+//                        return false
+//                    }
                     
                     /// keep any that don't have densities
                     return true
@@ -92,6 +79,52 @@ extension MyFitnessPalFood {
                         from: sizesToAdd, unit: .g, amount: weight
                     )
                 )
+
+                
+//            }
+            
+//            if let volumeWithWeightSize = scrapedSizes.first(where: { $0.type == .volumeWithWeight }),
+//               let volumeUnit = volumeWithWeightSize.name.parsedVolumeWithWeight.volume?.unit,
+//               let weightAmount = volumeWithWeightSize.name.parsedVolumeWithWeight.weight?.amount,
+//               let weightUnit = volumeWithWeightSize.name.parsedVolumeWithWeight.weight?.unit
+//            {
+//
+//                /// determine the density of that particular size
+//                food.densityVolume = volumeWithWeightSize.processedSize.ml(for: volumeWithWeightSize.value, unit: volumeUnit)
+//                food.densityWeight = baseSize.processedSize.g(for: weightAmount, unit: weightUnit)
+
+//                let weight = volume * food.densityWeight / food.densityVolume
+                                
+//                /// create the food based on weight
+//                food.unit = .g
+//                food.amount = weight
+//                food.servingAmount = 0
+                
+                
+//                let sizesToAdd = scrapedSizes.dropFirst().filter {
+//                    $0.type != .weight && $0.type != .volume
+//                }.filter { sizeToAdd in
+//                    /// filter out other sizes with a different density
+//                    if let sizeDensity = sizeToAdd.density, let foodDensity = food.density, sizeDensity != foodDensity {
+//                        return false
+//                    }
+//
+//                    /// filter out sizes with the same ratio/multiplier and volumeUnit
+//                    if sizeToAdd.multiplier == baseSize.multiplier,
+//                       let sizeToAddVolumeUnit = sizeToAdd.volumeUnit,
+//                       sizeToAddVolumeUnit == volumeUnit {
+//                        return false
+//                    }
+//
+//                    /// keep any that don't have densities
+//                    return true
+//                }
+//
+//                food.sizes.append(
+//                    contentsOf: createSizes(
+//                        from: sizesToAdd, unit: .g, amount: weight
+//                    )
+//                )
             } else {
                 let sizesToAdd = scrapedSizes.dropFirst().filter {
                     $0.type != .weight && $0.type != .volume
@@ -111,10 +144,29 @@ extension MyFitnessPalFood {
 
 
 //C796CF29
-extension Sequence where Iterator.Element == MyFitnessPalFood.ScrapedSize
+extension Array where Iterator.Element == MyFitnessPalFood.ScrapedSize
 {
-    var something: [MyFitnessPalFood.ScrapedSize] {
-        return []
+    
+    var baseSize: MyFitnessPalFood.ScrapedSize? {
+        first
+    }
+    
+    /// The first density determined in the order that the sizes are presented (as there may be multiple for a given food)
+    var baseDensity: Density? {
+        guard let baseSize = self.first else { return nil }
+        
+        /// volumeWithWeight
+        if let size = first(where: { $0.type == .volumeWithWeight }),
+           let volumeUnit = size.name.parsedVolumeWithWeight.volume?.unit,
+           let weightAmount = size.name.parsedVolumeWithWeight.weight?.amount,
+           let weightUnit = size.name.parsedVolumeWithWeight.weight?.unit
+        {
+            /// determine the density of that particular size
+            let volume = size.processedSize.ml(for: size.value, unit: volumeUnit)
+            let weight = baseSize.processedSize.g(for: weightAmount, unit: weightUnit)
+            return Density(volume: volume, weight: weight)
+        }
+        return nil
     }
 }
 
