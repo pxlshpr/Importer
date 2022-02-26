@@ -107,3 +107,15 @@ extension Food.Size {
     }
 }
 
+extension MyFitnessPalFood.ScrapedSize {
+    var volumeUnit: VolumeUnit? {
+//        switch type {
+//        case .servingWithVolume:
+//        case .volumeWithServing:
+//        case .volumeWithWeight:
+//        case .weightWithVolume:
+//        case .volume:
+//        }
+        return nil
+    }
+}

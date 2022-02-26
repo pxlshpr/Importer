@@ -1,6 +1,25 @@
 import Foundation
 import PrepUnits
 
+//extension String {
+//    var parseServing(type: ServingType) ->
+//}
+
+//typealias weight = (ImporterWeightUnit)?
+//typealias weightWithServing = (unit: ImporterWeightUnit, servingValue: Double, servingName: String)?
+//typealias servingWithWeight = (name: String, value: Double, unit: ImporterWeightUnit)?
+//typealias servingWithVolume = (name: String, value: Double, unit: VolumeUnit)?
+//typealias volumeWithWeight = (volumeUnit: VolumeUnit?, volumeString: String, weight: Double, weightUnit: ImporterWeightUnit)?
+//typealias weightWithVolume = (weightUnit: ImporterWeightUnit?, weightString: String, volume: Double, volumeUnit: VolumeUnit)?
+//typealias volume = (VolumeUnit)?
+//typealias parseVolumeWithServing = (unit: VolumeUnit, servingValue: Double, servingName: String)?
+//typealias servingWithServing = (serving: String, constituentAmount: Double, constituentName: String)?
+
+typealias ParseResult = (weightAmount: Double?, weightUnit: ImporterWeightUnit?, weightString: String?,
+                         volumeAmount: Double?, volumeUnit: VolumeUnit?, volumeString: String?,
+                         servingAmount: Double?, servingName: String?,
+                         sizeAmount: Double?, sizeName: String?)
+
 extension ServingType {
 
     //MARK: - Weight
