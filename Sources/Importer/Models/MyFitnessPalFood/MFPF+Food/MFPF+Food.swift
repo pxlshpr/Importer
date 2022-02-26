@@ -46,14 +46,14 @@ extension MyFitnessPalFood {
     func createSizes(from scrapedSizes: [ScrapedSize], unit: SizeUnit, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
         scrapedSizes
             .filter { !$0.name.isEmpty }
-            .map { Food.Size($0) }
+            .map { Food.Size(scrapedSize: $0, unit: unit, amount: amount) }
             .removingDuplicates()
             .filter { $0 != baseFoodSize }
     }
 }
 
 extension Food.Size {
-    convenience init(_ scrapedSize: MyFitnessPalFood.ScrapedSize) {
+    convenience init(scrapedSize: MyFitnessPalFood.ScrapedSize, unit: SizeUnit, amount: Double) {
         self.init()
         
         name = scrapedSize.cleanedName.capitalized
@@ -71,8 +71,8 @@ extension Food.Size {
             name = parsed.serving.capitalized
         }
         
-        unit = unit
-        amount = amount * scrapedSize.multiplier
+        self.unit = unit
+        self.amount = amount * scrapedSize.multiplier
     }
 }
 
