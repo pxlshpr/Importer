@@ -73,6 +73,11 @@ extension MyFitnessPalFood {
                     if let sizeDensity = sizeToAdd.density, let foodDensity = food.density, sizeDensity != foodDensity {
                         return false
                     }
+                    
+                    //F4E7A5C7
+                    /// filter out sizes with the same ratio/multiplier and volumeUnit
+//                    if sizeToAdd.multiplier = baseSize.multiplier, sizeToAdd.volumeUnit
+                    
                     /// keep any that don't have densities
                     return true
                 }
@@ -96,6 +101,14 @@ extension MyFitnessPalFood {
         }
         
         return food
+    }
+}
+
+//C796CF29
+extension Sequence where Iterator.Element == MyFitnessPalFood.ScrapedSize
+{
+    var something: [MyFitnessPalFood.ScrapedSize] {
+        return []
     }
 }
 
