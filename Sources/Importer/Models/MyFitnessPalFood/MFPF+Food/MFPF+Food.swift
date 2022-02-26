@@ -75,26 +75,6 @@ extension Food.Size {
         }
         
         name = name.capitalized
-        
-//        let name: String
-//        if scrapedSize.type == .servingWithWeight, let parsed = ServingType.parseServingWithWeight(scrapedSize.name)
-//        {
-//            name = parsed.name
-//        }
-//        else if scrapedSize.type == .servingWithVolume, let parsed = ServingType.parseServingWithVolume(scrapedSize.name)
-//        {
-//            name = parsed.name
-//        }
-//        else if scrapedSize.type == .servingWithServing, let parsed = ServingType.parseServingWithServing(scrapedSize.name)
-//        {
-//            name = parsed.serving
-//        } else {
-//            name = scrapedSize.cleanedName
-//        }
-//
-//        self.name = name.capitalized
-//        self.unit = unit
-//        self.amount = amount * scrapedSize.multiplier
     }
     
     func processServingWithWeight(name: String) throws {
@@ -115,7 +95,11 @@ extension Food.Size {
         guard let parsed = ServingType.parseServingWithVolume(scrapedSize.name) else {
             throw ParseError.unableToParse
         }
+        
         self.name = parsed.name
+        self.unit = .mL
+        self.volumeUnit = parsed.unit
+        self.amount = parsed.value
     }
 
     enum ParseError: Error {

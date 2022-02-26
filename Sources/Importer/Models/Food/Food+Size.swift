@@ -6,7 +6,9 @@ extension Food {
         public var id = UUID()
         public var name: String = ""
         public var amount: Double = 0
+        
         public var unit: SizeUnit = .g
+        public var volumeUnit: VolumeUnit? = nil
         public var size: Food.Size? = nil
     }
 }
