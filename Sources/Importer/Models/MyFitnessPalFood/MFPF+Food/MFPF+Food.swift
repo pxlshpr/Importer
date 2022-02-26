@@ -62,11 +62,13 @@ extension Food.Size {
         do {
             switch scrapedSize.type {
             case .servingWithWeight:
-                try processServingWithWeight(name: scrapedSize.name)
+                try fillInServingWithWeight(named: scrapedSize.name)
             case .servingWithServing:
-                try processServingWithServing(name: scrapedSize.name)
+                try fillInServingWithServing(named: scrapedSize.name)
             case .servingWithVolume:
-                try processServingWithVolume(scrapedSize: scrapedSize, unit: unit, amount: amount)
+                try fillInServingWithVolume(scrapedSize, unit: unit, amount: amount)
+            case .volumeWithWeight:
+                try fillInVolumeWithWeight(scrapedSize, unit: unit, amount: amount)
             default:
                 name = scrapedSize.cleanedName
             }
@@ -77,21 +79,33 @@ extension Food.Size {
         name = name.capitalized
     }
     
-    func processServingWithWeight(name: String) throws {
+    func fillInServingWithWeight(named name: String) throws {
         guard let servingName = name.parsedServingWithWeight.serving?.name else {
             throw ParseError.unableToParse
         }
         self.name = servingName
     }
 
-    func processServingWithServing(name: String) throws {
+    func fillInServingWithServing(named name: String) throws {
         guard let servingName = name.parsedServingWithServing.serving?.name else {
             throw ParseError.unableToParse
         }
         self.name = servingName
     }
     
-    func processServingWithVolume(scrapedSize: MyFitnessPalFood.ScrapedSize, unit: SizeUnit, amount: Double) throws {
+    func fillInVolumeWithWeight(_ scrapedSize: MyFitnessPalFood.ScrapedSize, unit: SizeUnit, amount: Double) throws {
+        let parsed = scrapedSize.name.parsedVolumeWithWeight
+        guard let volumeUnit = parsed.volume?.unit else {
+            throw ParseError.unableToParse
+        }
+        
+        self.name = scrapedSize.cleanedName
+        self.unit = .mL
+        self.volumeUnit = volumeUnit
+        self.amount = scrapedSize.scaledValue
+    }
+    
+    func fillInServingWithVolume(_ scrapedSize: MyFitnessPalFood.ScrapedSize, unit: SizeUnit, amount: Double) throws {
         let parsed = scrapedSize.name.parsedServingWithVolume
         guard let serving = parsed.serving,
               let servingAmount = serving.amount,
@@ -108,5 +122,11 @@ extension Food.Size {
 
     enum ParseError: Error {
         case unableToParse
+    }
+}
+
+extension MyFitnessPalFood.ScrapedSize {
+    var scaledValue: Double {
+        multiplier * value
     }
 }
