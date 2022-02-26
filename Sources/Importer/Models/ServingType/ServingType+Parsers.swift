@@ -24,10 +24,11 @@ typealias ParseResult = (weight: ParsedWeight?, volume: ParsedVolume?, serving: 
 extension ServingType {
 
     //MARK: - Weight
-    static func weightUnit(of string: String) -> (weightUnit: ImporterWeightUnit?, placeholder: String?) {
+    static func weightUnit(of string: String) -> (weight: ParsedWeight?, placeholder: String?) {
         for unit in ImporterWeightUnit.allCases {
             if string.matchesRegex(unit.regex) {
-                return (unit, nil)
+                let weight: ParsedWeight = (nil, unit, nil)
+                return (weight, nil)
             }
         }
         return (nil, nil)
@@ -65,7 +66,7 @@ extension ServingType {
         servingAmount = servingAmount.trimmingCharacters(in: .whitespaces)
         servingName = servingName.trimmingCharacters(in: .whitespaces)
         
-        guard let servingAmountValue = servingAmount.doubleFromExtractedNumber, let weightUnit = weightUnit(of: unit).weightUnit else {
+        guard let servingAmountValue = servingAmount.doubleFromExtractedNumber, let weightUnit = weightUnit(of: unit).weight?.unit else {
             return nil
         }
         
@@ -93,7 +94,7 @@ extension ServingType {
         unit = unit.trimmingCharacters(in: .whitespaces)
         
         guard let amountValue = amount.doubleFromExtractedNumber,
-                let weightUnit = weightUnit(of: unit).weightUnit else {
+              let weightUnit = weightUnit(of: unit).weight?.unit else {
             return nil
         }
         return (name, amountValue, weightUnit)
@@ -154,7 +155,7 @@ extension ServingType {
         weight = weight.trimmingCharacters(in: .whitespaces)
         
         guard let amountValue = amount.doubleFromExtractedNumber,
-              let weightUnit = weightUnit(of: weight).weightUnit
+              let weightUnit = weightUnit(of: weight).weight?.unit
         else {
             return nil
         }
@@ -183,7 +184,7 @@ extension ServingType {
         else {
             return nil
         }
-        return (weightUnit(of: weight).weightUnit, weight, amountValue, volumeUnit)
+        return (weightUnit(of: weight).weight?.unit, weight, amountValue, volumeUnit)
     }
     
     //MARK: - Volume
