@@ -76,7 +76,7 @@ extension ProcessedSize {
         return nil
     }
     
-    func g(for value: Double, unit: ImporterWeightUnit) -> Double {
+    func g(for value: Double, unit: WeightUnit) -> Double {
         let multiplier: Double
         switch unit {
         case .g:

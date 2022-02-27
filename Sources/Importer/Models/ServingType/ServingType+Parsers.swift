@@ -18,17 +18,17 @@ extension String {
     var parsedServingWithServing: ParsedServingName { ParsedServingName(self, type: .servingWithServing) }
 }
 
-//typealias weight = (ImporterWeightUnit)?
-//typealias weightWithServing = (unit: ImporterWeightUnit, servingValue: Double, servingName: String)?
-//typealias servingWithWeight = (name: String, value: Double, unit: ImporterWeightUnit)?
+//typealias weight = (WeightUnit)?
+//typealias weightWithServing = (unit: WeightUnit, servingValue: Double, servingName: String)?
+//typealias servingWithWeight = (name: String, value: Double, unit: WeightUnit)?
 //typealias servingWithVolume = (name: String, value: Double, unit: VolumeUnit)?
-//typealias volumeWithWeight = (volumeUnit: VolumeUnit?, volumeString: String, weight: Double, weightUnit: ImporterWeightUnit)?
-//typealias weightWithVolume = (weightUnit: ImporterWeightUnit?, weightString: String, volume: Double, volumeUnit: VolumeUnit)?
+//typealias volumeWithWeight = (volumeUnit: VolumeUnit?, volumeString: String, weight: Double, weightUnit: WeightUnit)?
+//typealias weightWithVolume = (weightUnit: WeightUnit?, weightString: String, volume: Double, volumeUnit: VolumeUnit)?
 //typealias volume = (VolumeUnit)?
 //typealias parseVolumeWithServing = (unit: VolumeUnit, servingValue: Double, servingName: String)?
 //typealias servingWithServing = (serving: String, constituentAmount: Double, constituentName: String)?
 
-typealias ParsedWeight = (unit: ImporterWeightUnit?, amount: Double?, string: String?)
+typealias ParsedWeight = (unit: WeightUnit?, amount: Double?, string: String?)
 typealias ParsedVolume = (unit: VolumeUnit?, amount: Double?, string: String?)
 typealias ParsedServing = (name: String, amount: Double?)
 
@@ -36,10 +36,10 @@ typealias ParseResult = (weight: ParsedWeight?, volume: ParsedVolume?, serving: 
 
 struct ParsedServingName {
     struct ParsedWeight {
-        let unit: ImporterWeightUnit?
+        let unit: WeightUnit?
         let amount: Double?
         let string: String?
-        init(unit: ImporterWeightUnit? = nil, amount: Double? = nil, string: String? = nil) {
+        init(unit: WeightUnit? = nil, amount: Double? = nil, string: String? = nil) {
             self.unit = unit
             self.amount = amount
             self.string = string
@@ -136,7 +136,7 @@ struct ParsedServingName {
     }
     
     static func parseWeight(from string: String) -> ParsedWeight? {
-        for unit in ImporterWeightUnit.allCases {
+        for unit in WeightUnit.allCases {
             if string.matchesRegex(unit.regex) {
                 return ParsedWeight(unit: unit)
             }
@@ -403,7 +403,7 @@ struct ParsedServingName {
 //
 //    //MARK: - Weight
 //    static func weightUnit(of string: String) -> (weight: ParsedWeight?, placeholder: String?) {
-//        for unit in ImporterWeightUnit.allCases {
+//        for unit in WeightUnit.allCases {
 //            if string.matchesRegex(unit.regex) {
 //                let weight: ParsedWeight = (unit, nil, nil)
 //                return (weight, nil)
