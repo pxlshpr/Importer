@@ -17,7 +17,7 @@ extension MyFitnessPalFood {
 
         let food = baseFood
         
-        food.servingUnit = .mL
+        food.servingUnit = .volume
         food.servingAmount = baseSize.processedSize.ml(for: baseSize.value, unit: volumeUnit)
         food.setAmount(basedOn: food.servingAmount)
 //        food.amount = food.servingAmount < 100 ? 100 / food.servingAmount : 1
@@ -55,7 +55,7 @@ extension MyFitnessPalFood {
                 $0.type == .servingWithVolume
             }
             food.sizes.append(
-                contentsOf: createSizes(from: sizesToAdd, unit: .mL, amount: baseSize.value * food.servingAmount)
+                contentsOf: createSizes(from: sizesToAdd, unit: .volume, amount: baseSize.value * food.servingAmount)
             )
         }
 

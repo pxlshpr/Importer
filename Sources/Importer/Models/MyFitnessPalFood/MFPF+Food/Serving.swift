@@ -22,7 +22,7 @@ extension MyFitnessPalFood {
             
             food.setAmount(basedOn: baseWeight)
 //            food.amount = baseWeight < 100 ? 100 / baseWeight : 1
-            size.unit = .g
+            size.unit = .weight
             size.amount = baseWeight / baseSize.value
             
             food.sizes.append(size)

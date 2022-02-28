@@ -7,7 +7,7 @@ extension Food {
         public var name: String = ""
         public var amount: Double = 0
         
-        public var unit: SizeUnit = .g
+        public var unit: UnitType = .weight
         public var volumeUnit: VolumeUnit? = nil
         public var size: Food.Size? = nil
     }

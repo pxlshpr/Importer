@@ -20,7 +20,7 @@ extension MyFitnessPalFood {
         
         let size = Food.Size()
         size.name = serving.name.capitalized
-        size.unit = .mL
+        size.unit = .volume
         size.amount = baseSize.processedSize.ml(for: servingAmount, unit: volumeUnit) / baseSize.value
         
         food.setAmount(basedOn: size.amount)
@@ -34,7 +34,7 @@ extension MyFitnessPalFood {
             $0.type == .serving || ($0.type == .volume && $0.isDescriptiveCups)
         }
         food.sizes.append(contentsOf:
-                            createSizes(from: sizesToAdd, unit: .mL, amount: size.amount, baseFoodSize: size)
+                            createSizes(from: sizesToAdd, unit: .volume, amount: size.amount, baseFoodSize: size)
         )
         
         food.sizes.append(contentsOf: scrapedSizes.filter { scrapedSize in

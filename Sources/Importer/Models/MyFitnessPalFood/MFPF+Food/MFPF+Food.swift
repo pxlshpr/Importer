@@ -43,7 +43,7 @@ extension MyFitnessPalFood {
     
     //MARK: - Helpers
     
-    func createSizes(from scrapedSizes: [ScrapedSize], unit: SizeUnit, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
+    func createSizes(from scrapedSizes: [ScrapedSize], unit: UnitType, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
         scrapedSizes
             .filter { !$0.name.isEmpty }
             .map { Food.Size(scrapedSize: $0, unit: unit, amount: amount) }
@@ -53,7 +53,7 @@ extension MyFitnessPalFood {
 }
 
 extension Food.Size {
-    convenience init(scrapedSize: MyFitnessPalFood.ScrapedSize, unit: SizeUnit, amount: Double) {
+    convenience init(scrapedSize: MyFitnessPalFood.ScrapedSize, unit: UnitType, amount: Double) {
         self.init()
         
         self.unit = unit
@@ -93,19 +93,19 @@ extension Food.Size {
         self.name = servingName
     }
     
-    func fillInVolumeWithWeight(_ scrapedSize: MyFitnessPalFood.ScrapedSize, unit: SizeUnit, amount: Double) throws {
+    func fillInVolumeWithWeight(_ scrapedSize: MyFitnessPalFood.ScrapedSize, unit: UnitType, amount: Double) throws {
         let parsed = scrapedSize.name.parsedVolumeWithWeight
         guard let volumeUnit = parsed.volume?.unit else {
             throw ParseError.unableToParse
         }
         
         self.name = scrapedSize.cleanedName
-        self.unit = .mL
+        self.unit = .volume
         self.volumeUnit = volumeUnit
         self.amount = scrapedSize.scaledValue
     }
     
-    func fillInServingWithVolume(_ scrapedSize: MyFitnessPalFood.ScrapedSize, unit: SizeUnit, amount: Double) throws {
+    func fillInServingWithVolume(_ scrapedSize: MyFitnessPalFood.ScrapedSize, unit: UnitType, amount: Double) throws {
         let parsed = scrapedSize.name.parsedServingWithVolume
         guard let serving = parsed.serving,
               let servingAmount = serving.amount,
@@ -115,7 +115,7 @@ extension Food.Size {
         }
         
         self.name = serving.name
-        self.unit = .mL
+        self.unit = .volume
         self.volumeUnit = volumeUnit
         self.amount = servingAmount
     }

@@ -18,7 +18,7 @@ extension MyFitnessPalFood {
             
             let size = Food.Size()
             size.name = baseSize.cleanedName.capitalized
-            size.unit = .g
+            size.unit = .weight
             size.amount = baseWeight / baseSize.value
             food.sizes.append(size)
             
@@ -33,7 +33,7 @@ extension MyFitnessPalFood {
                 $0.type == .serving || ($0.type == .volume && $0.isDescriptiveCups)
             }
             food.sizes.append(contentsOf:
-                                createSizes(from: sizesToAdd, unit: .g, amount: secondTotal, baseFoodSize: size)
+                                createSizes(from: sizesToAdd, unit: .weight, amount: secondTotal, baseFoodSize: size)
             )
             
             food.scaleNutrientsBy(scale: food.amount * baseSize.multiplier)
@@ -44,7 +44,7 @@ extension MyFitnessPalFood {
             food.unit = .serving
             food.amount = 1
             
-            food.servingUnit = .mL
+            food.servingUnit = .volume
             food.servingAmount = baseSize.value / baseSize.multiplier
             food.servingVolumeUnit = baseSize.cleanedName.parsedVolume.volume?.unit?.volumeUserUnit
             
@@ -78,7 +78,7 @@ extension MyFitnessPalFood {
                 
                 food.sizes.append(
                     contentsOf: createSizes(
-                        from: sizesToAdd, unit: .mL, amount: volume
+                        from: sizesToAdd, unit: .volume, amount: volume
                     )
                 )
 
@@ -133,7 +133,7 @@ extension MyFitnessPalFood {
                 }
                 food.sizes.append(
                     contentsOf: createSizes(
-                        from: sizesToAdd, unit: .mL, amount: volume
+                        from: sizesToAdd, unit: .volume, amount: volume
                     )
                 )
             }

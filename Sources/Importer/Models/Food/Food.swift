@@ -6,11 +6,11 @@ public class Food {
     public var brand: String? = ""
     
     public var amount: Double = 0.0
-    public var unit: FoodUnit = .g
+    public var unit: UnitType = .weight
     public var volumeUnit: VolumeUserUnit? = nil
     
     public var servingAmount: Double = 0.0
-    public var servingUnit: SizeUnit = .g
+    public var servingUnit: UnitType = .weight
     public var servingVolumeUnit: VolumeUserUnit? = nil
     public var servingSize: Size? = nil
     

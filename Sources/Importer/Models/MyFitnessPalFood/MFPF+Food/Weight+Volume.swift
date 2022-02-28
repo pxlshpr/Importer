@@ -17,7 +17,7 @@ extension MyFitnessPalFood {
 
         let food = baseFood
         
-        food.servingUnit = .g
+        food.servingUnit = .weight
         food.servingAmount = baseSize.processedSize.g(for: baseSize.value, unit: weightUnit)
         food.setAmount(basedOn: food.servingAmount)
 //        food.amount = food.servingAmount < 100 ? 100 / food.servingAmount : 1
@@ -56,7 +56,7 @@ extension MyFitnessPalFood {
             }
             food.sizes.append(
                 contentsOf:
-                    createSizes(from: sizesToAdd, unit: .g, amount: food.servingAmount)
+                    createSizes(from: sizesToAdd, unit: .weight, amount: food.servingAmount)
             )
         }
 
