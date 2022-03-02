@@ -1,6 +1,6 @@
 import Foundation
 
-struct RawUnit: Unit {
+struct RawUnit: ImporterUnit {
     let unit: String
     let singular: String
     let plural: String

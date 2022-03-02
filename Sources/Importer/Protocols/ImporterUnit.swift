@@ -1,12 +1,12 @@
 import Foundation
 
-public protocol Unit {
+public protocol ImporterUnit {
     var unitId: String { get }
     var nameSingular: String { get }
     var namePlural: String { get }
 }
 
-public extension Unit {
+public extension ImporterUnit {
     func unitDescription(forValue value: Double = 1, withServingSize: Bool = true, withTotalSize: Bool = false) -> String {
         return ""
 //        if let size = self as? Food.Size {
