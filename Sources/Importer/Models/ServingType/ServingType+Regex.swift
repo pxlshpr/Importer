@@ -16,7 +16,7 @@ extension ServingType {
         case .weightWithServing:
             return Rx.weightWithServing
         case .volumeWithServing:
-            return ""
+            return Rx.volumeWithServing
         case .servingWithServing:
             return Rx.servingWithServing
         case .unsupported:
@@ -182,7 +182,7 @@ public extension ServingType.Rx {
 
     static let volumeWithServing =
     #"^(?=\#(rawVolumeWithServing))(?!\#(endsWithVolume))(?!\#(endsWithWeight)).*$"#
-    
+
     static let servingWithServing =
     #"^(?=^\#(servingPrefix).*$)(?!\#(servingWithWeight))(?!\#(servingWithVolume))(?!\#(weightWithServing))(?!\#(volumeWithWeight))(?!\#(weightWithVolume))(?!\#(servingWithWithInName)).*$"#
     
