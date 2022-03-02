@@ -389,7 +389,8 @@ public struct ParsedServingName {
         
         servingName = servingName.trimmingCharacters(in: .whitespaces)
         
-        guard let volumeUnit = parseVolume(from: unit)?.unit
+        guard let volumeUnit = parseVolume(from: unit)?.unit,
+              !servingName.isEmpty
         else {
             return nil
         }
