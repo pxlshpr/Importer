@@ -1,7 +1,7 @@
 import Foundation
 import PrepUnits
 
-extension String {
+public extension String {
     func parsedServing(type: ServingType) -> ParsedServingName {
         ParsedServingName(self, type: type)
     }
@@ -34,11 +34,11 @@ typealias ParsedServing = (name: String, amount: Double?)
 
 typealias ParseResult = (weight: ParsedWeight?, volume: ParsedVolume?, serving: ParsedServing?, servingSize: ParsedServing?)
 
-struct ParsedServingName {
-    struct ParsedWeight {
-        let unit: WeightUnit?
-        let amount: Double?
-        let string: String?
+public struct ParsedServingName {
+    public struct ParsedWeight {
+        public let unit: WeightUnit?
+        public let amount: Double?
+        public let string: String?
         init(unit: WeightUnit? = nil, amount: Double? = nil, string: String? = nil) {
             self.unit = unit
             self.amount = amount
@@ -46,10 +46,10 @@ struct ParsedServingName {
         }
     }
     
-    struct ParsedVolume {
-        let unit: VolumeUnit?
-        let amount: Double?
-        let string: String?
+    public struct ParsedVolume {
+        public let unit: VolumeUnit?
+        public let amount: Double?
+        public let string: String?
         init(unit: VolumeUnit? = nil, amount: Double? = nil, string: String? = nil) {
             self.unit = unit
             self.amount = amount
@@ -57,19 +57,19 @@ struct ParsedServingName {
         }
     }
     
-    struct ParsedServing {
-        let name: String
-        let amount: Double?
+    public struct ParsedServing {
+        public let name: String
+        public let amount: Double?
         init(name: String, amount: Double? = nil) {
             self.name = name
             self.amount = amount
         }
     }
     
-    let weight: ParsedWeight?
-    let volume: ParsedVolume?
-    let serving: ParsedServing?
-    let servingSize: ParsedServing?
+    public let weight: ParsedWeight?
+    public let volume: ParsedVolume?
+    public let serving: ParsedServing?
+    public let servingSize: ParsedServing?
 
     init(weight: ParsedWeight? = nil, volume: ParsedVolume? = nil, serving: ParsedServing? = nil, sevingSize: ParsedServing? = nil) {
         self.weight = weight
