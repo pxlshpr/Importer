@@ -8,6 +8,7 @@ public extension String {
     
     var parsedWeight: ParsedServingName { ParsedServingName(self, type: .weight) }
     var parsedVolume: ParsedServingName { ParsedServingName(self, type: .volume) }
+    var parsedVolumeWithDescription: ParsedServingName { ParsedServingName(self, type: .volumeWithDescription) }
     var parsedServing: ParsedServingName { ParsedServingName(self, type: .serving) }
     var parsedWeightWithServing: ParsedServingName { ParsedServingName(self, type: .weightWithServing) }
     var parsedServingWithWeight: ParsedServingName { ParsedServingName(self, type: .servingWithWeight) }
@@ -128,8 +129,13 @@ public struct ParsedServingName {
             let parsed = Self.parseWeightWithVolume(from: name)
             weight = parsed?.weight
             volume = parsed?.volume
+        
+        case .volumeWithDescription:
+            let parsed = Self.parseVolumeWithDescription(from: name)
+            volume = parsed?.volume
+            serving = parsed?.serving
             
-        default:
+        case .unsupported:
             break
         }
         self.init(weight: weight, volume: volume, serving: serving, sevingSize: servingSize)
@@ -361,6 +367,30 @@ public struct ParsedServingName {
         
         let volume = ParsedVolume(unit: volumeUnit)
         let serving = ParsedServing(name: servingName, amount: servingAmountValue)
+        return (volume, serving)
+    }
+    
+    static func parseVolumeWithDescription(from string: String) -> (volume: ParsedVolume?, serving: ParsedServing?)? {
+        let groups = string.capturedGroups(using: ServingType.Rx.volumeWithDescriptionExtractor)
+        let unit = groups[0]
+        var servingName = groups[2]
+        
+        if servingName.hasPrefix("(") {
+            servingName.removeFirst(1)
+        }
+        if servingName.hasSuffix(")") {
+            servingName.removeLast(1)
+        }
+        
+        servingName = servingName.trimmingCharacters(in: .whitespaces)
+        
+        guard let volumeUnit = parseVolume(from: unit)?.unit
+        else {
+            return nil
+        }
+        
+        let volume = ParsedVolume(unit: volumeUnit)
+        let serving = ParsedServing(name: servingName)
         return (volume, serving)
     }
     
