@@ -71,7 +71,7 @@ public extension ServingType.Rx {
     #",? [A-Za-z \(\)]*"#
     
     static let volumes =
-    #"(fluid ounce|tablespoon|milliliter|millilitre|mililiter|mililitre|teaspoon|gallon|fl\. oz\.?|oz\. fl\.|oz fl|fl oz|litre|quart|pint|tbsp|gal|cup\#(pluralSuffix)\#(unitDescription)|tbs\.|tbs|cup|tsp|ltr|ml|pt|qt|l|c|c\#(pluralSuffix)\#(unitDescription))"#
+    #"(fluid ounce|tablespoon|milliliter|millilitre|mililiter|mililitre|teaspoon|gallon|fl\. oz\.?|oz\. fl\.|oz fl|fl oz|litre|quart|pint|tbsp|gal|cup\#(pluralSuffix)|tbs\.|tbs|cup|tsp|ltr|ml|pt|qt|l|c|c\#(pluralSuffix))"#
     
     static let volumeUnits =
     #"\#(volumes)\#(pluralSuffix)"#
@@ -245,4 +245,8 @@ public extension ServingType.Rx {
     
     static let weightWithVolumeExtractor =
     #"\#(weightUnits)[^0-9.,\/]+([0-9.,\/]+)[ ]*\#(volumeUnits) ?\.?\)? ?(.*)$"#
+    
+    //MARK: - Legacy
+    static let volumes_legacy =
+    #"(fluid ounce|tablespoon|milliliter|millilitre|mililiter|mililitre|teaspoon|gallon|fl\. oz\.?|oz\. fl\.|oz fl|fl oz|litre|quart|pint|tbsp|gal|cup\#(pluralSuffix)\#(unitDescription)|tbs\.|tbs|cup|tsp|ltr|ml|pt|qt|l|c|c\#(pluralSuffix)\#(unitDescription))"#
 }
