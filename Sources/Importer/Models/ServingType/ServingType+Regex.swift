@@ -237,7 +237,7 @@ public extension ServingType.Rx {
     #"^\#(volumeUnits)(\(| |\/)?.*( |\()([0-9.,\/]+) ([^\)]*)\)?$"#
 
     static let volumeWithDescriptionExtractor =
-    #"^\#(volumeUnits)(, |,| )?(.*)$"#
+    #"^\#(volumeUnits)(, |,| )?(.+)$"#
 
     static let servingWithServingExtractor =
     #"^(.*) \(?([0-9.,\/]+) ([^0-9.,\/]+)[ ]?(ea\.)? ?\)?$"#
