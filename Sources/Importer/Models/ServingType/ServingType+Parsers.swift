@@ -372,6 +372,11 @@ public struct ParsedServingName {
     
     static func parseVolumeWithDescription(from string: String) -> (volume: ParsedVolume?, serving: ParsedServing?)? {
         let groups = string.capturedGroups(using: ServingType.Rx.volumeWithDescriptionExtractor)
+        
+        guard groups.count == 3 else {
+            return nil
+        }
+        
         let unit = groups[0]
         var servingName = groups[2]
         
