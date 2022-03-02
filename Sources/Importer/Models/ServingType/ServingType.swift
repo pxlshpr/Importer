@@ -8,6 +8,7 @@ public enum ServingType: Int, CaseIterable, Identifiable {
     /// **Important** : Make sure new cases are added at bottom to ensure saved `Int` values correctly identify previous cases
     case weight
     case volume
+    case volumeWithDescription
     case serving
     case servingWithWeight
     case servingWithVolume
@@ -24,6 +25,8 @@ public enum ServingType: Int, CaseIterable, Identifiable {
             return "Weight"
         case .volume:
             return "Volume"
+        case .volumeWithDescription:
+            return "Volume with Description"
         case .serving:
             return "Serving"
         case .servingWithWeight:

@@ -7,6 +7,8 @@ extension ServingType {
             return Rx.weight
         case .volume:
             return Rx.volume
+        case .volumeWithDescription:
+            return Rx.volumeWithDescriptionExtractor
         case .serving:
             return Rx.serving
         case .servingWithWeight:
@@ -235,7 +237,7 @@ public extension ServingType.Rx {
     #"^\#(volumeUnits)(\(| |\/)?.*( |\()([0-9.,\/]+) ([^\)]*)\)?$"#
 
     static let volumeWithDescriptionExtractor =
-    #"^\#(volumeUnits)(\(| |\/)?.*( |\()?([0-9.,\/]?) ([^\)]*)\)?$"#
+    #"^\#(volumeUnits)(, |,| )?(.*)$"#
 
     static let servingWithServingExtractor =
     #"^(.*) \(?([0-9.,\/]+) ([^0-9.,\/]+)[ ]?(ea\.)? ?\)?$"#
