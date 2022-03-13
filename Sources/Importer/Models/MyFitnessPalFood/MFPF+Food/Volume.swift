@@ -53,7 +53,12 @@ extension MyFitnessPalFood {
             
             if let baseDensity = scrapedSizes.baseDensity {
                 food.density = baseDensity
-                let weight = volume * food.densityWeight / food.densityVolume
+                
+                let densityVolume = baseDensity.volume
+                let densityWeight = baseDensity.weight
+
+                //TODO: Density
+                let weight = volume * densityWeight / densityVolume
 
                 let sizesToAdd = scrapedSizes.dropFirst().filter {
                     $0.type != .weight && $0.type != .volume

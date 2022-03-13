@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/pxlshpr/PrepUnits",
         "state": {
           "branch": null,
-          "revision": "e80645a8b00a5ea63fdd7e4a3718a7394ad8d53d",
-          "version": "0.0.13"
+          "revision": "c1847dc8caf161a8976d5585aaf7279c9354849d",
+          "version": "0.0.23"
         }
       },
       {
@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/pxlshpr/SwiftSugar",
         "state": {
           "branch": null,
-          "revision": "4215dbc4a522e8fbcfd6c8becfb3f26d9ed31cb0",
-          "version": "0.0.25"
+          "revision": "d3c55e58bbf36886db0b8b3b07fcb5e2e26bf5de",
+          "version": "0.0.35"
         }
       }
     ]

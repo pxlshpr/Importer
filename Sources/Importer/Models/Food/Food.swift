@@ -18,8 +18,8 @@ public class Food {
     public var carbohydrate: Double = 0
     public var fat: Double = 0
     public var protein: Double = 0
-    public var densityVolume: Double = 0
-    public var densityWeight: Double = 0
+//    public var densityVolume: Double = 0
+//    public var densityWeight: Double = 0
     public var sizes: [Size] = []
     
     func scaleNutrientsBy(scale: Double) {
@@ -49,8 +49,8 @@ extension Food: Hashable {
             lhs.carbohydrate == rhs.carbohydrate &&
             lhs.fat == rhs.fat &&
             lhs.protein == rhs.protein &&
-            lhs.densityVolume == rhs.densityVolume &&
-            lhs.densityWeight == rhs.densityWeight &&
+//            lhs.densityVolume == rhs.densityVolume &&
+//            lhs.densityWeight == rhs.densityWeight &&
             lhs.sizes == rhs.sizes
         )
     }
@@ -67,20 +67,36 @@ extension Food: Hashable {
         hasher.combine(carbohydrate)
         hasher.combine(fat)
         hasher.combine(protein)
-        hasher.combine(densityVolume)
-        hasher.combine(densityWeight)
+//        hasher.combine(densityVolume)
+//        hasher.combine(densityWeight)
         hasher.combine(sizes)
     }
 }
 
 extension Food {
+    //TODO: Density
     var density: Density? {
         get {
-            Density(volume: densityVolume, weight: densityWeight)
+            guard let density = sizes.first(where: { $0.isDensity }) else {
+                return nil
+            }
+            return Density(volume: 1, weight: density.amount)
         }
         set {
-            densityVolume = newValue?.volume ?? 0
-            densityWeight = newValue?.weight ?? 0
+            guard let newValue = newValue, newValue.volume != 0, newValue.weight != 0 else {
+                sizes.removeAll(where: { $0.isDensity })
+                return
+            }
+            
+            let densitySize = Food.Size()
+            densitySize.name = ""
+            densitySize.nameVolumeUnit = .mL
+            densitySize.amount = newValue.weight / newValue.volume
+            densitySize.unit = .weight
+            densitySize.weightUnit = .g
+            
+            sizes.removeAll(where: { $0.isDensity })
+            sizes.append(densitySize)
         }
     }
 }

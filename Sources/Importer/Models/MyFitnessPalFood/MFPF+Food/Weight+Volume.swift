@@ -23,8 +23,11 @@ extension MyFitnessPalFood {
 //        food.amount = food.servingAmount < 100 ? 100 / food.servingAmount : 1
         
         /// now get the weight unit
-        food.densityWeight = food.servingAmount
-        food.densityVolume = baseSize.processedSize.ml(for: volumeAmount, unit: volumeUnit)
+        //TODO: Density
+        let densityWeight = food.servingAmount
+        let densityVolume = baseSize.processedSize.ml(for: volumeAmount, unit: volumeUnit)
+        
+        food.density = Density(volume: densityVolume, weight: densityWeight)
         
         if volumeUnit == .cup {
             /// add this as a size in case it has a description
