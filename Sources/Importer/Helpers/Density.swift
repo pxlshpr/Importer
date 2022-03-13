@@ -2,8 +2,8 @@ import Foundation
 
 //4D3536AB
 public struct Density {
-    let volume: Double
-    let weight: Double
+    public let volume: Double
+    public let weight: Double
     
     init?(volume: Double, weight: Double) {
         guard volume > 0 && weight > 0 else {
