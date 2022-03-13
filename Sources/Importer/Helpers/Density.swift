@@ -1,7 +1,7 @@
 import Foundation
 
 //4D3536AB
-struct Density {
+public struct Density {
     let volume: Double
     let weight: Double
     
@@ -15,7 +15,7 @@ struct Density {
 }
 
 extension Density: Equatable {
-    static func ==(lhs: Density, rhs: Density) -> Bool {
+    public static func ==(lhs: Density, rhs: Density) -> Bool {
         lhs.volume / lhs.weight == rhs.volume / rhs.weight
     }
 }

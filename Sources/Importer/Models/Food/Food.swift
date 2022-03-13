@@ -75,7 +75,7 @@ extension Food: Hashable {
 
 extension Food {
     //TODO: Density
-    var density: Density? {
+    public var density: Density? {
         get {
             guard let density = sizes.first(where: { $0.isDensity }) else {
                 return nil
