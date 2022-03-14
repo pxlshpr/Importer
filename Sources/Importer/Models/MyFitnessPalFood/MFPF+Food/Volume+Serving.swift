@@ -14,15 +14,38 @@ extension MyFitnessPalFood {
             return nil
         }
         
+        //TODO: Next—How are we going to describe Aphrodisi-oats with our system?
+        /// 1 serving = 0.33 cup, cooked
+        /// BUT
+        /// What does 0.33 cup (or 1 cup) cooked = ??
+        /// Since it cannot be serving.
+        /// Maybe we SHOULD let it be serving based since we don't have a weight?
+        /// OR just assign it the volume in the absence of a weight—
+        ///     ie. if a weight can't be inferred from the rest of the sizes, then it gets assigned its volume, descriptively (in this case, being 0.33 cups)
+        ///         this means that 0.33 cups, cooked = 0.33 cups
+        ///         But think about how assigning this in in the form would be
+        ///         > User taps "Add size" on serving field
+        ///         > User puts in "0.33", "cups", and "cooked"
+        ///         > Now do we get them to save it at this point?
+        ///
+        ///     BETTER YET
+        ///         What about if we have an empty serving, so "1 serving" with no serving size
+        ///         But we then have a size called "cups, cooked" where we equate that 0.33 of it == 1 serving
+        ///         Voila. Then we have 1 Container = 7.3 of that Size. Done!
+        //TODO: Comment all these out properly
+        
         let food = baseFood
         food.servingAmount = baseSize.value
         food.servingUnit = .size
         
+        //TODO: Handle this
         let baseVolume = baseSize.processedSize.ml(for: baseSize.value, unit: volumeUnit)
         
         let size = Food.Size()
         size.name = servingName.capitalized
         size.unit = .volume
+        
+        //TODO: Assign nameVolumeUnit instead (rename it first)
         size.amount = baseVolume / baseSize.value
         
         food.setAmount(basedOn: baseVolume)
