@@ -8,7 +8,6 @@ public enum ServingType: Int, CaseIterable, Identifiable {
     /// **Important** : Make sure new cases are added at bottom to ensure saved `Int` values correctly identify previous cases
     case weight
     case volume
-    case volumeWithDescription
     case serving
     case servingWithWeight
     case servingWithVolume
@@ -18,6 +17,7 @@ public enum ServingType: Int, CaseIterable, Identifiable {
     case unsupported
     case volumeWithWeight
     case weightWithVolume
+    case volumeWithDescription
 
     public var description: String {
         switch self {
