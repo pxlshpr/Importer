@@ -7,8 +7,8 @@ extension ServingType {
             return Rx.weight
         case .volume:
             return Rx.volume
-//        case .volumeWithDescription:
-//            return Rx.volumeWithDescription
+        case .volumeWithDescription:
+            return Rx.volumeWithDescription
         case .serving:
             return Rx.serving
         case .servingWithWeight:
@@ -167,7 +167,7 @@ public extension ServingType.Rx {
     #"^\#(onlyNumbersFollowedBySize)$|^\#(notNumeral)*$"#
     
     static let serving =
-    #"(?=\#(rawServing))(?!\#(servingWithWeight))(?!\#(servingWithVolume))(?!\#(volumeWithServing))(?!\#(startsWithWeight))(?!\#(startsWithVolume)).*$"#
+    #"(?=\#(rawServing))(?!\#(servingWithWeight))(?!\#(servingWithVolume))(?!\#(volumeWithDescription))(?!\#(startsWithWeight))(?!\#(startsWithVolume)).*$"#
     
     static let servingWithWeight =
 //        #"^(?=\#(rawServingWithWeight))(?!\#(startsWithWeight)).*$"#
