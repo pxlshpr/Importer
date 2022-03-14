@@ -8,7 +8,7 @@ public extension String {
     
     var parsedWeight: ParsedServingName { ParsedServingName(self, type: .weight) }
     var parsedVolume: ParsedServingName { ParsedServingName(self, type: .volume) }
-    var parsedVolumeWithDescription: ParsedServingName { ParsedServingName(self, type: .volumeWithDescription) }
+//    var parsedVolumeWithDescription: ParsedServingName { ParsedServingName(self, type: .volumeWithDescription) }
     var parsedServing: ParsedServingName { ParsedServingName(self, type: .serving) }
     var parsedWeightWithServing: ParsedServingName { ParsedServingName(self, type: .weightWithServing) }
     var parsedServingWithWeight: ParsedServingName { ParsedServingName(self, type: .servingWithWeight) }
@@ -130,10 +130,10 @@ public struct ParsedServingName {
             weight = parsed?.weight
             volume = parsed?.volume
         
-        case .volumeWithDescription:
-            let parsed = Self.parseVolumeWithDescription(from: name)
-            volume = parsed?.volume
-            serving = parsed?.serving
+//        case .volumeWithDescription:
+//            let parsed = Self.parseVolumeWithDescription(from: name)
+//            volume = parsed?.volume
+//            serving = parsed?.serving
             
         case .unsupported:
             break
