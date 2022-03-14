@@ -279,12 +279,15 @@ public struct ParsedServingName {
         volume = groups[0].cleaned
         amount = groups[2]
         weight = groups[3]
-        if groups.count == 4 {
-            name = groups[1]
-        } else if groups.count == 5 {
-            name = groups[4]
-        } else {
-            name = ""
+        name = ""
+        if groups.count == 5 {
+            if groups[4].isEmpty {
+                if !groups[1].trimmingCharacters(in: .whitespaces).isEmpty {
+                    name = groups[1]
+                }
+            } else {
+                name = groups[4]
+            }
         }
         
         volume = volume.trimmingCharacters(in: .whitespaces)
