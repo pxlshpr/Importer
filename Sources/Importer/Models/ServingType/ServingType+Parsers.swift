@@ -8,7 +8,6 @@ public extension String {
     
     var parsedWeight: ParsedServingName { ParsedServingName(self, type: .weight) }
     var parsedVolume: ParsedServingName { ParsedServingName(self, type: .volume) }
-    var parsedVolumeWithDescription: ParsedServingName { ParsedServingName(self, type: .volumeWithDescription) }
     var parsedServing: ParsedServingName { ParsedServingName(self, type: .serving) }
     var parsedWeightWithServing: ParsedServingName { ParsedServingName(self, type: .weightWithServing) }
     var parsedServingWithWeight: ParsedServingName { ParsedServingName(self, type: .servingWithWeight) }
@@ -130,11 +129,6 @@ public struct ParsedServingName {
             weight = parsed?.weight
             volume = parsed?.volume
         
-        case .volumeWithDescription:
-            let parsed = Self.parseVolumeWithDescription(from: name)
-            volume = parsed?.volume
-            serving = parsed?.serving
-            
         case .unsupported:
             break
         }
@@ -335,8 +329,8 @@ public struct ParsedServingName {
         return (parsedWeight, parsedVolume)
     }
     
-    static func parseVolumeWithServing(from string: String) -> (volume: ParsedVolume?, serving: ParsedServing?)? {
-        var groups = string.capturedGroups(using: ServingType.Rx.volumeWithServingExtractor)
+    static func parseVolumeWithServing_leacy(from string: String) -> (volume: ParsedVolume?, serving: ParsedServing?)? {
+        var groups = string.capturedGroups(using: ServingType.Rx.volumeWithServingExtractor_legacy)
         var unit: String, servingAmount: String, servingName: String
         if groups.count < 4 {
             groups = string.capturedGroups(using: ServingType.Rx.volumeWithServingHavingSizeNumberExtractor)
@@ -378,8 +372,8 @@ public struct ParsedServingName {
         return (volume, serving)
     }
     
-    static func parseVolumeWithDescription(from string: String) -> (volume: ParsedVolume?, serving: ParsedServing?)? {
-        let groups = string.capturedGroups(using: ServingType.Rx.volumeWithDescriptionExtractor)
+    static func parseVolumeWithServing(from string: String) -> (volume: ParsedVolume?, serving: ParsedServing?)? {
+        let groups = string.capturedGroups(using: ServingType.Rx.volumeWithServingExtractor)
         
         guard groups.count == 3 else {
             return nil

@@ -16,7 +16,6 @@ public enum ServingType: Int, CaseIterable, Identifiable {
     case unsupported
     case volumeWithWeight
     case weightWithVolume
-    case volumeWithDescription
     case volumeWithServing
 
     public var description: String {
@@ -25,8 +24,6 @@ public enum ServingType: Int, CaseIterable, Identifiable {
             return "Weight"
         case .volume:
             return "Volume"
-        case .volumeWithDescription:
-            return "Volume with Description"
         case .serving:
             return "Serving"
         case .servingWithWeight:

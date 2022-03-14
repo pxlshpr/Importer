@@ -7,8 +7,6 @@ extension ServingType {
             return Rx.weight
         case .volume:
             return Rx.volume
-        case .volumeWithDescription:
-            return Rx.volumeWithDescription
         case .serving:
             return Rx.serving
         case .servingWithWeight:
@@ -167,7 +165,7 @@ public extension ServingType.Rx {
     #"^\#(onlyNumbersFollowedBySize)$|^\#(notNumeral)*$"#
     
     static let serving =
-    #"(?=\#(rawServing))(?!\#(servingWithWeight))(?!\#(servingWithVolume))(?!\#(volumeWithDescription))(?!\#(startsWithWeight))(?!\#(startsWithVolume)).*$"#
+    #"(?=\#(rawServing))(?!\#(servingWithWeight))(?!\#(servingWithVolume))(?!\#(volumeWithServing))(?!\#(startsWithWeight))(?!\#(startsWithVolume)).*$"#
     
     static let servingWithWeight =
 //        #"^(?=\#(rawServingWithWeight))(?!\#(startsWithWeight)).*$"#
@@ -182,11 +180,11 @@ public extension ServingType.Rx {
     static let weightWithServing =
     #"^(?=\#(rawWeightWithServing)|\#(weightWithServingWithSizeNumber))(?!\#(endsWithWeight))(?!\#(endsWithVolume)).*$"#
 
-    static let volumeWithServing =
+    static let volumeWithServing_legacy =
     #"^(?=\#(rawVolumeWithServing))(?!\#(endsWithVolume))(?!\#(endsWithWeight)).*$"#
 
-    static let volumeWithDescription =
-    #"^(?!\#(volume))(?=\#(volumeWithDescriptionExtractor)).*$"#
+    static let volumeWithServing =
+    #"^(?!\#(volume))(?=\#(volumeWithServingExtractor)).*$"#
 
     static let servingWithServing =
     #"^(?=^\#(servingPrefix).*$)(?!\#(servingWithWeight))(?!\#(servingWithVolume))(?!\#(weightWithServing))(?!\#(volumeWithWeight))(?!\#(weightWithVolume))(?!\#(servingWithWithInName)).*$"#
@@ -236,10 +234,10 @@ public extension ServingType.Rx {
     static let servingWithVolumeExtractor =
     #"\#(servingWithVolumeFirstValue)|\#(servingWithVolumeLastValue)"#
     
-    static let volumeWithServingExtractor =
+    static let volumeWithServingExtractor_legacy =
     #"^\#(volumeUnits)(\(| |\/)?.*( |\()([0-9.,\/]+) ([^\)]*)\)?$"#
 
-    static let volumeWithDescriptionExtractor =
+    static let volumeWithServingExtractor =
     #"^\#(volumeUnits)(, |,| )+(.*)$"#
 
     static let servingWithServingExtractor =
