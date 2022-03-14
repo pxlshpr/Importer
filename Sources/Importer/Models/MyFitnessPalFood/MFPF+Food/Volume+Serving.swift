@@ -104,7 +104,7 @@ extension MyFitnessPalFood {
             contentsOf: createSizes(from: sizesToAdd, unit: .volume, amount: size.amount * baseSize.value, baseFoodSize: size)
         )
         
-        food.sizes.append(contentsOf: scrapedSizes.filter { scrapedSize in
+        food.sizes.append(contentsOf: scrapedSizes.dropFirst().filter { scrapedSize in
             scrapedSize.type == .volumeWithServing
         }.compactMap { scrapedSize -> Food.Size? in
             let s = Food.Size()
@@ -115,6 +115,12 @@ extension MyFitnessPalFood {
                 print("Couldn't parse volumeWithServing: \(scrapedSize)")
                 return nil
             }
+            
+            /// Make sure this isn't a repeat of the first size (with a different quantity)
+            guard servingName != size.name else {
+                return nil
+            }
+            
             s.name = servingName
             s.nameVolumeUnit = volumeUnit
             s.amountUnitType = containsWeightBasedSize ? .weight : .serving
