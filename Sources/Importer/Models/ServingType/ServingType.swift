@@ -48,11 +48,13 @@ public enum ServingType: Int, CaseIterable, Identifiable {
 
 extension ServingType {    
     static var weightBasedTypes: [ServingType] {
-        [.weight, .servingWithWeight, .weightWithServing]
+        //TODO: Check that adding .weightWithVolume is valid
+        [.weight, .servingWithWeight, .weightWithServing, .weightWithVolume]
     }
 
     static var volumeBasedTypes: [ServingType] {
-        [.volume, .servingWithVolume, .volumeWithServing]
+        //TODO: Check that adding .volumeWithWeight is valid
+        [.volume, .servingWithVolume, .volumeWithServing, .volumeWithWeight]
     }
     
     var isWeightBased: Bool {

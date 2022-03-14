@@ -2,20 +2,20 @@ import Foundation
 import PrepUnits
 
 public extension String {
-    func parsedServing(type: ServingType) -> ParsedServingName {
-        ParsedServingName(self, type: type)
+    func parsedServing(type: ServingType) -> ParseResult {
+        ParseResult(self, type: type)
     }
     
-    var parsedWeight: ParsedServingName { ParsedServingName(self, type: .weight) }
-    var parsedVolume: ParsedServingName { ParsedServingName(self, type: .volume) }
-    var parsedServing: ParsedServingName { ParsedServingName(self, type: .serving) }
-    var parsedWeightWithServing: ParsedServingName { ParsedServingName(self, type: .weightWithServing) }
-    var parsedServingWithWeight: ParsedServingName { ParsedServingName(self, type: .servingWithWeight) }
-    var parsedServingWithVolume: ParsedServingName { ParsedServingName(self, type: .servingWithVolume) }
-    var parsedVolumeWithWeight: ParsedServingName { ParsedServingName(self, type: .volumeWithWeight) }
-    var parsedWeightWithVolume: ParsedServingName { ParsedServingName(self, type: .weightWithVolume) }
-    var parsedVolumeWithServing: ParsedServingName { ParsedServingName(self, type: .volumeWithServing) }
-    var parsedServingWithServing: ParsedServingName { ParsedServingName(self, type: .servingWithServing) }
+    var parsedWeight: ParseResult { ParseResult(self, type: .weight) }
+    var parsedVolume: ParseResult { ParseResult(self, type: .volume) }
+    var parsedServing: ParseResult { ParseResult(self, type: .serving) }
+    var parsedWeightWithServing: ParseResult { ParseResult(self, type: .weightWithServing) }
+    var parsedServingWithWeight: ParseResult { ParseResult(self, type: .servingWithWeight) }
+    var parsedServingWithVolume: ParseResult { ParseResult(self, type: .servingWithVolume) }
+    var parsedVolumeWithWeight: ParseResult { ParseResult(self, type: .volumeWithWeight) }
+    var parsedWeightWithVolume: ParseResult { ParseResult(self, type: .weightWithVolume) }
+    var parsedVolumeWithServing: ParseResult { ParseResult(self, type: .volumeWithServing) }
+    var parsedServingWithServing: ParseResult { ParseResult(self, type: .servingWithServing) }
 }
 
 //typealias weight = (WeightUnit)?
@@ -32,9 +32,9 @@ typealias ParsedWeight = (unit: WeightUnit?, amount: Double?, string: String?)
 typealias ParsedVolume = (unit: VolumeUnit?, amount: Double?, string: String?)
 typealias ParsedServing = (name: String, amount: Double?)
 
-typealias ParseResult = (weight: ParsedWeight?, volume: ParsedVolume?, serving: ParsedServing?, servingSize: ParsedServing?)
+//typealias ParseResult = (weight: ParsedWeight?, volume: ParsedVolume?, serving: ParsedServing?, servingSize: ParsedServing?)
 
-public struct ParsedServingName {
+public struct ParseResult {
     public struct ParsedWeight {
         public let unit: WeightUnit?
         public let amount: Double?

@@ -30,6 +30,7 @@ public class Food {
     }
     
     func setAmount(basedOn value: Double) {
+        //TODO: Replace this redundant function with this value
         amount = 1
 //        amount = value < 100 ? 100 / value : 1
     }
