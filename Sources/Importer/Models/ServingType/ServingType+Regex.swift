@@ -186,7 +186,7 @@ public extension ServingType.Rx {
     #"^(?=\#(rawVolumeWithServing))(?!\#(endsWithVolume))(?!\#(endsWithWeight)).*$"#
 
     static let volumeWithDescription =
-    #"^(?!\#(volume)(?=\#(volumeWithDescriptionExtractor)).*$"#
+    #"^(?!\#(volume))(?=\#(volumeWithDescriptionExtractor)).*$"#
 
     static let servingWithServing =
     #"^(?=^\#(servingPrefix).*$)(?!\#(servingWithWeight))(?!\#(servingWithVolume))(?!\#(weightWithServing))(?!\#(volumeWithWeight))(?!\#(weightWithVolume))(?!\#(servingWithWithInName)).*$"#
