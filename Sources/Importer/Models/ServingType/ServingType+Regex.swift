@@ -167,7 +167,7 @@ public extension ServingType.Rx {
     #"^\#(onlyNumbersFollowedBySize)$|^\#(notNumeral)*$"#
     
     static let serving =
-    #"(?=\#(rawServing))(?!\#(servingWithWeight))(?!\#(servingWithVolume))(?!\#(startsWithWeight))(?!\#(startsWithVolume)).*$"#
+    #"(?=\#(rawServing))(?!\#(servingWithWeight))(?!\#(servingWithVolume))(?!\#(volumeWithDescription))(?!\#(startsWithWeight))(?!\#(startsWithVolume)).*$"#
     
     static let servingWithWeight =
 //        #"^(?=\#(rawServingWithWeight))(?!\#(startsWithWeight)).*$"#

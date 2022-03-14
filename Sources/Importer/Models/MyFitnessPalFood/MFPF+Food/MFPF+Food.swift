@@ -24,6 +24,8 @@ extension MyFitnessPalFood {
             return foodStartingWithVolumeWithWeight
         case .weightWithVolume:
             return foodStartingWithWeightWithVolume
+        case .volumeWithDescription:
+            return foodStartingWithVolumeWithDescription
         default:
             return Food()
         }
