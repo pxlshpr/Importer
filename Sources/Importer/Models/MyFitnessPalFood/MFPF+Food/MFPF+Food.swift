@@ -58,7 +58,7 @@ extension Food.Size {
     convenience init(scrapedSize: MyFitnessPalFood.ScrapedSize, unit: UnitType, amount: Double) {
         self.init()
         
-        self.unit = unit
+        self.amountUnitType = unit
         self.amount = amount * scrapedSize.multiplier
 
         do {
@@ -102,8 +102,8 @@ extension Food.Size {
         }
         
         self.name = scrapedSize.cleanedName
-        self.unit = .volume
-        self.volumeUnit = volumeUnit
+        self.amountUnitType = .volume
+        self.amountVolumeUnit = volumeUnit
         self.amount = scrapedSize.scaledValue
     }
     
@@ -117,8 +117,8 @@ extension Food.Size {
         }
         
         self.name = serving.name
-        self.unit = .volume
-        self.volumeUnit = volumeUnit
+        self.amountUnitType = .volume
+        self.amountVolumeUnit = volumeUnit
         self.amount = servingAmount
     }
 

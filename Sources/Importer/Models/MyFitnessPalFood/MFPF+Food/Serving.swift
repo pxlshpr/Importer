@@ -22,7 +22,7 @@ extension MyFitnessPalFood {
             
             food.setAmount(basedOn: baseWeight)
 //            food.amount = baseWeight < 100 ? 100 / baseWeight : 1
-            size.unit = .weight
+            size.amountUnitType = .weight
             size.amount = baseWeight / baseSize.value
             
             food.sizes.append(size)
@@ -30,7 +30,7 @@ extension MyFitnessPalFood {
             
         } else {
             food.amount = 1
-            size.unit = .serving
+            size.amountUnitType = .serving
             size.amount = 1.0/baseSize.value
             
             total = baseSize.multiplier
@@ -44,7 +44,7 @@ extension MyFitnessPalFood {
             $0.type == .serving || ($0.type == .volume && $0.isDescriptiveCups)
         }
         food.sizes.append(contentsOf:
-                            createSizes(from: sizesToAdd, unit: size.unit, amount: total, baseFoodSize: size)
+                            createSizes(from: sizesToAdd, unit: size.amountUnitType, amount: total, baseFoodSize: size)
         )
         
         food.sizes.append(contentsOf: scrapedSizes.filter { scrapedSize in
@@ -56,9 +56,9 @@ extension MyFitnessPalFood {
             } else {
                 remainingSize.name = scrapedSize.cleanedName.capitalized
             }
-            remainingSize.unit = .size
+            remainingSize.amountUnitType = .size
             remainingSize.amount = total * scrapedSize.multiplier * baseSize.value
-            remainingSize.size = size
+            remainingSize.amountSizeUnit = size
             return remainingSize
         })
         

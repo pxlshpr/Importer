@@ -92,8 +92,8 @@ extension Food {
             densitySize.name = ""
             densitySize.nameVolumeUnit = .mL
             densitySize.amount = newValue.weight / newValue.volume
-            densitySize.unit = .weight
-            densitySize.weightUnit = .g
+            densitySize.amountUnitType = .weight
+            densitySize.amountWeightUnit = .g
             
             sizes.removeAll(where: { $0.isDensity })
             sizes.append(densitySize)

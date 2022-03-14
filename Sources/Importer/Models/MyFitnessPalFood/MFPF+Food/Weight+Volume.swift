@@ -34,7 +34,7 @@ extension MyFitnessPalFood {
             let size = Food.Size()
             size.name = volumeUnit.description.capitalized
             size.amount = 1.0/volumeAmount
-            size.unit = .serving
+            size.amountUnitType = .serving
             food.sizes.append(size)
             
             food.sizes.append(contentsOf: scrapedSizes.filter { scrapedSize in
@@ -47,9 +47,9 @@ extension MyFitnessPalFood {
                     return nil
                 }
                 s.name = serving.name
-                s.unit = .size
+                s.amountUnitType = .size
                 s.amount = baseSize.multiplier * scrapedSize.multiplier * baseSize.value
-                s.size = size
+                s.amountSizeUnit = size
                 return s
             })
         } else {

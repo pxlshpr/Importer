@@ -4,16 +4,18 @@ import PrepUnits
 extension Food {
     public class Size: Identifiable {
         public var id = UUID()
+
+        public var quantity: Double = 1
         
         public var name: String = ""
         public var nameVolumeUnit: VolumeUnit? = nil
         
         public var amount: Double = 0
         
-        public var unit: UnitType = .weight
-        public var volumeUnit: VolumeUnit? = nil
-        public var weightUnit: WeightUnit? = nil
-        public var size: Food.Size? = nil
+        public var amountUnitType: UnitType = .weight
+        public var amountVolumeUnit: VolumeUnit? = nil
+        public var amountWeightUnit: WeightUnit? = nil
+        public var amountSizeUnit: Food.Size? = nil
         
         public var isDensity: Bool {
             guard nameVolumeUnit != nil, name.isEmpty else {
@@ -27,22 +29,26 @@ extension Food {
 extension Food.Size: Equatable {
     public static func ==(lhs: Food.Size, rhs: Food.Size) -> Bool {
         lhs.name == rhs.name
-        && lhs.unit == rhs.unit
-        && lhs.volumeUnit == rhs.volumeUnit
-        && lhs.weightUnit == rhs.weightUnit
-        && lhs.size == rhs.size
+        && lhs.nameVolumeUnit == rhs.nameVolumeUnit
+        && lhs.amountUnitType == rhs.amountUnitType
+        && lhs.amountVolumeUnit == rhs.amountVolumeUnit
+        && lhs.amountWeightUnit == rhs.amountWeightUnit
+        && lhs.amountSizeUnit == rhs.amountSizeUnit
         && lhs.amount.rounded(toPlaces: 2) == rhs.amount.rounded(toPlaces: 2)
+        && lhs.quantity.rounded(toPlaces: 2) == rhs.quantity.rounded(toPlaces: 2)
     }
 }
 
 extension Food.Size: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+        hasher.combine(quantity)
         hasher.combine(name)
+        hasher.combine(nameVolumeUnit)
         hasher.combine(amount)
-        hasher.combine(unit)
-        hasher.combine(volumeUnit)
-        hasher.combine(weightUnit)
-        hasher.combine(size)
+        hasher.combine(amountUnitType)
+        hasher.combine(amountVolumeUnit)
+        hasher.combine(amountWeightUnit)
+        hasher.combine(amountSizeUnit)
     }
 }

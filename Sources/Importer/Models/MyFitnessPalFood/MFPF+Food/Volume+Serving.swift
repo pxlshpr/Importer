@@ -1,6 +1,17 @@
 import Foundation
 
 extension MyFitnessPalFood {
+    
+    var containsWeightBasedSize: Bool {
+        scrapedSizes.contains(where: { $0.isWeightBased })
+    }
+    
+    /// Returns the weight of 1x of this food OR 0 if it is not weight based
+    var baseWeight: Double {
+        //TODO: Write this
+        return 0
+    }
+    
     var foodStartingWithVolumeWithServing: Food? {
         /// protect against division by 0 with baseSize.value check
         guard let baseSize = baseSize, baseSize.value > 0 else {
@@ -43,15 +54,20 @@ extension MyFitnessPalFood {
         
         let size = Food.Size()
         size.name = servingName.capitalized
-        size.unit = .volume
+        size.amountUnitType = containsWeightBasedSize ? .weight : .serving
+        size.nameVolumeUnit = volumeUnit
+        size.quantity = baseSize.value
         
-        //TODO: Assign nameVolumeUnit instead (rename it first)
-        size.amount = baseVolume / baseSize.value
+        //TODO: Check that this is valid
+//        size.amount = baseVolume / baseSize.value
+        size.amount = containsWeightBasedSize ? baseWeight * baseSize.multiplier : baseSize.multiplier
         
+        //TODO: Change this
         food.setAmount(basedOn: baseVolume)
-//        food.amount = baseVolume < 100 ? 100 / baseVolume : 1
         
-        food.servingSize = size
+        //TODO: Check that this is now valid to uncomment
+//        food.servingSize = size
+        
         food.sizes.append(size)
         
         /// add remaining servings or descriptive volumes
@@ -72,9 +88,9 @@ extension MyFitnessPalFood {
                 return nil
             }
             s.name = servingName
-            s.unit = .size
+            s.amountUnitType = .size
             s.amount = baseSize.multiplier * scrapedSize.multiplier * baseVolume / size.amount
-            s.size = size
+            s.amountSizeUnit = size
             return s
         })
 
@@ -87,9 +103,9 @@ extension MyFitnessPalFood {
             } else {
                 s.name = scrapedSize.cleanedName
             }
-            s.unit = .size
+            s.amountUnitType = .size
             s.amount = baseSize.multiplier * scrapedSize.multiplier * baseVolume
-            s.size = size
+            s.amountSizeUnit = size
             return s
         })
         
