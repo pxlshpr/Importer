@@ -71,11 +71,11 @@ public struct ParsedServingName {
     public let serving: ParsedServing?
     public let servingSize: ParsedServing?
 
-    init(weight: ParsedWeight? = nil, volume: ParsedVolume? = nil, serving: ParsedServing? = nil, sevingSize: ParsedServing? = nil) {
+    init(weight: ParsedWeight? = nil, volume: ParsedVolume? = nil, serving: ParsedServing? = nil, servingSize: ParsedServing? = nil) {
         self.weight = weight
         self.volume = volume
         self.serving = serving
-        self.servingSize = serving
+        self.servingSize = servingSize
     }
     
     init(_ name: String, type: ServingType) {
@@ -132,7 +132,7 @@ public struct ParsedServingName {
         case .unsupported:
             break
         }
-        self.init(weight: weight, volume: volume, serving: serving, sevingSize: servingSize)
+        self.init(weight: weight, volume: volume, serving: serving, servingSize: servingSize)
     }
     
     static func parseWeight(from string: String) -> ParsedWeight? {
