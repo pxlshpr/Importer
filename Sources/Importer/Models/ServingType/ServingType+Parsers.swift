@@ -275,17 +275,22 @@ public struct ParsedServingName {
         guard groups.count > 2 else {
             return nil
         }
-        var volume, amount, weight: String
+        var volume, amount, weight, name: String
         volume = groups[0].cleaned
-        amount = groups[1]
-        weight = groups[2]
-        if groups.count == 4, groups[3].count > 0 {
-            volume += " " + groups[3]
+        amount = groups[2]
+        weight = groups[3]
+        if groups.count == 4 {
+            name = groups[1]
+        } else if groups.count == 5 {
+            name = groups[4]
+        } else {
+            name = ""
         }
         
         volume = volume.trimmingCharacters(in: .whitespaces)
         amount = amount.trimmingCharacters(in: .whitespaces)
         weight = weight.trimmingCharacters(in: .whitespaces)
+        name = name.trimmingCharacters(in: .whitespaces)
         
         guard let amountValue = amount.doubleFromExtractedNumber,
               let weightUnit = parseWeight(from: weight)?.unit,

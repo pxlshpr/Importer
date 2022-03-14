@@ -246,7 +246,7 @@ public extension ServingType.Rx {
     #"^(.*) \(?([0-9.,\/]+) ([^0-9.,\/]+)[ ]?(ea\.)? ?\)?$"#
     
     static let volumeWithWeightExtractor =
-    #"\#(volumeUnits)[^0-9.,\/]+([0-9.,\/]+)[ ]*\#(weightUnits) ?\.?\)? ?(.*)$"#
+    #"\#(volumeUnits)([^0-9.,\/\(]+)[\(]*([0-9.,\/]+)[ ]*\#(weightUnits) ?\.?\)? ?(.*)$"#
     
     static let weightWithVolumeExtractor =
     #"\#(weightUnits)[^0-9.,\/]+([0-9.,\/]+)[ ]*\#(volumeUnits) ?\.?\)? ?(.*)$"#
