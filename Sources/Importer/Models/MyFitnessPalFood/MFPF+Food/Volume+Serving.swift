@@ -46,7 +46,7 @@ extension MyFitnessPalFood {
         //TODO: Comment all these out properly
         
         let food = baseFood
-        food.servingAmount = baseSize.value
+        food.servingAmount = 0
         food.servingUnit = .size
         
         //TODO: Handle this
