@@ -20,6 +20,8 @@ extension MyFitnessPalFood {
             return foodStartingWithServingWithVolume
         case .weightWithServing:
             return foodStartingWithWeightWithServing
+        case .volumeWithServing:
+            return foodStartingWithVolumeWithServing
         case .volumeWithWeight:
             return foodStartingWithVolumeWithWeight
         case .weightWithVolume:
