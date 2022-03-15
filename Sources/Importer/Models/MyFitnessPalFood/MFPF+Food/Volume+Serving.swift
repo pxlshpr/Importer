@@ -64,17 +64,17 @@ extension MFPFood {
         }.compactMap {
             Food.Size(servingWithServing: $0, baseFoodSize: baseFoodSize, otherSizes: scrapedSizes)
 //            let s = Food.Size()
-//            if let servingName = scrapedSize.name.parsedServingWithServing.serving?.name {
+//            if let servingName = mfpSize.name.parsedServingWithServing.serving?.name {
 //                s.name = servingName
 //            } else {
-//                s.name = scrapedSize.cleanedName
+//                s.name = mfpSize.cleanedName
 //            }
 //            s.amountUnitType = .size
 //            s.amountSizeUnit = baseFoodSize
 //
 //            //TODO: Do this for all other servingWithServings
-////            s.amount = baseSize.multiplier * scrapedSize.multiplier * baseVolume
-//            s.amount = baseScrapedSize.multiplier * scrapedSize.multiplier
+////            s.amount = baseSize.multiplier * mfpSize.multiplier * baseVolume
+//            s.amount = baseScrapedSize.multiplier * mfpSize.multiplier
 //            return s
         })
         
@@ -87,50 +87,50 @@ extension MFPFood {
 
 extension Food.Size {
     
-    convenience init?(servingWithVolume scrapedSize: MFPFood.Size, baseSize: Food.Size, sizes: [MFPFood.Size]) {
+    convenience init?(servingWithVolume mfpSize: MFPFood.Size, baseSize: Food.Size, sizes: [MFPFood.Size]) {
         self.init()
-        let parsed = scrapedSize.name.parsedServingWithVolume
+        let parsed = mfpSize.name.parsedServingWithVolume
         guard let servingName = parsed.serving?.name else {
-            print("Couldn't parse servingWithVolume: \(scrapedSize)")
+            print("Couldn't parse servingWithVolume: \(mfpSize)")
             return nil
         }
         name = servingName
         amountUnitType = .size
-//        amount = baseScrapedSize.multiplier * scrapedSize.multiplier * baseVolume / baseSize.amount
-        amount = sizes.containsWeightBasedSize ? sizes.baseWeight * scrapedSize.multiplier : scrapedSize.multiplier
+//        amount = baseScrapedSize.multiplier * mfpSize.multiplier * baseVolume / baseSize.amount
+        amount = sizes.containsWeightBasedSize ? sizes.baseWeight * mfpSize.multiplier : mfpSize.multiplier
         amountSizeUnit = baseSize
     }
     
-    convenience init?(scrapedSize: MFPFood.Size, otherSizes: [MFPFood.Size]) {
+    convenience init?(mfpSize: MFPFood.Size, otherSizes: [MFPFood.Size]) {
         return nil
     }
     
-    convenience init?(servingWithServing scrapedSize: MFPFood.Size, baseFoodSize: Food.Size, otherSizes sizes: [MFPFood.Size]) {
+    convenience init?(servingWithServing mfpSize: MFPFood.Size, baseFoodSize: Food.Size, otherSizes sizes: [MFPFood.Size]) {
         guard let baseScrapedSize = sizes.first else {
             return nil
         }
         self.init()
-        if let servingName = scrapedSize.name.parsedServingWithServing.serving?.name {
+        if let servingName = mfpSize.name.parsedServingWithServing.serving?.name {
             name = servingName
         } else {
-            name = scrapedSize.cleanedName
+            name = mfpSize.cleanedName
         }
         amountUnitType = .size
         amountSizeUnit = baseFoodSize
         
         //TODO: Do this for all other servingWithServings
-//            s.amount = baseSize.multiplier * scrapedSize.multiplier * baseVolume
-        amount = baseScrapedSize.multiplier * scrapedSize.multiplier
+//            s.amount = baseSize.multiplier * mfpSize.multiplier * baseVolume
+        amount = baseScrapedSize.multiplier * mfpSize.multiplier
     }
-    convenience init?(volumeWithServing scrapedSize: MFPFood.Size, otherSizes sizes: [MFPFood.Size]) {
+    convenience init?(volumeWithServing mfpSize: MFPFood.Size, otherSizes sizes: [MFPFood.Size]) {
         
         self.init()
         
-        let parsed = scrapedSize.name.parsedVolumeWithServing
+        let parsed = mfpSize.name.parsedVolumeWithServing
         guard let servingName = parsed.serving?.name,
               let volumeUnit = parsed.volume?.unit
         else {
-            print("Couldn't parse volumeWithServing: \(scrapedSize)")
+            print("Couldn't parse volumeWithServing: \(mfpSize)")
             return nil
         }
         
@@ -144,7 +144,7 @@ extension Food.Size {
         nameVolumeUnit = volumeUnit
         amountUnitType = sizes.containsWeightBasedSize ? .weight : .serving
         
-        quantity = scrapedSize.value
-        amount = sizes.containsWeightBasedSize ? sizes.baseWeight * scrapedSize.multiplier : scrapedSize.multiplier
+        quantity = mfpSize.value
+        amount = sizes.containsWeightBasedSize ? sizes.baseWeight * mfpSize.multiplier : mfpSize.multiplier
     }
 }

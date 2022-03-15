@@ -37,17 +37,17 @@ extension MFPFood {
                             createSizes(from: sizesToAdd, unit: .weight, amount: size.amount, baseFoodSize: size)
         )
         
-        food.sizes.append(contentsOf: scrapedSizes.filter { scrapedSize in
-            scrapedSize.type == .servingWithServing
-        }.map { scrapedSize -> Food.Size in
+        food.sizes.append(contentsOf: scrapedSizes.filter { mfpSize in
+            mfpSize.type == .servingWithServing
+        }.map { mfpSize -> Food.Size in
             let remainingSize = Food.Size()
-            if let servingName = scrapedSize.name.parsedServingWithServing.serving?.name {
+            if let servingName = mfpSize.name.parsedServingWithServing.serving?.name {
                 remainingSize.name = servingName.capitalized
             } else {
-                remainingSize.name = scrapedSize.cleanedName.capitalized
+                remainingSize.name = mfpSize.cleanedName.capitalized
             }
             remainingSize.amountUnitType = .size
-            remainingSize.amount = baseSize.multiplier * scrapedSize.multiplier * baseSize.value
+            remainingSize.amount = baseSize.multiplier * mfpSize.multiplier * baseSize.value
             remainingSize.amountSizeUnit = size
             return remainingSize
         })

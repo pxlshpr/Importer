@@ -36,18 +36,18 @@ extension MFPFood {
             size.amountUnitType = .serving
             food.sizes.append(size)
             
-            food.sizes.append(contentsOf: scrapedSizes.filter { scrapedSize in
-                scrapedSize.type == .servingWithVolume
-            }.compactMap { scrapedSize -> Food.Size? in
+            food.sizes.append(contentsOf: scrapedSizes.filter { mfpSize in
+                mfpSize.type == .servingWithVolume
+            }.compactMap { mfpSize -> Food.Size? in
                 let s = Food.Size()
-                let parsed = scrapedSize.name.parsedServingWithVolume
+                let parsed = mfpSize.name.parsedServingWithVolume
                 guard let servingName = parsed.serving?.name else {
-                    print("Couldn't parse servingWithVolume: \(scrapedSize)")
+                    print("Couldn't parse servingWithVolume: \(mfpSize)")
                     return nil
                 }
                 s.name = servingName
                 s.amountUnitType = .size
-                s.amount = baseSize.multiplier * scrapedSize.multiplier * baseSize.value
+                s.amount = baseSize.multiplier * mfpSize.multiplier * baseSize.value
                 s.amountSizeUnit = size
                 return s
             })

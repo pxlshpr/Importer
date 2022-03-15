@@ -48,34 +48,34 @@ extension MFPFood {
     func createSizes(from scrapedSizes: [Size], unit: UnitType, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
         scrapedSizes
             .filter { !$0.name.isEmpty }
-            .map { Food.Size(scrapedSize: $0, unit: unit, amount: amount) }
+            .map { Food.Size(mfpSize: $0, unit: unit, amount: amount) }
             .removingDuplicates()
             .filter { $0 != baseFoodSize }
     }
 }
 
 extension Food.Size {
-    convenience init(scrapedSize: MFPFood.Size, unit: UnitType, amount: Double) {
+    convenience init(mfpSize: MFPFood.Size, unit: UnitType, amount: Double) {
         self.init()
         
         self.amountUnitType = unit
-        self.amount = amount * scrapedSize.multiplier
+        self.amount = amount * mfpSize.multiplier
 
         do {
-            switch scrapedSize.type {
+            switch mfpSize.type {
             case .servingWithWeight:
-                try fillInServingWithWeight(named: scrapedSize.name)
+                try fillInServingWithWeight(named: mfpSize.name)
             case .servingWithServing:
-                try fillInServingWithServing(named: scrapedSize.name)
+                try fillInServingWithServing(named: mfpSize.name)
             case .servingWithVolume:
-                try fillInServingWithVolume(scrapedSize, unit: unit, amount: amount)
+                try fillInServingWithVolume(mfpSize, unit: unit, amount: amount)
             case .volumeWithWeight:
-                try fillInVolumeWithWeight(scrapedSize, unit: unit, amount: amount)
+                try fillInVolumeWithWeight(mfpSize, unit: unit, amount: amount)
             default:
-                name = scrapedSize.cleanedName
+                name = mfpSize.cleanedName
             }
         } catch {
-            name = scrapedSize.cleanedName
+            name = mfpSize.cleanedName
         }
         
         name = name.capitalized
@@ -95,20 +95,20 @@ extension Food.Size {
         self.name = servingName
     }
     
-    func fillInVolumeWithWeight(_ scrapedSize: MFPFood.Size, unit: UnitType, amount: Double) throws {
-        let parsed = scrapedSize.name.parsedVolumeWithWeight
+    func fillInVolumeWithWeight(_ mfpSize: MFPFood.Size, unit: UnitType, amount: Double) throws {
+        let parsed = mfpSize.name.parsedVolumeWithWeight
         guard let volumeUnit = parsed.volume?.unit else {
             throw ParseError.unableToParse
         }
         
-        self.name = scrapedSize.cleanedName
+        self.name = mfpSize.cleanedName
         self.amountUnitType = .volume
         self.amountVolumeUnit = volumeUnit
-        self.amount = scrapedSize.scaledValue
+        self.amount = mfpSize.scaledValue
     }
     
-    func fillInServingWithVolume(_ scrapedSize: MFPFood.Size, unit: UnitType, amount: Double) throws {
-        let parsed = scrapedSize.name.parsedServingWithVolume
+    func fillInServingWithVolume(_ mfpSize: MFPFood.Size, unit: UnitType, amount: Double) throws {
+        let parsed = mfpSize.name.parsedServingWithVolume
         guard let serving = parsed.serving,
               let servingAmount = serving.amount,
               let volumeUnit = parsed.volume?.unit

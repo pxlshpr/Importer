@@ -41,34 +41,34 @@ extension MFPFood {
             contentsOf: createSizes(from: sizesToAdd, unit: .weight, amount: size.amount * servingAmount, baseFoodSize: size)
         )
 
-        food.sizes.append(contentsOf: scrapedSizes.filter { scrapedSize in
-            scrapedSize.type == .servingWithWeight
-        }.compactMap { scrapedSize -> Food.Size? in
+        food.sizes.append(contentsOf: scrapedSizes.filter { mfpSize in
+            mfpSize.type == .servingWithWeight
+        }.compactMap { mfpSize -> Food.Size? in
             let s = Food.Size()
-            let parsed = scrapedSize.name.parsedServingWithWeight
+            let parsed = mfpSize.name.parsedServingWithWeight
             guard let serving = parsed.serving else {
-                print("Couldn't parse servingWithWeight: \(scrapedSize)")
+                print("Couldn't parse servingWithWeight: \(mfpSize)")
                 return nil
             }
             s.name = serving.name
             s.amountUnitType = .size
-            s.amount = baseSize.multiplier * scrapedSize.multiplier * baseWeight / size.amount
+            s.amount = baseSize.multiplier * mfpSize.multiplier * baseWeight / size.amount
             s.amountSizeUnit = size
             return s
         })
 
-        food.sizes.append(contentsOf: scrapedSizes.filter { scrapedSize in
-            scrapedSize.type == .servingWithServing
-        }.map { scrapedSize -> Food.Size in
+        food.sizes.append(contentsOf: scrapedSizes.filter { mfpSize in
+            mfpSize.type == .servingWithServing
+        }.map { mfpSize -> Food.Size in
             let s = Food.Size()
-            let parsed = scrapedSize.name.parsedServingWithServing
+            let parsed = mfpSize.name.parsedServingWithServing
             if let servingName = parsed.serving?.name {
                 s.name = servingName
             } else {
-                s.name = scrapedSize.cleanedName
+                s.name = mfpSize.cleanedName
             }
             s.amountUnitType = .size
-            s.amount = baseSize.multiplier * scrapedSize.multiplier * baseWeight
+            s.amount = baseSize.multiplier * mfpSize.multiplier * baseWeight
             s.amountSizeUnit = size
             return s
         })
