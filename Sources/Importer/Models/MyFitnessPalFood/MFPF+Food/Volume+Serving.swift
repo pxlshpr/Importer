@@ -117,7 +117,7 @@ extension MyFitnessPalFood {
             }
             
             /// Make sure this isn't a repeat of the first size (with a different quantity)
-            guard servingName != size.name else {
+            guard servingName.lowercased() != size.name.lowercased() else {
                 return nil
             }
             

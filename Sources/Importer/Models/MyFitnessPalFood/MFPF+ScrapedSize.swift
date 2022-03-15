@@ -39,7 +39,7 @@ public extension MyFitnessPalFood.ScrapedSize {
     }
 }
 
-extension MyFitnessPalFood.ScrapedSize {
+public extension MyFitnessPalFood.ScrapedSize {
     
     var type: ServingType {
         for type in ServingType.allCases {
