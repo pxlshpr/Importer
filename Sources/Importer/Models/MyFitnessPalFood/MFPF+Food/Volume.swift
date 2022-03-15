@@ -170,10 +170,6 @@ public extension Array where Element == MyFitnessPalFood.ScrapedSize {
         self = self.removingSizesWithDifferentDensityToBaseSize()
     }
     
-    var defaultServing: MyFitnessPalFood.ScrapedSize? {
-        first(where: { $0.index == 0 })
-    }
-    
     var containsWeightBasedSize: Bool {
         contains(where: { $0.isWeightBased })
     }

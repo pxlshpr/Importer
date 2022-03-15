@@ -67,9 +67,9 @@ public extension MyFitnessPalFood {
         scrapedSizes.first { $0.isWeightBased || $0.isVolumeBased }
     }
     
-//    var defaultServing: ScrapedSize? {
-//        scrapedSizes.first(where: { $0.index == 0 })
-//    }
+    var defaultServing: ScrapedSize? {
+        scrapedSizes.first(where: { $0.index == 0 })
+    }
 //
 //    var containsWeightBasedSize: Bool {
 //        scrapedSizes.contains(where: { $0.isWeightBased })
