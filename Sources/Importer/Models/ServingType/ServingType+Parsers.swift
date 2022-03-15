@@ -123,6 +123,7 @@ public struct ParseResult {
             let parsed = Self.parseVolumeWithWeight(from: name)
             volume = parsed?.volume
             weight = parsed?.weight
+            serving = parsed?.serving
             
         case .weightWithVolume:
             let parsed = Self.parseWeightWithVolume(from: name)
@@ -264,7 +265,7 @@ public struct ParseResult {
         return (serving, volume)
     }
 
-    static func parseVolumeWithWeight(from string: String) -> (volume: ParsedVolume?, weight: ParsedWeight?)? {
+    static func parseVolumeWithWeight(from string: String) -> (volume: ParsedVolume?, weight: ParsedWeight?, serving: ParsedServing?)? {
         let groups = string.capturedGroups(using: ServingType.Rx.volumeWithWeightExtractor)
         guard groups.count > 2 else {
             return nil
@@ -298,7 +299,8 @@ public struct ParseResult {
         
         let parsedVolume = ParsedVolume(unit: volumeUnit, string: volume)
         let parsedWeight = ParsedWeight(unit: weightUnit, amount: amountValue)
-        return (parsedVolume, parsedWeight)
+        let parsedServing = !name.isEmpty ? ParsedServing(name: name) : nil
+        return (parsedVolume, parsedWeight, parsedServing)
     }
     
     static func parseWeightWithVolume(from string: String) -> (weight: ParsedWeight?, volume: ParsedVolume?)? {

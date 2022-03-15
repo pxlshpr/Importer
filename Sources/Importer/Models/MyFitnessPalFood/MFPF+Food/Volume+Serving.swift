@@ -2,42 +2,13 @@ import Foundation
 
 extension MyFitnessPalFood {
     
-    var containsWeightBasedSize: Bool {
-        scrapedSizes.contains(where: { $0.isWeightBased })
-    }
-    
-    /// Returns the weight of 1x of this food OR 0 if it is not weight based
-    var baseWeight: Double {
-        //TODO: Write this
-        guard let size = scrapedSizes.first(where: { $0.isWeightBased }) else {
-            return 0
-        }
-        let parsed: ParseResult
-        switch size.type {
-        case .weight:
-            parsed = size.name.parsedWeight
-        case .weightWithVolume:
-            parsed = size.name.parsedWeightWithVolume
-        case .weightWithServing:
-            parsed = size.name.parsedWeightWithServing
-        case .servingWithWeight:
-            parsed = size.name.parsedServingWithWeight
-        default:
-            return 0
-        }
-        guard let weight = parsed.weight?.amount else {
-            return 0
-        }
-        return weight
-    }
-    
     var foodStartingWithVolumeWithServing: Food? {
         /// protect against division by 0 with baseSize.value check
-        guard let baseSize = baseSize, baseSize.value > 0 else {
+        guard let baseScrapedSize = baseSize, baseScrapedSize.value > 0 else {
             return nil
         }
         
-        let parsed = baseSize.name.parsedVolumeWithServing
+        let parsed = baseScrapedSize.name.parsedVolumeWithServing
         guard let servingName = parsed.serving?.name,
               let volumeUnit = parsed.volume?.unit
         else {
@@ -67,31 +38,31 @@ extension MyFitnessPalFood {
         let food = baseFood
         
         //TODO: Handle this
-        let baseVolume = baseSize.processedSize.ml(for: baseSize.value, unit: volumeUnit)
+        let baseVolume = baseScrapedSize.processedSize.ml(for: baseScrapedSize.value, unit: volumeUnit)
         
-        let size = Food.Size()
-        size.name = servingName.capitalized
-        size.amountUnitType = containsWeightBasedSize ? .weight : .serving
-        size.nameVolumeUnit = volumeUnit
-        size.quantity = baseSize.value
+        let baseSize = Food.Size()
+        baseSize.name = servingName.capitalized
+        baseSize.amountUnitType = scrapedSizes.containsWeightBasedSize ? .weight : .serving
+        baseSize.nameVolumeUnit = volumeUnit
+        baseSize.quantity = baseScrapedSize.value
         
         //TODO: Check that this is valid
 //        size.amount = baseVolume / baseSize.value
-        size.amount = containsWeightBasedSize ? baseWeight * baseSize.multiplier : baseSize.multiplier
+        baseSize.amount = scrapedSizes.containsWeightBasedSize ? scrapedSizes.baseWeight * baseScrapedSize.multiplier : baseScrapedSize.multiplier
         
         food.amount = 1
         
         //TODO: Check that this is now valid to uncomment
         food.servingUnit = .size
-        if containsWeightBasedSize {
+        if scrapedSizes.containsWeightBasedSize {
             //TODO: Should this be 1 or baseSize.value?
             food.servingAmount = 1
-            food.servingSize = size
+            food.servingSize = baseSize
         } else {
             food.servingAmount = 0
         }
         
-        food.sizes.append(size)
+        food.sizes.append(baseSize)
         
         /// add remaining servings or descriptive volumes
         //TODO: Check if this is valid
@@ -101,34 +72,36 @@ extension MyFitnessPalFood {
             $0.type == .serving
         }
         food.sizes.append(
-            contentsOf: createSizes(from: sizesToAdd, unit: .volume, amount: size.amount * baseSize.value, baseFoodSize: size)
+            contentsOf: createSizes(from: sizesToAdd, unit: .volume, amount: baseSize.amount * baseScrapedSize.value, baseFoodSize: baseSize)
         )
         
+        /// Add all remaining `volumeWithServing` sizes
         food.sizes.append(contentsOf: scrapedSizes.dropFirst().filter { scrapedSize in
             scrapedSize.type == .volumeWithServing
         }.compactMap { scrapedSize -> Food.Size? in
-            let s = Food.Size()
-            let parsed = scrapedSize.name.parsedVolumeWithServing
-            guard let servingName = parsed.serving?.name,
-                  let volumeUnit = parsed.volume?.unit
-            else {
-                print("Couldn't parse volumeWithServing: \(scrapedSize)")
-                return nil
-            }
-            
-            /// Make sure this isn't a repeat of the first size (with a different quantity)
-            guard servingName.lowercased() != size.name.lowercased() else {
-                return nil
-            }
-            
-            s.name = servingName
-            s.nameVolumeUnit = volumeUnit
-            s.amountUnitType = containsWeightBasedSize ? .weight : .serving
-            
-            s.quantity = scrapedSize.value
-            s.amount = containsWeightBasedSize ? baseWeight * scrapedSize.multiplier : scrapedSize.multiplier
-            //TODO: Set Weight Unit
-            return s
+            Food.Size(volumeWithServing: scrapedSize, baseSize: baseSize, sizes: scrapedSizes)
+//            let s = Food.Size()
+//            let parsed = scrapedSize.name.parsedVolumeWithServing
+//            guard let servingName = parsed.serving?.name,
+//                  let volumeUnit = parsed.volume?.unit
+//            else {
+//                print("Couldn't parse volumeWithServing: \(scrapedSize)")
+//                return nil
+//            }
+//
+//            /// Make sure this isn't a repeat of the first size (with a different quantity)
+//            guard servingName.lowercased() != baseSize.name.lowercased() else {
+//                return nil
+//            }
+//
+//            s.name = servingName
+//            s.nameVolumeUnit = volumeUnit
+//            s.amountUnitType = scrapedSizes.containsWeightBasedSize ? .weight : .serving
+//
+//            s.quantity = scrapedSize.value
+//            s.amount = scrapedSizes.containsWeightBasedSize ? scrapedSizes.baseWeight * scrapedSize.multiplier : scrapedSize.multiplier
+//            //TODO: Set Weight Unit
+//            return s
         })
 
         food.sizes.append(contentsOf: scrapedSizes.filter { scrapedSize in
@@ -142,8 +115,8 @@ extension MyFitnessPalFood {
             }
             s.name = servingName
             s.amountUnitType = .size
-            s.amount = baseSize.multiplier * scrapedSize.multiplier * baseVolume / size.amount
-            s.amountSizeUnit = size
+            s.amount = baseScrapedSize.multiplier * scrapedSize.multiplier * baseVolume / baseSize.amount
+            s.amountSizeUnit = baseSize
             return s
         })
 
@@ -157,15 +130,44 @@ extension MyFitnessPalFood {
                 s.name = scrapedSize.cleanedName
             }
             s.amountUnitType = .size
-            s.amountSizeUnit = size
+            s.amountSizeUnit = baseSize
             
             //TODO: Do this for all other servingWithServings
 //            s.amount = baseSize.multiplier * scrapedSize.multiplier * baseVolume
-            s.amount = baseSize.multiplier * scrapedSize.multiplier
+            s.amount = baseScrapedSize.multiplier * scrapedSize.multiplier
             return s
         })
         
-        food.scaleNutrientsBy(scale: (food.amount * baseSize.multiplier))
+        food.scaleNutrientsBy(scale: (food.amount * baseScrapedSize.multiplier))
         return food
+    }
+}
+
+extension Food.Size {
+    
+    
+    convenience init?(volumeWithServing scrapedSize: MyFitnessPalFood.ScrapedSize, baseSize: Food.Size, sizes: [MyFitnessPalFood.ScrapedSize]) {
+        
+        self.init()
+        
+        let parsed = scrapedSize.name.parsedVolumeWithServing
+        guard let servingName = parsed.serving?.name,
+              let volumeUnit = parsed.volume?.unit
+        else {
+            print("Couldn't parse volumeWithServing: \(scrapedSize)")
+            return nil
+        }
+        
+        /// Make sure this isn't a repeat of the first size (with a different quantity)
+        guard servingName.lowercased() != baseSize.name.lowercased() else {
+            return nil
+        }
+        
+        name = servingName
+        nameVolumeUnit = volumeUnit
+        amountUnitType = sizes.containsWeightBasedSize ? .weight : .serving
+        
+        quantity = scrapedSize.value
+        amount = sizes.containsWeightBasedSize ? sizes.baseWeight * scrapedSize.multiplier : scrapedSize.multiplier
     }
 }
