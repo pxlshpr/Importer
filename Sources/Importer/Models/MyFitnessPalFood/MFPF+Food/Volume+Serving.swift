@@ -40,6 +40,8 @@ extension MyFitnessPalFood {
         //TODO: Handle this
 //        let baseVolume = baseScrapedSize.processedSize.ml(for: baseScrapedSize.value, unit: volumeUnit)
         
+        let baseFoodSize = Food.Size(volumeWithServing: baseScrapedSize, otherSizes: scrapedSizes)
+        
         let baseFoodSize = Food.Size()
         baseFoodSize.name = servingName.capitalized
         baseFoodSize.amountUnitType = scrapedSizes.containsWeightBasedSize ? .weight : .serving
@@ -138,12 +140,18 @@ extension Food.Size {
         amountSizeUnit = baseSize
     }
     
-    convenience init?(volumeWithServing scrapedSize: MyFitnessPalFood.ScrapedSize, baseSize: Food.Size, sizes: [MyFitnessPalFood.ScrapedSize]) {
+    convenience init?(scrapedSize: MyFitnessPalFood.ScrapedSize, otherSizes: [MyFitnessPalFood.ScrapedSize]) {
+        
+    }
+    
+    convenience init?(volumeWithServing scrapedSize: MyFitnessPalFood.ScrapedSize, otherSizes sizes: [MyFitnessPalFood.ScrapedSize]) {
         
         self.init()
         
         let parsed = scrapedSize.name.parsedVolumeWithServing
-        guard let servingName = parsed.serving?.name,
+        guard let baseScrapedSize = sizes.first,
+              let baseSize = Food.Size(volumeWithServing: <#T##MyFitnessPalFood.ScrapedSize#>, otherSizes: <#T##[MyFitnessPalFood.ScrapedSize]#>)
+              let servingName = parsed.serving?.name,
               let volumeUnit = parsed.volume?.unit
         else {
             print("Couldn't parse volumeWithServing: \(scrapedSize)")

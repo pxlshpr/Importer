@@ -6,10 +6,7 @@ public extension MyFitnessPalFood {
     }
     
     var baseSize: ScrapedSize? {
-        guard let firstSize = scrapedSizes.first else {
-            return nil
-        }
-        return firstSize
+        scrapedSizes.first
     }
     
     var secondSize: ScrapedSize? {
