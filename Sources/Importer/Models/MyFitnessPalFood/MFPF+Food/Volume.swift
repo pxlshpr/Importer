@@ -71,7 +71,7 @@ extension MFPFood {
 //                    }
 //
 //                    /// filter out sizes with the same ratio/multiplier and volumeUnit
-////                    if sizeToAdd.multiplier == baseSize.multiplier,
+////                    if sizeToAdd.multiplier == firstSize.multiplier,
 ////                       let volumeUnit = sizeToAdd.volumeUnit,
 ////                        {
 ////                        return false
@@ -98,7 +98,7 @@ extension MFPFood {
 //
 //                /// determine the density of that particular size
 //                food.densityVolume = volumeWithWeightSize.processedSize.ml(for: volumeWithWeightSize.value, unit: volumeUnit)
-//                food.densityWeight = baseSize.processedSize.g(for: weightAmount, unit: weightUnit)
+//                food.densityWeight = firstSize.processedSize.g(for: weightAmount, unit: weightUnit)
 
 //                let weight = volume * food.densityWeight / food.densityVolume
                                 
@@ -117,7 +117,7 @@ extension MFPFood {
 //                    }
 //
 //                    /// filter out sizes with the same ratio/multiplier and volumeUnit
-//                    if sizeToAdd.multiplier == baseSize.multiplier,
+//                    if sizeToAdd.multiplier == firstSize.multiplier,
 //                       let sizeToAddVolumeUnit = sizeToAdd.volumeUnit,
 //                       sizeToAddVolumeUnit == volumeUnit {
 //                        return false
@@ -202,7 +202,7 @@ public extension Array where Element == MFPFood.Size {
     //C796CF29
     /// The first density determined in the order that the sizes are presented (as there may be multiple for a given food)
     var baseDensity: Density? {
-        guard let baseSize = self.first else { return nil }
+        guard let firstSize = self.first else { return nil }
         
         /// volumeWithWeight
         if let size = first(where: { $0.type == .volumeWithWeight }),
@@ -212,7 +212,7 @@ public extension Array where Element == MFPFood.Size {
         {
             /// determine the density of that particular size
             let volume = size.processedSize.ml(for: size.value, unit: volumeUnit)
-            let weight = baseSize.processedSize.g(for: weightAmount, unit: weightUnit)
+            let weight = firstSize.processedSize.g(for: weightAmount, unit: weightUnit)
             return Density(volume: volume, weight: weight)
         }
         return nil

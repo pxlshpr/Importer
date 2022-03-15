@@ -2,7 +2,7 @@ import Foundation
 
 extension MFPFood {
     var foodStartingWithWeightWithVolume: Food? {
-        /// protect against division by 0 with baseSize.value check
+        /// protect against division by 0 with firstSize.value check
         guard let firstSize = sizes.first, firstSize.value > 0 else {
             return nil
         }

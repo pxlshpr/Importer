@@ -4,7 +4,7 @@ extension MFPFood {
     
     var foodStartingWithVolumeWithServing: Food? {
         
-        /// protect against division by 0 with baseSize.value check
+        /// protect against division by 0 with firstSize.value check
         guard let firstSize = sizes.first,
               firstSize.value > 0,
               let baseFoodSize = Food.Size(volumeWithServing: firstSize, mfpSizes: sizes)
@@ -19,7 +19,7 @@ extension MFPFood {
         //TODO: Check that this is now valid to uncomment
         food.servingUnit = .size
         if sizes.containsWeightBasedSize {
-            //TODO: Should this be 1 or baseSize.value?
+            //TODO: Should this be 1 or firstSize.value?
             food.servingAmount = 1
             food.servingSize = baseFoodSize
         } else {
@@ -56,7 +56,7 @@ extension MFPFood {
         food.sizes.append(contentsOf: sizes.filter {
             $0.type == .servingWithVolume
         }.compactMap {
-            Food.Size(servingWithVolume: $0, baseSize: baseFoodSize, mfpSizes: sizes)
+            Food.Size(servingWithVolume: $0, firstSize: baseFoodSize, mfpSizes: sizes)
         })
 
         //MARK: servingWithServing

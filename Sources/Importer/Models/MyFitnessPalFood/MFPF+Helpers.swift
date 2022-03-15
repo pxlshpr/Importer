@@ -5,7 +5,7 @@ public extension MFPFood {
         sizes.sorted { $0.index < $1.index }.first?.type
     }
     
-//    var baseSize: Size? {
+//    var firstSize: Size? {
 //        sizes.first
 //    }
     

@@ -26,13 +26,13 @@ extension MFPFood {
         }
         food.sizes.append(
             contentsOf: createSizes(
-//                from: sizesToAdd, unit: .g, amount: (g * baseSize.value)
+//                from: sizesToAdd, unit: .g, amount: (g * firstSize.value)
                 from: sizesToAdd, unit: .weight, amount: weight
             )
         )
         
-//        food.scaleNutrientsBy(scale: (food.amount * baseSize.multiplier))
-//        food.scaleNutrientsBy(scale: food.amount / weight * baseSize.multiplier)
+//        food.scaleNutrientsBy(scale: (food.amount * firstSize.multiplier))
+//        food.scaleNutrientsBy(scale: food.amount / weight * firstSize.multiplier)
         food.scaleNutrientsBy(scale: food.amount / weight)
         return food
     }

@@ -2,7 +2,7 @@ import Foundation
 
 extension Food.Size {
     
-    convenience init?(servingWithVolume mfpSize: MFPFood.Size, baseSize: Food.Size, mfpSizes: [MFPFood.Size]) {
+    convenience init?(servingWithVolume mfpSize: MFPFood.Size, firstSize: Food.Size, mfpSizes: [MFPFood.Size]) {
         self.init()
         let parsed = mfpSize.name.parsedServingWithVolume
         guard let servingName = parsed.serving?.name else {
@@ -11,9 +11,9 @@ extension Food.Size {
         }
         name = servingName
         amountUnitType = .size
-//        amount = baseScrapedSize.multiplier * mfpSize.multiplier * baseVolume / baseSize.amount
+//        amount = baseScrapedSize.multiplier * mfpSize.multiplier * baseVolume / firstSize.amount
         amount = mfpSizes.containsWeightBasedSize ? mfpSizes.baseWeight * mfpSize.multiplier : mfpSize.multiplier
-        amountSizeUnit = baseSize
+        amountSizeUnit = firstSize
     }
     
     convenience init?(mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
@@ -34,7 +34,7 @@ extension Food.Size {
         amountSizeUnit = baseFoodSize
         
         //TODO: Do this for all other servingWithServings
-//            s.amount = baseSize.multiplier * mfpSize.multiplier * baseVolume
+//            s.amount = firstSize.multiplier * mfpSize.multiplier * baseVolume
         amount = baseScrapedSize.multiplier * mfpSize.multiplier
     }
     convenience init?(volumeWithServing mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
@@ -49,9 +49,9 @@ extension Food.Size {
             return nil
         }
         
-        //TODO: Do this test outside the initializer so that we can use it to create the baseSize itself
+        //TODO: Do this test outside the initializer so that we can use it to create the firstSize itself
         /// Make sure this isn't a repeat of the first size (with a different quantity)
-//        guard servingName.lowercased() != baseSize.name.lowercased() else {
+//        guard servingName.lowercased() != firstSize.name.lowercased() else {
 //            return nil
 //        }
         

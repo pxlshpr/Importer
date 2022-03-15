@@ -4,7 +4,7 @@ extension MFPFood {
     var foodStartingWithVolumeWithDescription: Food? {
         //TODO: Rewrite this
         
-        /// protect against division by 0 with baseSize.value check
+        /// protect against division by 0 with firstSize.value check
         guard let firstSize = sizes.first, firstSize.value > 0 else {
             return nil
         }
