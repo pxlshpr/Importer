@@ -57,7 +57,7 @@ extension MFPFood {
                 $0.type == .servingWithVolume
             }
             food.sizes.append(
-                contentsOf: createSizes(from: sizesToAdd, unit: .volume, amount: firstSize.value * food.servingAmount)
+                contentsOf: MFPFood.createSizes(from: sizesToAdd, unit: .volume, amount: firstSize.value * food.servingAmount)
             )
         }
 

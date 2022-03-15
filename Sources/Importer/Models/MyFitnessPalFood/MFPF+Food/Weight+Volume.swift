@@ -59,7 +59,7 @@ extension MFPFood {
             }
             food.sizes.append(
                 contentsOf:
-                    createSizes(from: sizesToAdd, unit: .weight, amount: food.servingAmount)
+                    MFPFood.createSizes(from: sizesToAdd, unit: .weight, amount: food.servingAmount)
             )
         }
 

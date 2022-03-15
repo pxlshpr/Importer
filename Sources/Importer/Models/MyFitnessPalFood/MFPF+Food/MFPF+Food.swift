@@ -45,7 +45,7 @@ extension MFPFood {
     
     //MARK: - Helpers
     
-    func createSizes(from sizes: [Size], unit: UnitType, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
+    static func createSizes(from sizes: [Size], unit: UnitType, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
         sizes
             .filter { !$0.name.isEmpty }
             .map { Food.Size(mfpSize: $0, unit: unit, amount: amount) }

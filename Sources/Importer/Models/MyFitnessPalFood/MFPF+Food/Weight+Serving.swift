@@ -38,7 +38,7 @@ extension MFPFood {
             $0.type == .serving || ($0.type == .volume && $0.isDescriptiveCups)
         }
         food.sizes.append(
-            contentsOf: createSizes(from: sizesToAdd, unit: .weight, amount: size.amount * servingAmount, baseFoodSize: size)
+            contentsOf: MFPFood.createSizes(from: sizesToAdd, unit: .weight, amount: size.amount * servingAmount, baseFoodSize: size)
         )
 
         food.sizes.append(contentsOf: sizes.filter { mfpSize in

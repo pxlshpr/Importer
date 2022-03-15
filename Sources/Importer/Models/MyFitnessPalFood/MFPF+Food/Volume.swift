@@ -8,7 +8,7 @@ extension MFPFood {
         }
         let food = baseFood
         
-        /// If the base size has format of `cup, shredded` **and** the next size is a weight size
+        /// If the first size has format of `cup, shredded` **and** the next size is a weight size
         if firstSize.isDescriptiveCups, let secondSize = secondSize, secondSize.type == .weight, let secondWeight = secondSize.processedSize.g {
             
             /// translates an entry of `1 g - x0.01` to `100g`
@@ -33,7 +33,7 @@ extension MFPFood {
                 $0.type == .serving || ($0.type == .volume && $0.isDescriptiveCups)
             }
             food.sizes.append(contentsOf:
-                                createSizes(from: sizesToAdd, unit: .weight, amount: secondTotal, baseFoodSize: size)
+                                MFPFood.createSizes(from: sizesToAdd, unit: .weight, amount: secondTotal, baseFoodSize: size)
             )
             
             food.scaleNutrientsBy(scale: food.amount * firstSize.multiplier)
@@ -82,7 +82,7 @@ extension MFPFood {
 //                }
                 
                 food.sizes.append(
-                    contentsOf: createSizes(
+                    contentsOf: MFPFood.createSizes(
                         from: sizesToAdd, unit: .volume, amount: volume
                     )
                 )
@@ -128,7 +128,7 @@ extension MFPFood {
 //                }
 //
 //                food.sizes.append(
-//                    contentsOf: createSizes(
+//                    contentsOf: MFPFood.createSizes(
 //                        from: sizesToAdd, unit: .g, amount: weight
 //                    )
 //                )
@@ -137,7 +137,7 @@ extension MFPFood {
                     $0.type != .weight && $0.type != .volume
                 }
                 food.sizes.append(
-                    contentsOf: createSizes(
+                    contentsOf: MFPFood.createSizes(
                         from: sizesToAdd, unit: .volume, amount: volume
                     )
                 )

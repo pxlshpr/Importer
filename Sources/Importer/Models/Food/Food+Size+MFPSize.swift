@@ -1,4 +1,41 @@
 import Foundation
+import PrepUnits
+
+extension Food {
+    func importMFPSizes(from sizes: [MFPFood.Size], ofTypes types: [ServingType], withFirstFoodSize firstFoodSize: Food.Size) {
+        
+        guard let firstSize = sizes.first else { return }
+        
+        let sizesToAdd = sizes.dropFirst().filter {
+            $0.type == .serving
+        }
+        self.sizes.append(
+            contentsOf: MFPFood.createSizes(from: sizesToAdd, unit: .volume, amount: firstFoodSize.amount * firstSize.value, baseFoodSize: firstFoodSize)
+        )
+        
+        //MARK: volumeWithServing
+        /// Add all remaining `volumeWithServing` sizes
+        self.sizes.append(contentsOf: sizes.dropFirst().filter {
+            $0.type == .volumeWithServing
+        }.compactMap {
+            Food.Size(volumeWithServing: $0, mfpSizes: sizes)
+        })
+        
+        self.sizes.append(contentsOf: sizes.filter {
+            $0.type == .servingWithVolume
+        }.compactMap {
+            Food.Size(servingWithVolume: $0, firstSize: firstFoodSize, mfpSizes: sizes)
+        })
+        
+        //MARK: servingWithServing
+        self.sizes.append(contentsOf: sizes.filter {
+            $0.type == .servingWithServing
+        }.compactMap {
+            Food.Size(servingWithServing: $0, baseFoodSize: firstFoodSize, mfpSizes: sizes)
+        })
+
+    }
+}
 
 extension Food.Size {
     

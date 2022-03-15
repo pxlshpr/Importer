@@ -25,7 +25,7 @@ extension MFPFood {
             $0.type != .weight && $0.type != .volume
         }
         food.sizes.append(
-            contentsOf: createSizes(
+            contentsOf: MFPFood.createSizes(
 //                from: sizesToAdd, unit: .g, amount: (g * firstSize.value)
                 from: sizesToAdd, unit: .weight, amount: weight
             )
