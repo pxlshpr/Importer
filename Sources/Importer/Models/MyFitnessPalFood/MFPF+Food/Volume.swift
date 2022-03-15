@@ -176,7 +176,7 @@ public extension Array where Element == MyFitnessPalFood.ScrapedSize {
     
     /// Returns the weight of 1x of this food OR 0 if it is not weight based
     var baseWeight: Double {
-        //TODO: Write this
+        //TODO: Consider size.multiplier for size that may be like 1g:0.01x
         guard let size = first(where: { $0.isWeightBased }) else {
             return 0
         }
