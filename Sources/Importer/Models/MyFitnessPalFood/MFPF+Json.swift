@@ -1,6 +1,6 @@
 import Foundation
 
-extension MyFitnessPalFood {
+extension MFPFood {
     public init?(json: [String: Any], urlString: String) {
         guard
             let item = json["item"] as? [String: Any],

@@ -1,5 +1,5 @@
 import Foundation
 
-extension MyFitnessPalFood {
+extension MFPFood {
     
 }

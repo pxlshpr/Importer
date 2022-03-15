@@ -1,7 +1,7 @@
 import Foundation
 import PrepUnits
 
-extension MyFitnessPalFood {
+extension MFPFood {
     var foodStartingWithVolume: Food? {
         guard let baseSize = baseSize, let ml = baseSize.processedSize.ml else {
             return nil
@@ -149,7 +149,7 @@ extension MyFitnessPalFood {
     }
 }
 
-public extension Array where Element == MyFitnessPalFood.ScrapedSize {
+public extension Array where Element == MFPFood.ScrapedSize {
     
     func removingSizesWithDifferentDensityToBaseSize() -> [Element] {
         return filter { size in
@@ -201,10 +201,10 @@ public extension Array where Element == MyFitnessPalFood.ScrapedSize {
 }
 
 //C796CF29
-extension Array where Iterator.Element == MyFitnessPalFood.ScrapedSize
+extension Array where Iterator.Element == MFPFood.ScrapedSize
 {
     
-    var baseSize: MyFitnessPalFood.ScrapedSize? {
+    var baseSize: MFPFood.ScrapedSize? {
         first
     }
     

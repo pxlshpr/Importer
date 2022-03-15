@@ -1,7 +1,7 @@
 import Foundation
 import PrepUnits
 
-extension MyFitnessPalFood {
+extension MFPFood {
     public var food: Food? {
         guard let firstType = firstType else {
             print("No firstType from: \(scrapedSizes.count) sizes")
@@ -55,7 +55,7 @@ extension MyFitnessPalFood {
 }
 
 extension Food.Size {
-    convenience init(scrapedSize: MyFitnessPalFood.ScrapedSize, unit: UnitType, amount: Double) {
+    convenience init(scrapedSize: MFPFood.ScrapedSize, unit: UnitType, amount: Double) {
         self.init()
         
         self.amountUnitType = unit
@@ -95,7 +95,7 @@ extension Food.Size {
         self.name = servingName
     }
     
-    func fillInVolumeWithWeight(_ scrapedSize: MyFitnessPalFood.ScrapedSize, unit: UnitType, amount: Double) throws {
+    func fillInVolumeWithWeight(_ scrapedSize: MFPFood.ScrapedSize, unit: UnitType, amount: Double) throws {
         let parsed = scrapedSize.name.parsedVolumeWithWeight
         guard let volumeUnit = parsed.volume?.unit else {
             throw ParseError.unableToParse
@@ -107,7 +107,7 @@ extension Food.Size {
         self.amount = scrapedSize.scaledValue
     }
     
-    func fillInServingWithVolume(_ scrapedSize: MyFitnessPalFood.ScrapedSize, unit: UnitType, amount: Double) throws {
+    func fillInServingWithVolume(_ scrapedSize: MFPFood.ScrapedSize, unit: UnitType, amount: Double) throws {
         let parsed = scrapedSize.name.parsedServingWithVolume
         guard let serving = parsed.serving,
               let servingAmount = serving.amount,
@@ -127,7 +127,7 @@ extension Food.Size {
     }
 }
 
-extension MyFitnessPalFood.ScrapedSize {
+extension MFPFood.ScrapedSize {
     var scaledValue: Double {
         multiplier * value
     }

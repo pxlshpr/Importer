@@ -1,6 +1,6 @@
 import Foundation
 
-extension MyFitnessPalFood {
+extension MFPFood {
     var foodStartingWithWeightWithServing: Food? {
         
         /// protect against division by 0 with baseSize.value check

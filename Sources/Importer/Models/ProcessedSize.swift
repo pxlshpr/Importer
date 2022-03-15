@@ -6,14 +6,14 @@ public struct ProcessedSize {
     public var type: ServingType
     public var isCorrect: Bool? = nil
     public var correctType: ServingType? = nil
-    public var foods: [MyFitnessPalFood] = []
+    public var foods: [MFPFood] = []
     
-    public init(servingSize: MyFitnessPalFood.ScrapedSize) {
+    public init(servingSize: MFPFood.ScrapedSize) {
         self.name = servingSize.name
         self.type = servingSize.type
     }
     
-    func servingSize(for food: MyFitnessPalFood) -> MyFitnessPalFood.ScrapedSize {
+    func servingSize(for food: MFPFood) -> MFPFood.ScrapedSize {
         food.scrapedSizes.first(where: {
             $0.name == name
         })!

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct MyFitnessPalFood: Identifiable {
+public struct MFPFood: Identifiable {
     public let id: String
     public let name: String?
     public let brand: String?
@@ -21,13 +21,13 @@ public struct MyFitnessPalFood: Identifiable {
     }
 }
 
-extension MyFitnessPalFood: Equatable {
-    public static func ==(lhs: MyFitnessPalFood, rhs: MyFitnessPalFood) -> Bool {
+extension MFPFood: Equatable {
+    public static func ==(lhs: MFPFood, rhs: MFPFood) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-extension MyFitnessPalFood.ScrapedSize: Hashable {
+extension MFPFood.ScrapedSize: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
         hasher.combine(value)
@@ -35,7 +35,7 @@ extension MyFitnessPalFood.ScrapedSize: Hashable {
         hasher.combine(index)
     }
 }
-extension MyFitnessPalFood: Hashable {
+extension MFPFood: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
         hasher.combine(brand)
@@ -50,7 +50,7 @@ extension MyFitnessPalFood: Hashable {
 
 //MARK: - CustomStringConvertible
 
-extension MyFitnessPalFood: CustomStringConvertible {
+extension MFPFood: CustomStringConvertible {
 
     public var description: String {
         var string = "" +

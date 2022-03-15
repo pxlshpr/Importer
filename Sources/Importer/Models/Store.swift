@@ -32,9 +32,9 @@ public extension Engine {
         }
         
         ///convert JSON back to Data
-        let mfpFoods = items.compactMap { json -> MyFitnessPalFood? in
+        let mfpFoods = items.compactMap { json -> MFPFood? in
             guard let foodJson = json as? [String: Any],
-                  let food = MyFitnessPalFood(json: foodJson, urlString: "")
+                  let food = MFPFood(json: foodJson, urlString: "")
             else {
                   print("Couldn't get food from: \(jsonString)")
                   NotificationCenter.default.post(name: .didGetFoodResults, object: nil)

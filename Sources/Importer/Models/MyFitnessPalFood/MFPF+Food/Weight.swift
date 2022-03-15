@@ -1,6 +1,6 @@
 import Foundation
 
-extension MyFitnessPalFood {
+extension MFPFood {
     var foodStartingWithWeight: Food? {
         guard let baseSize = baseSize, let g = baseSize.processedSize.g else {
             return nil

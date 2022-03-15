@@ -1,6 +1,6 @@
 import Foundation
 
-extension MyFitnessPalFood {
+extension MFPFood {
     var foodStartingWithVolumeWithDescription: Food? {
         //TODO: Rewrite this
         
