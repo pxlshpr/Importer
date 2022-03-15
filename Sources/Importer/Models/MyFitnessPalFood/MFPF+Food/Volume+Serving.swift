@@ -3,17 +3,18 @@ import Foundation
 extension MyFitnessPalFood {
     
     var foodStartingWithVolumeWithServing: Food? {
+        
         /// protect against division by 0 with baseSize.value check
         guard let baseScrapedSize = baseSize, baseScrapedSize.value > 0 else {
             return nil
         }
         
-        let parsed = baseScrapedSize.name.parsedVolumeWithServing
-        guard let servingName = parsed.serving?.name,
-              let volumeUnit = parsed.volume?.unit
-        else {
-            return nil
-        }
+//        let parsed = baseScrapedSize.name.parsedVolumeWithServing
+//        guard let servingName = parsed.serving?.name,
+//              let volumeUnit = parsed.volume?.unit
+//        else {
+//            return nil
+//        }
         
         //TODO: Next—How are we going to describe Aphrodisi-oats with our system?
         /// 1 serving = 0.33 cup, cooked
@@ -40,18 +41,22 @@ extension MyFitnessPalFood {
         //TODO: Handle this
 //        let baseVolume = baseScrapedSize.processedSize.ml(for: baseScrapedSize.value, unit: volumeUnit)
         
-        let baseFoodSize = Food.Size(volumeWithServing: baseScrapedSize, otherSizes: scrapedSizes)
+        guard let baseFoodSize = Food.Size(volumeWithServing: baseScrapedSize, otherSizes: scrapedSizes) else {
+            return nil
+        }
         
-        let baseFoodSize = Food.Size()
-        baseFoodSize.name = servingName.capitalized
-        baseFoodSize.amountUnitType = scrapedSizes.containsWeightBasedSize ? .weight : .serving
-        baseFoodSize.nameVolumeUnit = volumeUnit
-        baseFoodSize.quantity = baseScrapedSize.value
+//        let baseFoodSize = Food.Size()
+//        baseFoodSize.name = servingName.capitalized
+//        baseFoodSize.amountUnitType = scrapedSizes.containsWeightBasedSize ? .weight : .serving
+//        baseFoodSize.nameVolumeUnit = volumeUnit
+//        baseFoodSize.quantity = baseScrapedSize.value
+//
+//        //TODO: Check that this is valid
+////        size.amount = baseVolume / baseSize.value
+//        baseFoodSize.amount = scrapedSizes.containsWeightBasedSize ? scrapedSizes.baseWeight * baseScrapedSize.multiplier : baseScrapedSize.multiplier
         
-        //TODO: Check that this is valid
-//        size.amount = baseVolume / baseSize.value
-        baseFoodSize.amount = scrapedSizes.containsWeightBasedSize ? scrapedSizes.baseWeight * baseScrapedSize.multiplier : baseScrapedSize.multiplier
         
+        //MARK: - Configure Food
         food.amount = 1
         
         //TODO: Check that this is now valid to uncomment
@@ -66,6 +71,10 @@ extension MyFitnessPalFood {
         
         food.sizes.append(baseFoodSize)
         
+        
+        //MARK: - Add Sizes
+        
+        //MARK: serving
         /// add remaining servings or descriptive volumes
         //TODO: Check if this is valid
         let sizesToAdd = scrapedSizes.dropFirst().filter {
@@ -77,11 +86,13 @@ extension MyFitnessPalFood {
             contentsOf: createSizes(from: sizesToAdd, unit: .volume, amount: baseFoodSize.amount * baseScrapedSize.value, baseFoodSize: baseFoodSize)
         )
         
+        
+        //MARK: volumeWithServing
         /// Add all remaining `volumeWithServing` sizes
         food.sizes.append(contentsOf: scrapedSizes.dropFirst().filter { scrapedSize in
             scrapedSize.type == .volumeWithServing
         }.compactMap {
-            Food.Size(volumeWithServing: $0, baseSize: baseFoodSize, sizes: scrapedSizes)
+            Food.Size(volumeWithServing: $0, otherSizes: scrapedSizes)
         })
 
         food.sizes.append(contentsOf: scrapedSizes.filter { scrapedSize in
@@ -101,6 +112,7 @@ extension MyFitnessPalFood {
 //            return s
         })
 
+        //MARK: servingWithServing
         food.sizes.append(contentsOf: scrapedSizes.filter { scrapedSize in
             scrapedSize.type == .servingWithServing
         }.map { scrapedSize -> Food.Size in
@@ -119,6 +131,8 @@ extension MyFitnessPalFood {
             return s
         })
         
+        //MARK: - Scale Nutrients now
+        //TODO: Move this to Food configuration if doable before the sizes have been added
         food.scaleNutrientsBy(scale: (food.amount * baseScrapedSize.multiplier))
         return food
     }
@@ -141,7 +155,7 @@ extension Food.Size {
     }
     
     convenience init?(scrapedSize: MyFitnessPalFood.ScrapedSize, otherSizes: [MyFitnessPalFood.ScrapedSize]) {
-        
+        return nil
     }
     
     convenience init?(volumeWithServing scrapedSize: MyFitnessPalFood.ScrapedSize, otherSizes sizes: [MyFitnessPalFood.ScrapedSize]) {
@@ -149,9 +163,7 @@ extension Food.Size {
         self.init()
         
         let parsed = scrapedSize.name.parsedVolumeWithServing
-        guard let baseScrapedSize = sizes.first,
-              let baseSize = Food.Size(volumeWithServing: <#T##MyFitnessPalFood.ScrapedSize#>, otherSizes: <#T##[MyFitnessPalFood.ScrapedSize]#>)
-              let servingName = parsed.serving?.name,
+        guard let servingName = parsed.serving?.name,
               let volumeUnit = parsed.volume?.unit
         else {
             print("Couldn't parse volumeWithServing: \(scrapedSize)")
@@ -160,9 +172,9 @@ extension Food.Size {
         
         //TODO: Do this test outside the initializer so that we can use it to create the baseSize itself
         /// Make sure this isn't a repeat of the first size (with a different quantity)
-        guard servingName.lowercased() != baseSize.name.lowercased() else {
-            return nil
-        }
+//        guard servingName.lowercased() != baseSize.name.lowercased() else {
+//            return nil
+//        }
         
         name = servingName
         nameVolumeUnit = volumeUnit
