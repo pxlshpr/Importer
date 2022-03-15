@@ -4,7 +4,7 @@ import PrepUnits
 extension MFPFood {
     public var food: Food? {
         guard let firstType = firstType else {
-            print("No firstType from: \(scrapedSizes.count) sizes")
+            print("No firstType from: \(sizes.count) sizes")
             return nil
         }
         switch firstType {
@@ -45,8 +45,8 @@ extension MFPFood {
     
     //MARK: - Helpers
     
-    func createSizes(from scrapedSizes: [Size], unit: UnitType, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
-        scrapedSizes
+    func createSizes(from sizes: [Size], unit: UnitType, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
+        sizes
             .filter { !$0.name.isEmpty }
             .map { Food.Size(mfpSize: $0, unit: unit, amount: amount) }
             .removingDuplicates()

@@ -3,55 +3,55 @@ import PrepUnits
 
 extension MFPFood {
     var foodStartingWithVolume: Food? {
-        guard let baseSize = baseSize, let ml = baseSize.processedSize.ml else {
+        guard let firstSize = sizes.first, let ml = firstSize.processedSize.ml else {
             return nil
         }
         let food = baseFood
         
         /// If the base size has format of `cup, shredded` **and** the next size is a weight size
-        if baseSize.isDescriptiveCups, let secondSize = secondSize, secondSize.type == .weight, let secondWeight = secondSize.processedSize.g {
+        if firstSize.isDescriptiveCups, let secondSize = secondSize, secondSize.type == .weight, let secondWeight = secondSize.processedSize.g {
             
             /// translates an entry of `1 g - x0.01` to `100g`
             let secondTotal = secondWeight / secondSize.multiplier
             
-            let baseWeight = secondTotal * baseSize.multiplier
+            let baseWeight = secondTotal * firstSize.multiplier
             
             let size = Food.Size()
-            size.name = baseSize.cleanedName.capitalized
+            size.name = firstSize.cleanedName.capitalized
             size.amountUnitType = .weight
-            size.amount = baseWeight / baseSize.value
+            size.amount = baseWeight / firstSize.value
             food.sizes.append(size)
             
             food.setAmount(basedOn: baseWeight)
 //            food.amount = baseWeight < 100 ? 100 / baseWeight : 1
-            food.servingAmount = baseSize.value
+            food.servingAmount = firstSize.value
             food.servingUnit = .size
             food.servingSize = size
             
             /// add remaining non-measurement servings
-            let sizesToAdd = scrapedSizes.dropFirst().filter {
+            let sizesToAdd = sizes.dropFirst().filter {
                 $0.type == .serving || ($0.type == .volume && $0.isDescriptiveCups)
             }
             food.sizes.append(contentsOf:
                                 createSizes(from: sizesToAdd, unit: .weight, amount: secondTotal, baseFoodSize: size)
             )
             
-            food.scaleNutrientsBy(scale: food.amount * baseSize.multiplier)
+            food.scaleNutrientsBy(scale: food.amount * firstSize.multiplier)
             
         } else {
-            let volume = ml * baseSize.value / baseSize.multiplier
+            let volume = ml * firstSize.value / firstSize.multiplier
 
             food.unit = .serving
             food.amount = 1
             
             food.servingUnit = .volume
-            food.servingAmount = baseSize.value / baseSize.multiplier
-            food.servingVolumeUnit = baseSize.cleanedName.parsedVolume.volume?.unit?.volumeUserUnit
+            food.servingAmount = firstSize.value / firstSize.multiplier
+            food.servingVolumeUnit = firstSize.cleanedName.parsedVolume.volume?.unit?.volumeUserUnit
             
             //TODO: Do this for weight too
             /// if any sizes indicate a density
             
-            if let baseDensity = scrapedSizes.baseDensity {
+            if let baseDensity = sizes.baseDensity {
                 food.density = baseDensity
                 
                 let densityVolume = baseDensity.volume
@@ -60,7 +60,7 @@ extension MFPFood {
                 //TODO: Density
                 let weight = volume * densityWeight / densityVolume
 
-                let sizesToAdd = scrapedSizes.dropFirst().filter {
+                let sizesToAdd = sizes.dropFirst().filter {
                     $0.type != .weight && $0.type != .volume
                 }
 //                .removingSizesWithDifferentDensityToBaseSize()
@@ -90,7 +90,7 @@ extension MFPFood {
                 
 //            }
             
-//            if let volumeWithWeightSize = scrapedSizes.first(where: { $0.type == .volumeWithWeight }),
+//            if let volumeWithWeightSize = sizes.first(where: { $0.type == .volumeWithWeight }),
 //               let volumeUnit = volumeWithWeightSize.name.parsedVolumeWithWeight.volume?.unit,
 //               let weightAmount = volumeWithWeightSize.name.parsedVolumeWithWeight.weight?.amount,
 //               let weightUnit = volumeWithWeightSize.name.parsedVolumeWithWeight.weight?.unit
@@ -108,7 +108,7 @@ extension MFPFood {
 //                food.servingAmount = 0
                 
                 
-//                let sizesToAdd = scrapedSizes.dropFirst().filter {
+//                let sizesToAdd = sizes.dropFirst().filter {
 //                    $0.type != .weight && $0.type != .volume
 //                }.filter { sizeToAdd in
 //                    /// filter out other sizes with a different density
@@ -133,7 +133,7 @@ extension MFPFood {
 //                    )
 //                )
             } else {
-                let sizesToAdd = scrapedSizes.dropFirst().filter {
+                let sizesToAdd = sizes.dropFirst().filter {
                     $0.type != .weight && $0.type != .volume
                 }
                 food.sizes.append(
@@ -198,16 +198,8 @@ public extension Array where Element == MFPFood.Size {
         }
         return weight
     }
-}
-
-//C796CF29
-extension Array where Iterator.Element == MFPFood.Size
-{
     
-    var baseSize: MFPFood.Size? {
-        first
-    }
-    
+    //C796CF29
     /// The first density determined in the order that the sizes are presented (as there may be multiple for a given food)
     var baseDensity: Density? {
         guard let baseSize = self.first else { return nil }

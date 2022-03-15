@@ -5,9 +5,9 @@ extension MFPFood {
     var foodStartingWithVolumeWithServing: Food? {
         
         /// protect against division by 0 with baseSize.value check
-        guard let baseMFPSize = baseSize,
-              baseMFPSize.value > 0,
-              let baseFoodSize = Food.Size(volumeWithServing: baseMFPSize, mfpSizes: scrapedSizes)
+        guard let firstSize = sizes.first,
+              firstSize.value > 0,
+              let baseFoodSize = Food.Size(volumeWithServing: firstSize, mfpSizes: sizes)
         else {
             return nil
         }
@@ -18,7 +18,7 @@ extension MFPFood {
         
         //TODO: Check that this is now valid to uncomment
         food.servingUnit = .size
-        if scrapedSizes.containsWeightBasedSize {
+        if sizes.containsWeightBasedSize {
             //TODO: Should this be 1 or baseSize.value?
             food.servingAmount = 1
             food.servingSize = baseFoodSize
@@ -26,7 +26,7 @@ extension MFPFood {
             food.servingAmount = 0
         }
         
-        food.scaleNutrientsBy(scale: (food.amount * baseMFPSize.multiplier))
+        food.scaleNutrientsBy(scale: (food.amount * firstSize.multiplier))
 
         food.sizes.append(baseFoodSize)
 
@@ -35,35 +35,35 @@ extension MFPFood {
         //MARK: serving
         /// add remaining servings or descriptive volumes
         //TODO: Check if this is valid
-        let sizesToAdd = scrapedSizes.dropFirst().filter {
+        let sizesToAdd = sizes.dropFirst().filter {
             //TODO: Replace isDescriptiveCups call with checking if nameVolumeUnit is filled instead (in all food creators)
 //            $0.type == .serving || ($0.type == .volume && $0.isDescriptiveCups)
             $0.type == .serving
         }
         food.sizes.append(
-            contentsOf: createSizes(from: sizesToAdd, unit: .volume, amount: baseFoodSize.amount * baseMFPSize.value, baseFoodSize: baseFoodSize)
+            contentsOf: createSizes(from: sizesToAdd, unit: .volume, amount: baseFoodSize.amount * firstSize.value, baseFoodSize: baseFoodSize)
         )
         
         
         //MARK: volumeWithServing
         /// Add all remaining `volumeWithServing` sizes
-        food.sizes.append(contentsOf: scrapedSizes.dropFirst().filter {
+        food.sizes.append(contentsOf: sizes.dropFirst().filter {
             $0.type == .volumeWithServing
         }.compactMap {
-            Food.Size(volumeWithServing: $0, mfpSizes: scrapedSizes)
+            Food.Size(volumeWithServing: $0, mfpSizes: sizes)
         })
 
-        food.sizes.append(contentsOf: scrapedSizes.filter {
+        food.sizes.append(contentsOf: sizes.filter {
             $0.type == .servingWithVolume
         }.compactMap {
-            Food.Size(servingWithVolume: $0, baseSize: baseFoodSize, mfpSizes: scrapedSizes)
+            Food.Size(servingWithVolume: $0, baseSize: baseFoodSize, mfpSizes: sizes)
         })
 
         //MARK: servingWithServing
-        food.sizes.append(contentsOf: scrapedSizes.filter {
+        food.sizes.append(contentsOf: sizes.filter {
             $0.type == .servingWithServing
         }.compactMap {
-            Food.Size(servingWithServing: $0, baseFoodSize: baseFoodSize, mfpSizes: scrapedSizes)
+            Food.Size(servingWithServing: $0, baseFoodSize: baseFoodSize, mfpSizes: sizes)
         })
         
         return food

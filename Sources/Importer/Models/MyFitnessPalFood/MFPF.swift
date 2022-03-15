@@ -8,7 +8,7 @@ public struct MFPFood: Identifiable {
     public let carb: Double?
     public let fat: Double?
     public let protein: Double?
-    public let scrapedSizes: [Size]
+    public let sizes: [Size]
     public let urlSlug: String
     public let createdAt: Date
     public var processedSizes: [ProcessedSize] = []
@@ -43,7 +43,7 @@ extension MFPFood: Hashable {
         hasher.combine(carb)
         hasher.combine(fat)
         hasher.combine(protein)
-        hasher.combine(scrapedSizes)
+        hasher.combine(sizes)
         hasher.combine(processedSizes)
     }
 }
@@ -61,7 +61,7 @@ extension MFPFood: CustomStringConvertible {
         valueDescription(label: "Fat", value: fat) +
         valueDescription(label: "Protein", value: protein) +
         "**Servings**:\n\n"
-        for size in scrapedSizes {
+        for size in sizes {
             string += size.description
         }
         return string

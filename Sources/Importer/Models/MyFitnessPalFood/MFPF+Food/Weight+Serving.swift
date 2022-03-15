@@ -4,11 +4,11 @@ extension MFPFood {
     var foodStartingWithWeightWithServing: Food? {
         
         /// protect against division by 0 with baseSize.value check
-        guard let baseSize = baseSize, baseSize.value > 0 else {
+        guard let firstSize = sizes.first, firstSize.value > 0 else {
             return nil
         }
         
-        let parsed = baseSize.name.parsedWeightWithServing
+        let parsed = firstSize.name.parsedWeightWithServing
         guard let serving = parsed.serving,
               let servingAmount = serving.amount,
               let weightUnit = parsed.weight?.unit
@@ -20,7 +20,7 @@ extension MFPFood {
         food.servingAmount = servingAmount
         food.servingUnit = .size
         
-        let baseWeight = baseSize.processedSize.g(for: baseSize.value, unit: weightUnit)
+        let baseWeight = firstSize.processedSize.g(for: firstSize.value, unit: weightUnit)
         
         let size = Food.Size()
         size.name = serving.name.capitalized
@@ -34,14 +34,14 @@ extension MFPFood {
         food.sizes.append(size)
         
         /// add remaining servings or descriptive volumes
-        let sizesToAdd = scrapedSizes.dropFirst().filter {
+        let sizesToAdd = sizes.dropFirst().filter {
             $0.type == .serving || ($0.type == .volume && $0.isDescriptiveCups)
         }
         food.sizes.append(
             contentsOf: createSizes(from: sizesToAdd, unit: .weight, amount: size.amount * servingAmount, baseFoodSize: size)
         )
 
-        food.sizes.append(contentsOf: scrapedSizes.filter { mfpSize in
+        food.sizes.append(contentsOf: sizes.filter { mfpSize in
             mfpSize.type == .servingWithWeight
         }.compactMap { mfpSize -> Food.Size? in
             let s = Food.Size()
@@ -52,12 +52,12 @@ extension MFPFood {
             }
             s.name = serving.name
             s.amountUnitType = .size
-            s.amount = baseSize.multiplier * mfpSize.multiplier * baseWeight / size.amount
+            s.amount = firstSize.multiplier * mfpSize.multiplier * baseWeight / size.amount
             s.amountSizeUnit = size
             return s
         })
 
-        food.sizes.append(contentsOf: scrapedSizes.filter { mfpSize in
+        food.sizes.append(contentsOf: sizes.filter { mfpSize in
             mfpSize.type == .servingWithServing
         }.map { mfpSize -> Food.Size in
             let s = Food.Size()
@@ -68,12 +68,12 @@ extension MFPFood {
                 s.name = mfpSize.cleanedName
             }
             s.amountUnitType = .size
-            s.amount = baseSize.multiplier * mfpSize.multiplier * baseWeight
+            s.amount = firstSize.multiplier * mfpSize.multiplier * baseWeight
             s.amountSizeUnit = size
             return s
         })
         
-        food.scaleNutrientsBy(scale: (food.amount * baseSize.multiplier))
+        food.scaleNutrientsBy(scale: (food.amount * firstSize.multiplier))
         return food
     }
     

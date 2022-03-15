@@ -58,7 +58,7 @@ extension MFPFood {
                 )
             }
         }
-        self.scrapedSizes = sizes
+        self.sizes = sizes
         
         if let timestamp = urlString.firstCapturedGroup(using: RxFileWithTimestamp),
            let urlSlug = urlString.secondCapturedGroup(using: RxFileWithTimestamp),

@@ -14,7 +14,7 @@ public struct ProcessedSize {
     }
     
     func servingSize(for food: MFPFood) -> MFPFood.Size {
-        food.scrapedSizes.first(where: {
+        food.sizes.first(where: {
             $0.name == name
         })!
     }
