@@ -158,6 +158,7 @@ extension Food.Size {
             return nil
         }
         
+        //TODO: Do this test outside the initializer so that we can use it to create the baseSize itself
         /// Make sure this isn't a repeat of the first size (with a different quantity)
         guard servingName.lowercased() != baseSize.name.lowercased() else {
             return nil
