@@ -10,7 +10,7 @@ extension MFPFood {
             return nil
         }
         
-        //MARK: - Configure Food
+        //MARK: Configure Food
         let food = baseFood
         food.amount = 1
         food.servingUnit = .size
@@ -24,14 +24,11 @@ extension MFPFood {
         food.scaleNutrientsBy(scale: (food.amount * firstSize.multiplier))
         food.sizes.append(firstFoodSize)
         
-        //MARK: - Add Sizes
-        
-        let typesToAdd: [ServingType] =
-        [.serving,
-         .volumeWithServing,
-         .servingWithVolume,
-         .servingWithServing]
-        
+        //MARK: Add Sizes
+        let typesToAdd: [ServingType] = [.serving,
+                                         .volumeWithServing,
+                                         .servingWithVolume,
+                                         .servingWithServing]
         food.importMFPSizes(from: sizes, ofTypes: typesToAdd, withFirstFoodSize: firstFoodSize)
         
         return food
