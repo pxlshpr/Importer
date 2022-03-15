@@ -2,13 +2,13 @@ import Foundation
 import PrepUnits
 
 extension MFPFood {
-    public struct ScrapedSize: Equatable {
+    public struct Size: Equatable {
         public let name: String
         public let value: Double
         public let multiplier: Double
         public let index: Int
         
-        public static func ==(lhs: ScrapedSize, rhs: ScrapedSize) -> Bool {
+        public static func ==(lhs: Size, rhs: Size) -> Bool {
             lhs.name == rhs.name
             && lhs.value == rhs.value
             && lhs.multiplier == rhs.multiplier
@@ -17,12 +17,12 @@ extension MFPFood {
     }
 }
 
-public extension MFPFood.ScrapedSize {
+public extension MFPFood.Size {
     var processedSize: ProcessedSize {
         ProcessedSize(servingSize: self)
     }
     
-    func matchesUnit(of serving: MFPFood.ScrapedSize) -> Bool {
+    func matchesUnit(of serving: MFPFood.Size) -> Bool {
         let unit1 = name.lowercased()
         let unit2 = serving.name.lowercased()
         return unit1 == unit2
@@ -39,7 +39,7 @@ public extension MFPFood.ScrapedSize {
     }
 }
 
-public extension MFPFood.ScrapedSize {
+public extension MFPFood.Size {
     
     var type: ServingType {
         for type in ServingType.allCases {
@@ -124,7 +124,7 @@ public extension MFPFood.ScrapedSize {
 //
 
 
-extension MFPFood.ScrapedSize: CustomStringConvertible {
+extension MFPFood.Size: CustomStringConvertible {
     
     public var typeDescription: String {
         type.description
@@ -150,7 +150,7 @@ extension MFPFood.ScrapedSize: CustomStringConvertible {
     }
 }
 
-extension MFPFood.ScrapedSize {
+extension MFPFood.Size {
     
     var density: Density? {
         if type == .volumeWithWeight {
@@ -183,7 +183,7 @@ extension MFPFood.ScrapedSize {
     }
 }
 
-extension MFPFood.ScrapedSize {
+extension MFPFood.Size {
     var volumeUnit: VolumeUnit? {
         name.parsedServing(type: type).volume?.unit
     }

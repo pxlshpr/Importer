@@ -149,7 +149,7 @@ extension MFPFood {
     }
 }
 
-public extension Array where Element == MFPFood.ScrapedSize {
+public extension Array where Element == MFPFood.Size {
     
     func removingSizesWithDifferentDensityToBaseSize() -> [Element] {
         return filter { size in
@@ -201,10 +201,10 @@ public extension Array where Element == MFPFood.ScrapedSize {
 }
 
 //C796CF29
-extension Array where Iterator.Element == MFPFood.ScrapedSize
+extension Array where Iterator.Element == MFPFood.Size
 {
     
-    var baseSize: MFPFood.ScrapedSize? {
+    var baseSize: MFPFood.Size? {
         first
     }
     

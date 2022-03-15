@@ -45,7 +45,7 @@ extension MFPFood {
     
     //MARK: - Helpers
     
-    func createSizes(from scrapedSizes: [ScrapedSize], unit: UnitType, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
+    func createSizes(from scrapedSizes: [Size], unit: UnitType, amount: Double, baseFoodSize: Food.Size? = nil) -> [Food.Size] {
         scrapedSizes
             .filter { !$0.name.isEmpty }
             .map { Food.Size(scrapedSize: $0, unit: unit, amount: amount) }
@@ -55,7 +55,7 @@ extension MFPFood {
 }
 
 extension Food.Size {
-    convenience init(scrapedSize: MFPFood.ScrapedSize, unit: UnitType, amount: Double) {
+    convenience init(scrapedSize: MFPFood.Size, unit: UnitType, amount: Double) {
         self.init()
         
         self.amountUnitType = unit
@@ -95,7 +95,7 @@ extension Food.Size {
         self.name = servingName
     }
     
-    func fillInVolumeWithWeight(_ scrapedSize: MFPFood.ScrapedSize, unit: UnitType, amount: Double) throws {
+    func fillInVolumeWithWeight(_ scrapedSize: MFPFood.Size, unit: UnitType, amount: Double) throws {
         let parsed = scrapedSize.name.parsedVolumeWithWeight
         guard let volumeUnit = parsed.volume?.unit else {
             throw ParseError.unableToParse
@@ -107,7 +107,7 @@ extension Food.Size {
         self.amount = scrapedSize.scaledValue
     }
     
-    func fillInServingWithVolume(_ scrapedSize: MFPFood.ScrapedSize, unit: UnitType, amount: Double) throws {
+    func fillInServingWithVolume(_ scrapedSize: MFPFood.Size, unit: UnitType, amount: Double) throws {
         let parsed = scrapedSize.name.parsedServingWithVolume
         guard let serving = parsed.serving,
               let servingAmount = serving.amount,
@@ -127,7 +127,7 @@ extension Food.Size {
     }
 }
 
-extension MFPFood.ScrapedSize {
+extension MFPFood.Size {
     var scaledValue: Double {
         multiplier * value
     }

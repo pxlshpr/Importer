@@ -33,7 +33,7 @@ extension MFPFood {
         self.fat = nutrients["fat"] as? Double
         self.protein = nutrients["protein"] as? Double
         
-        var sizes = [ScrapedSize]()
+        var sizes = [Size]()
         if let servingSizes = item["serving_sizes"] as? [[String: Any]] {
             for i in 0..<servingSizes.count {
                 let servingSize = servingSizes[i]
@@ -54,7 +54,7 @@ extension MFPFood {
                 }
                 
                 sizes.append(
-                    ScrapedSize(name: cleanedUnit, value: value, multiplier: multiplier, index: index)
+                    Size(name: cleanedUnit, value: value, multiplier: multiplier, index: index)
                 )
             }
         }

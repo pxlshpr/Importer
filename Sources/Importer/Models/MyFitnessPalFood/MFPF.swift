@@ -8,7 +8,7 @@ public struct MFPFood: Identifiable {
     public let carb: Double?
     public let fat: Double?
     public let protein: Double?
-    public let scrapedSizes: [ScrapedSize]
+    public let scrapedSizes: [Size]
     public let urlSlug: String
     public let createdAt: Date
     public var processedSizes: [ProcessedSize] = []
@@ -27,7 +27,7 @@ extension MFPFood: Equatable {
     }
 }
 
-extension MFPFood.ScrapedSize: Hashable {
+extension MFPFood.Size: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
         hasher.combine(value)

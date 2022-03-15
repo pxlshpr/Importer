@@ -87,7 +87,7 @@ extension MFPFood {
 
 extension Food.Size {
     
-    convenience init?(servingWithVolume scrapedSize: MFPFood.ScrapedSize, baseSize: Food.Size, sizes: [MFPFood.ScrapedSize]) {
+    convenience init?(servingWithVolume scrapedSize: MFPFood.Size, baseSize: Food.Size, sizes: [MFPFood.Size]) {
         self.init()
         let parsed = scrapedSize.name.parsedServingWithVolume
         guard let servingName = parsed.serving?.name else {
@@ -101,11 +101,11 @@ extension Food.Size {
         amountSizeUnit = baseSize
     }
     
-    convenience init?(scrapedSize: MFPFood.ScrapedSize, otherSizes: [MFPFood.ScrapedSize]) {
+    convenience init?(scrapedSize: MFPFood.Size, otherSizes: [MFPFood.Size]) {
         return nil
     }
     
-    convenience init?(servingWithServing scrapedSize: MFPFood.ScrapedSize, baseFoodSize: Food.Size, otherSizes sizes: [MFPFood.ScrapedSize]) {
+    convenience init?(servingWithServing scrapedSize: MFPFood.Size, baseFoodSize: Food.Size, otherSizes sizes: [MFPFood.Size]) {
         guard let baseScrapedSize = sizes.first else {
             return nil
         }
@@ -122,7 +122,7 @@ extension Food.Size {
 //            s.amount = baseSize.multiplier * scrapedSize.multiplier * baseVolume
         amount = baseScrapedSize.multiplier * scrapedSize.multiplier
     }
-    convenience init?(volumeWithServing scrapedSize: MFPFood.ScrapedSize, otherSizes sizes: [MFPFood.ScrapedSize]) {
+    convenience init?(volumeWithServing scrapedSize: MFPFood.Size, otherSizes sizes: [MFPFood.Size]) {
         
         self.init()
         

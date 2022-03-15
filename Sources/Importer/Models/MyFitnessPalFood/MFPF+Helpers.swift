@@ -5,18 +5,18 @@ public extension MFPFood {
         scrapedSizes.sorted { $0.index < $1.index }.first?.type
     }
     
-    var baseSize: ScrapedSize? {
+    var baseSize: Size? {
         scrapedSizes.first
     }
     
-    var secondSize: ScrapedSize? {
+    var secondSize: Size? {
         guard scrapedSizes.count > 1 else {
             return nil
         }
         return scrapedSizes[1]
     }
     
-    var firstWeightSize: ScrapedSize? {
+    var firstWeightSize: Size? {
         scrapedSizes.first(where: { $0.type == .weight })
     }
     
@@ -32,14 +32,14 @@ public extension MFPFood {
     }
     
     /// returns the first match that contains a weight in the serving description so that we may determine the serving weight
-    var servingsWithWeight: [ScrapedSize]? {
+    var servingsWithWeight: [Size]? {
         let servings = scrapedSizes.filter {
             $0.type == .servingWithWeight
 //            $0.unit.matchesRegex(RegExServingWithWeight)
         }
         return servings.isEmpty ? nil : servings
     }
-    func servingsWithoutSameUnit(of serving: ScrapedSize) -> [ScrapedSize]? {
+    func servingsWithoutSameUnit(of serving: Size) -> [Size]? {
         let servings = scrapedSizes.filter {
             guard $0 != serving else { return false }
             return !$0.matchesUnit(of: serving)
@@ -47,7 +47,7 @@ public extension MFPFood {
         return servings.count > 0 ? servings : nil
     }
 
-    func servingsWithSameUnit(of serving: ScrapedSize) -> [ScrapedSize]? {
+    func servingsWithSameUnit(of serving: Size) -> [Size]? {
         let servings = scrapedSizes.filter {
             guard $0 != serving else { return false }
             return $0.matchesUnit(of: serving)
@@ -60,11 +60,11 @@ public extension MFPFood {
         scrapedSizes.contains { $0.isWeightBased }
     }
     
-    var defaultMeasuredServing: ScrapedSize? {
+    var defaultMeasuredServing: Size? {
         scrapedSizes.first { $0.isWeightBased || $0.isVolumeBased }
     }
     
-    var defaultServing: ScrapedSize? {
+    var defaultServing: Size? {
         scrapedSizes.first(where: { $0.index == 0 })
     }
 //
