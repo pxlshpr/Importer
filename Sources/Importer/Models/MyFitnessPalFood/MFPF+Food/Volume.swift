@@ -8,6 +8,7 @@ extension MFPFood {
         }
         let food = baseFood
         
+        //TODO: Descriptive cups is now invalid
         /// If the first size has format of `cup, shredded` **and** the next size is a weight size
         if firstSize.isDescriptiveCups, let secondSize = secondSize, secondSize.type == .weight, let secondWeight = secondSize.processedSize.g {
             
