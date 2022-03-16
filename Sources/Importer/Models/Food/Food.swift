@@ -75,23 +75,28 @@ extension Food {
     //TODO: Density
     public var density: Density? {
         get {
-            guard let density = sizes.first(where: { $0.isDensity }) else {
+            guard let densitySize = sizes.first(where: { $0.isDensity }),
+                  let volumeUnit = densitySize.nameVolumeUnit,
+                  let weightUnit = densitySize.amountWeightUnit
+            else {
                 return nil
             }
-            return Density(volume: 1, weight: density.amount)
+            return Density(volumeAmount: densitySize.quantity, volumeUnit: volumeUnit,
+                           weightAmount: densitySize.amount, weightUnit: weightUnit)
         }
         set {
-            guard let newValue = newValue, newValue.volume != 0, newValue.weight != 0 else {
+            guard let newValue = newValue, newValue.volumeAmount != 0, newValue.weightAmount != 0 else {
                 sizes.removeAll(where: { $0.isDensity })
                 return
             }
             
             let densitySize = Food.Size()
             densitySize.name = ""
-            densitySize.nameVolumeUnit = .mL
-            densitySize.amount = newValue.weight / newValue.volume
+            densitySize.nameVolumeUnit = newValue.volumeUnit
+            densitySize.quantity = newValue.volumeAmount
+            densitySize.amount = newValue.weightAmount
             densitySize.amountUnit = .weight
-            densitySize.amountWeightUnit = .g
+            densitySize.amountWeightUnit = newValue.weightUnit
             
             sizes.removeAll(where: { $0.isDensity })
             sizes.append(densitySize)

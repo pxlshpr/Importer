@@ -26,7 +26,8 @@ extension MFPFood {
         let densityWeight = firstSize.processedSize.g(for: weightAmount, unit: weightUnit)
         let densityVolume = food.servingValue
         
-        food.density = Density(volume: densityVolume, weight: densityWeight)
+        //TODO: Density
+//        food.density = Density(volume: densityVolume, weight: densityWeight)
 
         if volumeUnit == .cup {
             /// add this as a size in case it has a description

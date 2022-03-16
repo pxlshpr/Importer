@@ -259,7 +259,7 @@ extension MFPFood.Size {
             }
             let volume = processedSize.ml(for: value, unit: volumeUnit)
             let weight = processedSize.g(for: weightAmount, unit: weightUnit)
-            return Density(volume: volume, weight: weight)
+            return Density(volumeAmount: volume, volumeUnit: .mL, weightAmount: weight, weightUnit: .g)
         }
         
         if type == .weightWithVolume {
@@ -272,7 +272,7 @@ extension MFPFood.Size {
             }
             let weight = processedSize.g(for: value, unit: weightUnit)
             let volume = processedSize.ml(for: volumeAmount, unit: volumeUnit)
-            return Density(volume: volume, weight: weight)
+            return Density(volumeAmount: volume, volumeUnit: .mL, weightAmount: weight, weightUnit: .g)
         }
 
         return nil

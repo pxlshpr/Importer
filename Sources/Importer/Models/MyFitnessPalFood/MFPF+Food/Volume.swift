@@ -51,11 +51,12 @@ extension MFPFood {
             //TODO: Do this for weight too
             /// if any sizes indicate a density
             
-            if let baseDensity = sizes.density {
-                food.density = baseDensity
+            if let density = sizes.density {
+                food.density = density
                 
-                let densityVolume = baseDensity.volume
-                let densityWeight = baseDensity.weight
+                //TODO: Density
+                let densityVolume = density.volumeAmount
+                let densityWeight = density.weightAmount
 
                 //TODO: Density
                 let weight = volume * densityWeight / densityVolume
@@ -151,24 +152,24 @@ extension MFPFood {
 
 public extension Array where Element == MFPFood.Size {
     
-    func removingSizesWithDifferentDensityToBaseSize() -> [Element] {
-        return filter { size in
-            if let sizeDensity = size.density,
-               let baseDensity = density,
-               sizeDensity != baseDensity
-            {
-                /// has a density that is different to baseDensity, so do not include it
-                return false
-            }
-            
-            /// either has no density or matches density of baseDensity, so include it
-            return true
-        }
-    }
-
-    mutating func removeSizesWithDifferentDensityToBaseSize() {
-        self = self.removingSizesWithDifferentDensityToBaseSize()
-    }
+//    func removingSizesWithDifferentDensityToBaseSize() -> [Element] {
+//        return filter { size in
+//            if let sizeDensity = size.density,
+//               let baseDensity = density,
+//               sizeDensity != baseDensity
+//            {
+//                /// has a density that is different to baseDensity, so do not include it
+//                return false
+//            }
+//
+//            /// either has no density or matches density of baseDensity, so include it
+//            return true
+//        }
+//    }
+//
+//    mutating func removeSizesWithDifferentDensityToBaseSize() {
+//        self = self.removingSizesWithDifferentDensityToBaseSize()
+//    }
     
     var containsWeightBasedSize: Bool {
         contains(where: { $0.isWeightBased })
@@ -222,23 +223,27 @@ public extension Array where Element == MFPFood.Size {
             /// determine the density of that particular size
             let volume = size.processedSize.ml(for: size.value, unit: volumeUnit)
             let weight = firstSize.processedSize.g(for: weightAmount, unit: weightUnit)
-            return Density(volume: volume, weight: weight)
+            return Density(volumeAmount: volume, volumeUnit: .mL, weightAmount: weight, weightUnit: .g)
         }
         return nil
     }
     
     var densityFromWeightAndVolumeSizes: Density? {
-        guard let weightSize = weightSize, let volumeSize = volumeSize else {
+        guard let weightSize = weightSize, let weightUnit = weightSize.weightUnit,
+              let volumeSize = volumeSize, let volumeUnit = volumeSize.volumeUnit
+        else {
             return nil
         }
         
         /// Scale the lesser size up to match the greatest multiplier
         if weightSize.multiplier > volumeSize.multiplier {
             let volume = (weightSize.multiplier * volumeSize.value)/volumeSize.multiplier
-            return Density(volume: volume, weight: weightSize.value)
+            return Density(volumeAmount: volume, volumeUnit: volumeUnit,
+                           weightAmount: weightSize.value, weightUnit: weightUnit)
         } else {
             let weight = (volumeSize.multiplier * weightSize.value)/weightSize.multiplier
-            return Density(volume: volumeSize.value, weight: weight)
+            return Density(volumeAmount: volumeSize.value, volumeUnit: volumeUnit,
+                           weightAmount: weight, weightUnit: weightUnit)
         }
     }
     
