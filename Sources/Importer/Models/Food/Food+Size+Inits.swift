@@ -22,16 +22,17 @@ extension Food.Size {
     
     convenience init?(servingWithWeight mfpSize: MFPFood.Size) {
         guard let servingName = mfpSize.parsed?.serving?.name,
-              let weightAmount = mfpSize.parsed?.weight?.amount
+              let weight = mfpSize.weightConvertedForUnits
         else {
             return nil
         }
         
         self.init()
         name = servingName
-        amount = weightAmount
         amountUnit = .weight
-        amountWeightUnit = mfpSize.weightUnit
+        
+        amount = weight.amount
+        amountWeightUnit = weight.unit
     }
     
     convenience init?(servingWithServing mfpSize: MFPFood.Size, baseFoodSize: Food.Size, mfpSizes: [MFPFood.Size]) {

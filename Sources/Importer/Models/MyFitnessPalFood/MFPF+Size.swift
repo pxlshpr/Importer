@@ -46,12 +46,56 @@ extension MFPFood.Size {
         }
     }
     
+    var weightAmount: Double? {
+        parsed?.weight?.amount
+    }
+    
     var weightUnit: WeightUnit? {
         parsed?.weight?.unit
     }
     
-    var weightAmount: Double? {
-        parsed?.weight?.amount
+    var weightConvertedForUnits: (amount: Double, unit: WeightUnit)? {
+        guard let amount = weightAmount, let unit = weightUnit else {
+            return nil
+        }
+        switch unit {
+        case .g:
+            if amount > 1000 {
+                return (amount/1000.0, .kg)
+            } else if amount < 1 {
+                return (amount*1000.0, .mg)
+            } else {
+                return (amount, .g)
+            }
+        case .kg:
+            if amount < 0.001 {
+                return (amount*1_000_000.0, .mg)
+            } else if amount < 1 {
+                return (amount*1000.0, .g)
+            } else {
+                return (amount, .kg)
+            }
+        case .oz:
+            if amount > 16 {
+                return (amount/16.0, .lb)
+            } else {
+                return (amount, .oz)
+            }
+        case .lb:
+            if amount < 1 {
+                return (amount*0.0625, .oz)
+            } else {
+                return (amount, .lb)
+            }
+        case .mg:
+            if amount > 1000000 {
+                return (amount/1000000, .kg)
+            } else if amount > 1000 {
+                return (amount/1000, .g)
+            } else {
+                return (amount, .mg)
+            }
+        }
     }
     
     var volumeUnit: VolumeUnit? {
