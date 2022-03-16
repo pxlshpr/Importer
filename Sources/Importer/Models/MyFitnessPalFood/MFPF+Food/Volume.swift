@@ -256,8 +256,7 @@ public extension Array where Element == MFPFood.Size {
     }
     
     var volumeSize: MFPFood.Size? {
-        /// Prioritize getting the first volume with a `mL` unit, so that we avoid the assumptions we would otherwise be making when converting with descriptive units. First try get one with a >=1x multiplier, otherwise resort to any `mL` unit, and finally return any unit
-        if let size = first(where: { $0.type == .volume && $0.volumeUnit == .mL && $0.multiplier >= 1 }) {
+        if let size = first(where: { $0.type == .volume && $0.multiplier >= 1 }) {
             return size
         } else if let size = first(where: { $0.type == .volume && $0.volumeUnit == .mL }) {
             return size
