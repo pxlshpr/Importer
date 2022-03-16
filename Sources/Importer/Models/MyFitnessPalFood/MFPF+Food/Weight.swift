@@ -8,9 +8,13 @@ extension MFPFood {
         }
         
         let food = baseFood
-        food.amount = firstSize.trueValue
-        food.amountUnit = .weight
-        food.amountWeightUnit = firstSize.weightUnit
+        
+        food.amount = 1
+        food.amountUnit = .serving
+        
+        food.servingValue = firstSize.trueValue
+        food.servingUnit = .weight
+        food.servingWeightUnit = firstSize.weightUnit
                 
         let types = Array(Set(ServingType.allCases).subtracting([ServingType.volume, ServingType.weight]))
         food.importMFPSizes(from: sizes, ofTypes: types)
