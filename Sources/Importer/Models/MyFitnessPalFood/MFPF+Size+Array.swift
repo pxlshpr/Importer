@@ -6,6 +6,11 @@ public extension Array where Element == MFPFood.Size {
         contains(where: { $0.isWeightBased })
     }
     
+    var firstFoodSize: Food.Size? {
+        guard let first = first else { return nil }
+        return Food.Size(mfpSize: first, mfpSizes: self)
+    }
+    
     /// Returns the weight of 1x of this food OR 0 if it is not weight based
     var baseWeight: Double {
         //TODO: Consider size.multiplier for size that may be like 1g:0.01x

@@ -2,6 +2,24 @@ import Foundation
 
 extension Food.Size {
     
+    convenience init?(mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
+        guard let firstSize = mfpSizes.first else { return nil }
+        switch mfpSize.type {
+        case .volumeWithServing:
+            self.init(volumeWithServing: mfpSize, mfpSizes: mfpSizes)
+        case .servingWithWeight:
+            self.init(servingWithWeight: mfpSize, firstMFPSize: firstSize)
+        case .servingWithVolume:
+            guard let firstFoodSize = mfpSizes.firstFoodSize else { return nil }
+            self.init(servingWithVolume: mfpSize, firstSize: firstFoodSize, mfpSizes: mfpSizes)
+        case .servingWithServing:
+            guard let firstFoodSize = mfpSizes.firstFoodSize else { return nil }
+            self.init(servingWithServing: mfpSize, baseFoodSize: firstFoodSize, mfpSizes: mfpSizes)
+        default:
+            return nil
+        }
+    }
+    
     convenience init?(servingWithVolume mfpSize: MFPFood.Size, firstSize: Food.Size, mfpSizes: [MFPFood.Size]) {
         self.init()
         let parsed = mfpSize.name.parsedServingWithVolume
@@ -14,10 +32,6 @@ extension Food.Size {
 //        amount = baseScrapedSize.multiplier * mfpSize.multiplier * baseVolume / firstSize.amount
         amount = mfpSizes.containsWeightBasedSize ? mfpSizes.baseWeight * mfpSize.multiplier : mfpSize.multiplier
         amountSizeUnit = firstSize
-    }
-    
-    convenience init?(mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
-        return nil
     }
     
     convenience init?(servingWithServing mfpSize: MFPFood.Size, baseFoodSize: Food.Size, mfpSizes: [MFPFood.Size]) {
