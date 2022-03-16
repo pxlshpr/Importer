@@ -24,7 +24,7 @@ extension MFPFood {
         
         let size = Food.Size()
         size.name = serving.name.capitalized
-        size.amountUnitType = .weight
+        size.amountUnit = .weight
         size.amount = baseWeight / servingAmount
         
         food.amount = 1
@@ -50,7 +50,7 @@ extension MFPFood {
                 return nil
             }
             s.name = serving.name
-            s.amountUnitType = .size
+            s.amountUnit = .size
             s.amount = firstSize.multiplier * mfpSize.multiplier * baseWeight / size.amount
             s.amountSizeUnit = size
             return s
@@ -66,7 +66,7 @@ extension MFPFood {
             } else {
                 s.name = mfpSize.cleanedName
             }
-            s.amountUnitType = .size
+            s.amountUnit = .size
             s.amount = firstSize.multiplier * mfpSize.multiplier * baseWeight
             s.amountSizeUnit = size
             return s

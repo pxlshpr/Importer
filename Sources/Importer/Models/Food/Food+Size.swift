@@ -12,7 +12,7 @@ extension Food {
         
         public var amount: Double = 0
         
-        public var amountUnitType: UnitType = .weight
+        public var amountUnit: UnitType = .weight
         public var amountVolumeUnit: VolumeUnit? = nil
         public var amountWeightUnit: WeightUnit? = nil
         public var amountSizeUnit: Food.Size? = nil
@@ -30,7 +30,7 @@ extension Food.Size: Equatable {
     public static func ==(lhs: Food.Size, rhs: Food.Size) -> Bool {
         lhs.name == rhs.name
         && lhs.nameVolumeUnit == rhs.nameVolumeUnit
-        && lhs.amountUnitType == rhs.amountUnitType
+        && lhs.amountUnit == rhs.amountUnit
         && lhs.amountVolumeUnit == rhs.amountVolumeUnit
         && lhs.amountWeightUnit == rhs.amountWeightUnit
         && lhs.amountSizeUnit == rhs.amountSizeUnit
@@ -46,7 +46,7 @@ extension Food.Size: Hashable {
         hasher.combine(name)
         hasher.combine(nameVolumeUnit)
         hasher.combine(amount)
-        hasher.combine(amountUnitType)
+        hasher.combine(amountUnit)
         hasher.combine(amountVolumeUnit)
         hasher.combine(amountWeightUnit)
         hasher.combine(amountSizeUnit)

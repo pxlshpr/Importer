@@ -22,14 +22,14 @@ extension MFPFood {
             let baseWeight = total * firstSize.multiplier
             
 //            food.amount = baseWeight < 100 ? 100 / baseWeight : 1
-            size.amountUnitType = .weight
+            size.amountUnit = .weight
             size.amount = baseWeight / firstSize.value
             
             food.sizes.append(size)
             food.servingSizeUnit = size
             
         } else {
-            size.amountUnitType = .serving
+            size.amountUnit = .serving
             size.amount = 1.0/firstSize.value
             
             total = firstSize.multiplier
@@ -43,7 +43,7 @@ extension MFPFood {
             $0.type == .serving || ($0.type == .volume && $0.isDescriptiveCups)
         }
         food.sizes.append(contentsOf:
-                            MFPFood.createSizes(from: sizesToAdd, unit: size.amountUnitType, amount: total, baseFoodSize: size)
+                            MFPFood.createSizes(from: sizesToAdd, unit: size.amountUnit, amount: total, baseFoodSize: size)
         )
         
         food.sizes.append(contentsOf: sizes.filter { mfpSize in
@@ -55,7 +55,7 @@ extension MFPFood {
             } else {
                 remainingSize.name = mfpSize.cleanedName.capitalized
             }
-            remainingSize.amountUnitType = .size
+            remainingSize.amountUnit = .size
             remainingSize.amount = total * mfpSize.multiplier * firstSize.value
             remainingSize.amountSizeUnit = size
             return remainingSize

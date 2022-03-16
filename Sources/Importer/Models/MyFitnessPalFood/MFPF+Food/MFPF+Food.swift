@@ -58,7 +58,7 @@ extension Food.Size {
     convenience init(mfpSize: MFPFood.Size, unit: UnitType, amount: Double) {
         self.init()
         
-        self.amountUnitType = unit
+        self.amountUnit = unit
         self.amount = amount * mfpSize.multiplier
 
         do {
@@ -102,7 +102,7 @@ extension Food.Size {
         }
         
         self.name = mfpSize.cleanedName
-        self.amountUnitType = .volume
+        self.amountUnit = .volume
         self.amountVolumeUnit = volumeUnit
         self.amount = mfpSize.trueValue
     }
@@ -117,7 +117,7 @@ extension Food.Size {
         }
         
         self.name = serving.name
-        self.amountUnitType = .volume
+        self.amountUnit = .volume
         self.amountVolumeUnit = volumeUnit
         self.amount = servingAmount
     }
@@ -146,10 +146,10 @@ public extension Food {
             return amountSizeUnit?.name ?? "(missing amount size)"
         }
         else if amountUnit == .volume, let volumeUnit = amountVolumeUnit {
-            return volumeUnit.volumeUnit.description(for: amount)
+            return volumeUnit.volumeUnit.shortDescription(for: amount)
         }
         else if amountUnit == .weight, let weightUnit = amountWeightUnit {
-            return weightUnit.description(for: amount)
+            return weightUnit.shortDescription(for: amount)
         }
         else if amountUnit == .serving {
             return "serving".pluralizedFor(amount)
@@ -164,13 +164,47 @@ public extension Food {
             return servingSizeUnit?.name ?? "(missing serving size)"
         }
         else if servingUnit == .volume, let volumeUnit = servingVolumeUnit {
-            return volumeUnit.volumeUnit.description(for: servingValue)
+            return volumeUnit.volumeUnit.shortDescription(for: servingValue)
         }
         else if servingUnit == .weight, let weightUnit = servingWeightUnit {
-            return weightUnit.description(for: servingValue)
+            return weightUnit.shortDescription(for: servingValue)
         }
         else {
             return "Invalid servingUnit: \(servingUnit.description)"
+        }
+    }
+}
+
+public extension Food.Size {
+    
+    var amountUnitDescription: String {
+        if amountUnit == .size {
+            return amountSizeUnit?.name ?? "(missing size)"
+        }
+        else if amountUnit == .volume, let volumeUnit = amountVolumeUnit {
+            return volumeUnit.shortDescription(for: amount)
+        }
+        else if amountUnit == .weight, let weightUnit = amountWeightUnit {
+            return weightUnit.shortDescription(for: amount)
+        }
+        else if amountUnit == .serving {
+            return "serving".pluralizedFor(amount)
+        }
+        else {
+            return "Invalid amountUnit: \(amountUnit.description)"
+        }
+    }
+    
+    var amountDescription: String {
+        return "\(amount.clean) \(amountUnitDescription)"
+    }
+    
+    var nameDescription: String {
+        
+        if let nameVolumeUnit = nameVolumeUnit {
+            return "[\(quantity.clean) \(nameVolumeUnit.shortDescription(for: quantity))] \(name)"
+        } else {
+            return name
         }
     }
 }

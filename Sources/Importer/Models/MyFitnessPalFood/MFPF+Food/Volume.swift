@@ -19,7 +19,7 @@ extension MFPFood {
             
             let size = Food.Size()
             size.name = firstSize.cleanedName.capitalized
-            size.amountUnitType = .weight
+            size.amountUnit = .weight
             size.amount = baseWeight / firstSize.value
             food.sizes.append(size)
             

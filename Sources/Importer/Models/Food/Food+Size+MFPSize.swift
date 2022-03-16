@@ -47,7 +47,7 @@ extension Food.Size {
             return nil
         }
         name = servingName
-        amountUnitType = .size
+        amountUnit = .size
 //        amount = baseScrapedSize.multiplier * mfpSize.multiplier * baseVolume / firstSize.amount
         amount = mfpSizes.containsWeightBasedSize ? mfpSizes.baseWeight * mfpSize.multiplier : mfpSize.multiplier
         amountSizeUnit = firstSize
@@ -67,7 +67,7 @@ extension Food.Size {
         } else {
             name = mfpSize.cleanedName
         }
-        amountUnitType = .size
+        amountUnit = .size
         amountSizeUnit = baseFoodSize
         
         //TODO: Do this for all other servingWithServings
@@ -94,7 +94,7 @@ extension Food.Size {
         
         name = servingName
         nameVolumeUnit = volumeUnit
-        amountUnitType = mfpSizes.containsWeightBasedSize ? .weight : .serving
+        amountUnit = mfpSizes.containsWeightBasedSize ? .weight : .serving
         
         quantity = mfpSize.value
         amount = mfpSizes.containsWeightBasedSize ? mfpSizes.baseWeight * mfpSize.multiplier : mfpSize.multiplier

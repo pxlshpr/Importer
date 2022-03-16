@@ -20,7 +20,7 @@ extension MFPFood {
         
         let size = Food.Size()
         size.name = serving.name.cleaned.capitalized
-        size.amountUnitType = .weight
+        size.amountUnit = .weight
         size.amount = firstSize.processedSize.g(for: servingAmount, unit: weightUnit) / firstSize.value
         
         food.amount = 1
@@ -45,7 +45,7 @@ extension MFPFood {
             } else {
                 remainingSize.name = mfpSize.cleanedName.capitalized
             }
-            remainingSize.amountUnitType = .size
+            remainingSize.amountUnit = .size
             remainingSize.amount = firstSize.multiplier * mfpSize.multiplier * firstSize.value
             remainingSize.amountSizeUnit = size
             return remainingSize

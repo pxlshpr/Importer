@@ -37,7 +37,7 @@ extension MFPFood {
             let size = Food.Size()
             size.name = volumeString.capitalized
             size.amount = 1.0/firstSize.value
-            size.amountUnitType = .serving
+            size.amountUnit = .serving
             food.sizes.append(size)
             
             food.sizes.append(contentsOf: sizes.filter { mfpSize in
@@ -50,7 +50,7 @@ extension MFPFood {
                     return nil
                 }
                 s.name = servingName
-                s.amountUnitType = .size
+                s.amountUnit = .size
                 s.amount = firstSize.multiplier * mfpSize.multiplier * firstSize.value
                 s.amountSizeUnit = size
                 return s
