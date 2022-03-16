@@ -16,7 +16,7 @@ extension Food {
         sizes.append(contentsOf: extraSizes.filter { types.contains($0.type) }.compactMap {
             switch $0.type {
             case .servingWithWeight:
-                return Food.Size(servingWithWeight: $0)
+                return Food.Size(servingWithWeight: $0, firstMFPSize: firstSize)
             case .volumeWithServing:
                 return Food.Size(volumeWithServing: $0, mfpSizes: mfpSizes)
             case .servingWithVolume:
@@ -30,4 +30,5 @@ extension Food {
             }
         })
     }
+    
 }

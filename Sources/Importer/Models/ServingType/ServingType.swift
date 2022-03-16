@@ -56,7 +56,10 @@ extension ServingType {
         //TODO: Check that adding .volumeWithWeight is valid
         [.volume, .servingWithVolume, .volumeWithServing, .volumeWithWeight]
     }
-    
+
+    var startsWithWeight: Bool {
+        [.weight, .weightWithServing, .weightWithVolume].contains(self)
+    }
     var isWeightBased: Bool {
         Self.weightBasedTypes.contains(self)
     }

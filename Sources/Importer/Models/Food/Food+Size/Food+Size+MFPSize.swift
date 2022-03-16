@@ -2,6 +2,7 @@ import Foundation
 import PrepUnits
 import UIKit
 
+//TODO: Delete these
 extension Food.Size {
     convenience init(mfpSize: MFPFood.Size, unit: UnitType, amount: Double) {
         self.init()
@@ -69,7 +70,7 @@ extension Food.Size {
         self.amountVolumeUnit = volumeUnit
         self.amount = servingAmount
     }
-
+    
     enum ParseError: Error {
         case unableToParse
     }

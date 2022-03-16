@@ -20,21 +20,6 @@ extension Food.Size {
         return nil
     }
     
-    convenience init?(servingWithWeight mfpSize: MFPFood.Size) {
-        guard let servingName = mfpSize.parsed?.serving?.name,
-              let weightAmount = mfpSize.weightAmount
-        else {
-            return nil
-        }
-        
-        self.init()
-        name = servingName
-        amountUnit = .weight
-        
-        amount = weightAmount
-        amountWeightUnit = mfpSize.weightUnit
-    }
-    
     convenience init?(servingWithServing mfpSize: MFPFood.Size, baseFoodSize: Food.Size, mfpSizes: [MFPFood.Size]) {
         guard let baseScrapedSize = mfpSizes.first else {
             return nil
