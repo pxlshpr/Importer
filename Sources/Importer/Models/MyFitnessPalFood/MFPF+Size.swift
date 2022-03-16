@@ -84,7 +84,7 @@ extension MFPFood.Size {
             }
         case .lb:
             if amount < 1 {
-                return (amount*0.0625, .oz)
+                return (amount/0.0625, .oz)
             } else {
                 return (amount, .lb)
             }
