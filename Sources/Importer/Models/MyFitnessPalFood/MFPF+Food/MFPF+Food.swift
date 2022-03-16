@@ -104,7 +104,7 @@ extension Food.Size {
         self.name = mfpSize.cleanedName
         self.amountUnitType = .volume
         self.amountVolumeUnit = volumeUnit
-        self.amount = mfpSize.scaledValue
+        self.amount = mfpSize.trueValue
     }
     
     func fillInServingWithVolume(_ mfpSize: MFPFood.Size, unit: UnitType, amount: Double) throws {
@@ -127,8 +127,50 @@ extension Food.Size {
     }
 }
 
-extension MFPFood.Size {
-    var scaledValue: Double {
-        multiplier * value
+import SwiftSugar
+
+extension Food {
+    var amountDescription: String {
+        return "\(amount.clean) \(amountUnitString)"
+    }
+    
+    var servingDescription: String {
+        guard amountUnit == .serving else {
+            return "(not set)"
+        }
+        return "\(servingValue.clean) \(servingUnitString)"
+    }
+
+    var amountUnitString: String {
+        if amountUnit == .size {
+            return amountSizeUnit?.name ?? "(missing amount size)"
+        }
+        else if amountUnit == .volume, let volumeUnit = amountVolumeUnit {
+            return volumeUnit.volumeUnit.description(for: amount)
+        }
+        else if amountUnit == .weight, let weightUnit = amountWeightUnit {
+            return weightUnit.description(for: amount)
+        }
+        else if amountUnit == .serving {
+            return "serving".pluralizedFor(amount)
+        }
+        else {
+            return "Invalid amountUnit: \(amountUnit.description)"
+        }
+    }
+
+    var servingUnitString: String {
+        if servingUnit == .size {
+            return servingSizeUnit?.name ?? "(missing serving size)"
+        }
+        else if servingUnit == .volume, let volumeUnit = servingVolumeUnit {
+            return volumeUnit.volumeUnit.description(for: servingValue)
+        }
+        else if servingUnit == .weight, let weightUnit = servingWeightUnit {
+            return weightUnit.description(for: servingValue)
+        }
+        else {
+            return "Invalid servingUnit: \(servingUnit.description)"
+        }
     }
 }
