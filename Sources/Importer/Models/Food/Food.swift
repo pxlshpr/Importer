@@ -9,13 +9,13 @@ public class Food {
     public var amount: Double = 0.0
     public var amountUnit: UnitType = .weight
     public var amountWeightUnit: WeightUnit? = nil
-    public var amountVolumeUnit: VolumeUserUnit? = nil
+    public var amountVolumeUnit: VolumeUnit? = nil
     public var amountSizeUnit: Size? = nil
     
     public var servingValue: Double = 0.0
     public var servingUnit: UnitType = .weight
     public var servingWeightUnit: WeightUnit? = nil
-    public var servingVolumeUnit: VolumeUserUnit? = nil
+    public var servingVolumeUnit: VolumeUnit? = nil
     public var servingSizeUnit: Size? = nil
     
     public var energy: Double = 0
@@ -123,7 +123,7 @@ public extension Food {
             return amountSizeUnit?.name ?? "(missing amount size)"
         }
         else if amountUnit == .volume, let volumeUnit = amountVolumeUnit {
-            return volumeUnit.volumeUnit.shortDescription(for: amount)
+            return volumeUnit.shortDescription(for: amount)
         }
         else if amountUnit == .weight, let weightUnit = amountWeightUnit {
             return weightUnit.shortDescription(for: amount)
@@ -141,7 +141,7 @@ public extension Food {
             return servingSizeUnit?.name ?? "(missing serving size)"
         }
         else if servingUnit == .volume, let volumeUnit = servingVolumeUnit {
-            return volumeUnit.volumeUnit.shortDescription(for: servingValue)
+            return volumeUnit.shortDescription(for: servingValue)
         }
         else if servingUnit == .weight, let weightUnit = servingWeightUnit {
             return weightUnit.shortDescription(for: servingValue)

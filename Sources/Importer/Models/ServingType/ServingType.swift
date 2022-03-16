@@ -44,6 +44,10 @@ public enum ServingType: Int, CaseIterable, Identifiable {
             return "Weight with Volume (Density)"
         }
     }
+    
+    static func all(excluding: [ServingType]) -> [ServingType] {
+        Array(Set(ServingType.allCases).subtracting(excluding))
+    }
 }
 
 extension ServingType {    
