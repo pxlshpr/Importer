@@ -50,6 +50,10 @@ extension MFPFood.Size {
         parsed?.weight?.unit
     }
     
+    var weightAmount: Double? {
+        parsed?.weight?.amount
+    }
+    
     var volumeUnit: VolumeUnit? {
         parsed?.volume?.unit
 //        name.parsedServing(type: type).volume?.unit
