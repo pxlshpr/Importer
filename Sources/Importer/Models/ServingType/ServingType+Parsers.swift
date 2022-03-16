@@ -220,8 +220,8 @@ public struct ParseResult {
             return nil
         }
         
-        let serving = ParsedServing(name: name, amount: amountValue)
-        let weight = ParsedWeight(unit: weightUnit)
+        let serving = ParsedServing(name: name)
+        let weight = ParsedWeight(unit: weightUnit, amount: amountValue)
         return (serving, weight)
     }
     
