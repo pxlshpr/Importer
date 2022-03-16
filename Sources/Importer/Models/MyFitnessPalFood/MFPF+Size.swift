@@ -109,7 +109,8 @@ extension MFPFood.Size {
 extension MFPFood.Size {
     /// Returns the `value` multiplied by the `multiplier`
     var trueValue: Double {
-        value * multiplier
+        guard multiplier > 0 else { return 0 }
+        return value / multiplier
     }
 }
 

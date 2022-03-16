@@ -17,6 +17,7 @@ extension MFPFood {
         food.servingWeightUnit = firstSize.weightUnit
         
         /// check for a volume based unit indicating a density
+        //TODO: Density needs to be added if volume units are present, e.g "Drink, Yakult", "Gimbir"
         if let density = sizes.density {
             food.density = density
         }
@@ -28,8 +29,6 @@ extension MFPFood {
         return food
      }
 }
-
-//TODO: Density needs to be added if volume units are present, e.g "Drink, Yakult", "Gimbir"
 
 //TODO: Ratio's need to be divided by, not multiplied, e.g. "Ghimbir..."
 
