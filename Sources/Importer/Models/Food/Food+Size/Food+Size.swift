@@ -3,7 +3,7 @@ import PrepUnits
 
 extension Food {
     public class Size: Identifiable {
-        public var id = UUID()
+//        public var id = UUID()
 
         public var quantity: Double = 1
         
@@ -41,7 +41,7 @@ extension Food.Size: Equatable {
 
 extension Food.Size: Hashable {
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+//        hasher.combine(id)
         hasher.combine(quantity)
         hasher.combine(name)
         hasher.combine(nameVolumeUnit)
