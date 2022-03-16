@@ -10,17 +10,16 @@ extension Food.Size {
         case .servingWithWeight:
             self.init(servingWithWeight: mfpSize, firstMFPSize: firstSize)
         case .servingWithVolume:
-            guard let firstFoodSize = mfpSizes.firstFoodSize else { return nil }
-            self.init(servingWithVolume: mfpSize, firstSize: firstFoodSize, mfpSizes: mfpSizes)
+            self.init(servingWithVolume: mfpSize, mfpSizes: mfpSizes)
         case .servingWithServing:
             guard let firstFoodSize = mfpSizes.firstFoodSize else { return nil }
-            self.init(servingWithServing: mfpSize, baseFoodSize: firstFoodSize, mfpSizes: mfpSizes)
+            self.init(servingWithServing: mfpSize, firstFoodSize: firstFoodSize, mfpSizes: mfpSizes)
         default:
             return nil
         }
     }
     
-    convenience init?(servingWithVolume mfpSize: MFPFood.Size, firstSize: Food.Size, mfpSizes: [MFPFood.Size]) {
+    convenience init?(servingWithVolume mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
         self.init()
         let parsed = mfpSize.name.parsedServingWithVolume
         guard let servingName = parsed.serving?.name else {
@@ -28,13 +27,13 @@ extension Food.Size {
             return nil
         }
         name = servingName
-        amountUnit = .size
-//        amount = baseScrapedSize.multiplier * mfpSize.multiplier * baseVolume / firstSize.amount
+        amountUnit = .volume
         amount = mfpSizes.containsWeightBasedSize ? mfpSizes.baseWeight * mfpSize.multiplier : mfpSize.multiplier
-        amountSizeUnit = firstSize
+        amountVolumeUnit = parsed.volume?.unit
+//        amountSizeUnit = firstFoodSize
     }
     
-    convenience init?(servingWithServing mfpSize: MFPFood.Size, baseFoodSize: Food.Size, mfpSizes: [MFPFood.Size]) {
+    convenience init?(servingWithServing mfpSize: MFPFood.Size, firstFoodSize: Food.Size, mfpSizes: [MFPFood.Size]) {
         guard let baseScrapedSize = mfpSizes.first else {
             return nil
         }
@@ -45,7 +44,7 @@ extension Food.Size {
             name = mfpSize.cleanedName
         }
         amountUnit = .size
-        amountSizeUnit = baseFoodSize
+        amountSizeUnit = firstFoodSize
         
         //TODO: Do this for all other servingWithServings
 //            s.amount = firstSize.multiplier * mfpSize.multiplier * baseVolume
