@@ -26,7 +26,7 @@ extension Food.Size {
         }
         self.init()
         name = servingName
-        amount = mfpSize.value
+        amount = mfpSize.trueValue
         amountUnit = .weight
         amountWeightUnit = mfpSize.weightUnit
     }
