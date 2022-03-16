@@ -28,7 +28,7 @@ extension Food {
             default:
                 return nil
             }
-        })
+        }.removingDuplicates())
     }
     
 }
