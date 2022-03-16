@@ -7,7 +7,7 @@ extension Food {
             .filter { types.contains($0.type) }
             .compactMap { Food.Size(mfpSize: $0, mfpSizes: mfpSizes) }
             .removingDuplicates()
-            .dropFirst()
+//            .dropFirst()
         
         sizes.append(contentsOf: sizesToAdd)
     }
