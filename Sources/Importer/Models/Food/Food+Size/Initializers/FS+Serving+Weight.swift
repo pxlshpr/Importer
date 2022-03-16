@@ -2,7 +2,7 @@ extension Food.Size {
     
     convenience init?(servingWithWeight mfpSize: MFPFood.Size, firstMFPSize: MFPFood.Size) {
         guard let servingName = mfpSize.parsed?.serving?.name,
-              let weightAmount = mfpSize.weightAmount
+              let weightAmount = mfpSize.parsed?.weight?.amount
         else {
             return nil
         }

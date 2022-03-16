@@ -46,16 +46,17 @@ extension MFPFood.Size {
         }
     }
     
-    var weightAmount: Double? {
-        parsed?.weight?.amount
-    }
+//    var weightAmount: Double? {
+//        parsed?.weight?.amount
+//    }
     
     var weightUnit: WeightUnit? {
         parsed?.weight?.unit
     }
     
     var weightConvertedForUnits: (amount: Double, unit: WeightUnit)? {
-        guard let amount = weightAmount, let unit = weightUnit else {
+        let amount = trueValue
+        guard let unit = weightUnit else {
             return nil
         }
         switch unit {

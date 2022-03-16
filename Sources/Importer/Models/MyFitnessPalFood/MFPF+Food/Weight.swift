@@ -16,6 +16,7 @@ extension MFPFood {
         food.servingValue = weight.amount
         food.servingWeightUnit = weight.unit
         
+        
         /// check for a volume based unit indicating a density
         //TODO: Density needs to be added if volume units are present, e.g "Drink, Yakult", "Gimbir"
         if let density = sizes.density {
