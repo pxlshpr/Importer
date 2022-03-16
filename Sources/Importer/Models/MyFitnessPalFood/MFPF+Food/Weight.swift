@@ -8,7 +8,7 @@ extension MFPFood {
         
         let food = baseFood
         //TODO: Make food volume based for those starting with volume too
-        food.unit = .weight
+        food.amountUnit = .weight
         food.servingUnit = .weight
         
         //TODO: We weren't correctly considering the multiplier—so check all other cases for this. Check the weight being set correctly, then used correctly in sizes and when scaling nutrients

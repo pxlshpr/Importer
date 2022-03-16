@@ -35,7 +35,7 @@ extension MFPFood {
         let food = Food()
         food.name = cleanedName
         food.brand = cleanedBrand
-        food.unit = .serving
+        food.amountUnit = .serving
         food.energy = energy ?? 0
         food.carbohydrate = carb ?? 0
         food.fat = fat ?? 0

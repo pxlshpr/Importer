@@ -41,7 +41,7 @@ extension MFPFood {
         } else {
             let volume = ml * firstSize.value / firstSize.multiplier
 
-            food.unit = .serving
+            food.amountUnit = .serving
             food.amount = 1
             
             food.servingUnit = .volume

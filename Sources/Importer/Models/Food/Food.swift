@@ -7,7 +7,7 @@ public class Food {
     public var description: String? = ""
     
     public var amount: Double = 0.0
-    public var unit: UnitType = .weight
+    public var amountUnit: UnitType = .weight
     public var volumeUnit: VolumeUserUnit? = nil
     
     public var servingAmount: Double = 0.0
@@ -38,7 +38,7 @@ extension Food: Hashable {
             lhs.name == rhs.name &&
             lhs.brand == rhs.brand &&
             lhs.amount == rhs.amount &&
-            lhs.unit == rhs.unit &&
+            lhs.amountUnit == rhs.amountUnit &&
             lhs.servingAmount == rhs.servingAmount &&
             lhs.servingUnit == rhs.servingUnit &&
             lhs.servingSize == rhs.servingSize &&
@@ -56,7 +56,7 @@ extension Food: Hashable {
         hasher.combine(name)
         hasher.combine(brand)
         hasher.combine(amount)
-        hasher.combine(unit)
+        hasher.combine(amountUnit)
         hasher.combine(servingAmount)
         hasher.combine(servingUnit)
         hasher.combine(servingSize)
