@@ -32,3 +32,9 @@ extension MFPFood {
         return food
     }
 }
+
+//TODO: Density needs to be added if volume units are present, e.g "Drink, Yakult", "Gimbir"
+
+//TODO: Ratio's need to be divided by, not multiplied, e.g. "Ghimbir..."
+
+//TODO: First look for a weight that has a ratio of 1 and use that, e.g. "Ghimbir..."
