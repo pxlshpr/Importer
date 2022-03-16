@@ -13,7 +13,7 @@ extension Food {
 //            contentsOf: MFPFood.createSizes(from: sizesToAdd, unit: .volume, amount: firstFoodSize.amount * firstSize.value, baseFoodSize: firstFoodSize)
 //        )
         
-        sizes.append(contentsOf: extraSizes.filter { types.contains($0.type) }.compactMap {
+        let sizesToAdd: [Food.Size] = extraSizes.filter { types.contains($0.type) }.compactMap {
             switch $0.type {
             case .servingWithWeight:
                 return Food.Size(servingWithWeight: $0, firstMFPSize: firstSize)
@@ -28,7 +28,9 @@ extension Food {
             default:
                 return nil
             }
-        }.removingDuplicates())
+        }.removingDuplicates()
+        
+        sizes.append(contentsOf: sizesToAdd)
     }
     
 }
