@@ -8,19 +8,20 @@ public class Food {
     
     public var amount: Double = 0.0
     public var amountUnit: UnitType = .weight
-    public var volumeUnit: VolumeUserUnit? = nil
+    public var amountWeightUnit: WeightUnit? = nil
+    public var amountVolumeUnit: VolumeUserUnit? = nil
+    public var amountSizeUnit: Size? = nil
     
-    public var servingAmount: Double = 0.0
+    public var servingValue: Double = 0.0
     public var servingUnit: UnitType = .weight
+    public var servingWeightUnit: WeightUnit? = nil
     public var servingVolumeUnit: VolumeUserUnit? = nil
-    public var servingSize: Size? = nil
+    public var servingSizeUnit: Size? = nil
     
     public var energy: Double = 0
     public var carbohydrate: Double = 0
     public var fat: Double = 0
     public var protein: Double = 0
-//    public var densityVolume: Double = 0
-//    public var densityWeight: Double = 0
     public var sizes: [Size] = []
     
     func scaleNutrientsBy(scale: Double) {
@@ -39,9 +40,9 @@ extension Food: Hashable {
             lhs.brand == rhs.brand &&
             lhs.amount == rhs.amount &&
             lhs.amountUnit == rhs.amountUnit &&
-            lhs.servingAmount == rhs.servingAmount &&
+            lhs.servingValue == rhs.servingValue &&
             lhs.servingUnit == rhs.servingUnit &&
-            lhs.servingSize == rhs.servingSize &&
+            lhs.servingSizeUnit == rhs.servingSizeUnit &&
             lhs.energy == rhs.energy &&
             lhs.carbohydrate == rhs.carbohydrate &&
             lhs.fat == rhs.fat &&
@@ -57,9 +58,9 @@ extension Food: Hashable {
         hasher.combine(brand)
         hasher.combine(amount)
         hasher.combine(amountUnit)
-        hasher.combine(servingAmount)
+        hasher.combine(servingValue)
         hasher.combine(servingUnit)
-        hasher.combine(servingSize)
+        hasher.combine(servingSizeUnit)
         hasher.combine(energy)
         hasher.combine(carbohydrate)
         hasher.combine(fat)

@@ -18,13 +18,13 @@ extension MFPFood {
         let food = baseFood
         
         food.servingUnit = .weight
-        food.servingAmount = firstSize.processedSize.g(for: firstSize.value, unit: weightUnit)
+        food.servingValue = firstSize.processedSize.g(for: firstSize.value, unit: weightUnit)
         food.amount = 1
 //        food.amount = food.servingAmount < 100 ? 100 / food.servingAmount : 1
         
         /// now get the weight unit
         //TODO: Density
-        let densityWeight = food.servingAmount
+        let densityWeight = food.servingValue
         let densityVolume = firstSize.processedSize.ml(for: volumeAmount, unit: volumeUnit)
         
         food.density = Density(volume: densityVolume, weight: densityWeight)
@@ -59,7 +59,7 @@ extension MFPFood {
             }
             food.sizes.append(
                 contentsOf:
-                    MFPFood.createSizes(from: sizesToAdd, unit: .weight, amount: food.servingAmount)
+                    MFPFood.createSizes(from: sizesToAdd, unit: .weight, amount: food.servingValue)
             )
         }
 

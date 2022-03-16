@@ -16,10 +16,10 @@ extension MFPFood {
         food.servingUnit = .size
         if sizes.containsWeightBasedSize {
             //TODO: Should this be 1 or firstSize.value?
-            food.servingAmount = 1
-            food.servingSize = firstFoodSize
+            food.servingValue = 1
+            food.servingSizeUnit = firstFoodSize
         } else {
-            food.servingAmount = 0
+            food.servingValue = 0
         }
         food.scaleNutrientsBy(scale: (food.amount * firstSize.multiplier))
         food.sizes.append(firstFoodSize)

@@ -24,9 +24,9 @@ extension MFPFood {
             food.sizes.append(size)
             
             food.amount = 1
-            food.servingAmount = firstSize.value
+            food.servingValue = firstSize.value
             food.servingUnit = .size
-            food.servingSize = size
+            food.servingSizeUnit = size
             
             /// add remaining non-measurement servings
             let sizesToAdd = sizes.dropFirst().filter {
@@ -45,7 +45,7 @@ extension MFPFood {
             food.amount = 1
             
             food.servingUnit = .volume
-            food.servingAmount = firstSize.value / firstSize.multiplier
+            food.servingValue = firstSize.value / firstSize.multiplier
             food.servingVolumeUnit = firstSize.cleanedName.parsedVolume.volume?.unit?.volumeUserUnit
             
             //TODO: Do this for weight too

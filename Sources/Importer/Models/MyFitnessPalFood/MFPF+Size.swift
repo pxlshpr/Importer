@@ -17,6 +17,44 @@ extension MFPFood {
     }
 }
 
+extension MFPFood.Size {
+    /// Returns the `value` multiplied by the `multiplier`
+    var trueValue: Double {
+        value * multiplier
+    }
+    
+    var parsed: ParseResult? {
+        switch type {
+        case .weight:
+            return name.parsedWeight
+        case .weightWithServing:
+            return name.parsedWeightWithServing
+        case .weightWithVolume:
+            return name.parsedWeightWithVolume
+        case .volume:
+            return name.parsedVolume
+        case .volumeWithServing:
+            return name.parsedVolumeWithServing
+        case .volumeWithWeight:
+            return name.parsedVolumeWithWeight
+        case .serving:
+            return name.parsedServing
+        case .servingWithServing:
+            return name.parsedServingWithServing
+        case .servingWithVolume:
+            return name.parsedServingWithVolume
+        case .servingWithWeight:
+            return name.parsedServingWithWeight
+        default:
+            return nil
+        }
+    }
+    
+    var weightUnit: WeightUnit? {
+        parsed?.weight?.unit
+    }
+}
+
 public extension MFPFood.Size {
     var processedSize: ProcessedSize {
         ProcessedSize(servingSize: self)

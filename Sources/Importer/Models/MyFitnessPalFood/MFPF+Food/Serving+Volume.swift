@@ -15,7 +15,7 @@ extension MFPFood {
         }
         
         let food = baseFood
-        food.servingAmount = firstSize.value
+        food.servingValue = firstSize.value
         food.servingUnit = .size
         
         let size = Food.Size()
@@ -25,7 +25,7 @@ extension MFPFood {
         
         food.amount = 1
         
-        food.servingSize = size
+        food.servingSizeUnit = size
         food.sizes.append(size)
         
         /// add remaining servings or descriptive volumes
