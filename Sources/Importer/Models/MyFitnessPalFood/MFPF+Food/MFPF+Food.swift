@@ -129,7 +129,7 @@ extension Food.Size {
 
 import SwiftSugar
 
-extension Food {
+public extension Food {
     var amountDescription: String {
         return "\(amount.clean) \(amountUnitString)"
     }
