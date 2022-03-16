@@ -51,7 +51,7 @@ extension MFPFood {
             //TODO: Do this for weight too
             /// if any sizes indicate a density
             
-            if let baseDensity = sizes.baseDensity {
+            if let baseDensity = sizes.density {
                 food.density = baseDensity
                 
                 let densityVolume = baseDensity.volume
@@ -154,7 +154,7 @@ public extension Array where Element == MFPFood.Size {
     func removingSizesWithDifferentDensityToBaseSize() -> [Element] {
         return filter { size in
             if let sizeDensity = size.density,
-               let baseDensity = baseDensity,
+               let baseDensity = density,
                sizeDensity != baseDensity
             {
                 /// has a density that is different to baseDensity, so do not include it
@@ -201,11 +201,16 @@ public extension Array where Element == MFPFood.Size {
     
     //C796CF29
     /// The first density determined in the order that the sizes are presented (as there may be multiple for a given food)
-    //TODO: Rewrite this, rename it to simply "density"
-    var baseDensity: Density? {
+    var density: Density? {
         //TODO: Go through the and see if we have both a raw weight and a raw volume first—then use the multipliers to express the density
         //TODO: If they're both not found, then look for a volumeWithWeight
         //
+        if let density = densityFromWeightAndVolumeSizes {
+            return density
+        }
+        
+        return nil
+        
         guard let firstSize = self.first else { return nil }
         
         /// volumeWithWeight
@@ -220,6 +225,37 @@ public extension Array where Element == MFPFood.Size {
             return Density(volume: volume, weight: weight)
         }
         return nil
+    }
+    
+    var densityFromWeightAndVolumeSizes: Density? {
+        guard let weightSize = weightSize, let volumeSize = volumeSize else {
+            return nil
+        }
+        
+        /// Scale the lesser size up to match the greatest multiplier
+        if weightSize.multiplier > volumeSize.multiplier {
+            let volume = (weightSize.multiplier * volumeSize.value)/volumeSize.multiplier
+            return Density(volume: volume, weight: weightSize.value)
+        } else {
+            let weight = (volumeSize.multiplier * weightSize.value)/weightSize.multiplier
+            return Density(volume: volumeSize.value, weight: weight)
+        }
+    }
+    
+    var weightSize: MFPFood.Size? {
+        /// prioritize getting the unit weight (with a `multiplier` of 1x, before returning the first `weight` size in the array)
+        guard let unitWeight = first(where: { $0.type == .weight && $0.multiplier == 1 }) else {
+            return first(where: { $0.type == .weight })
+        }
+        return unitWeight
+    }
+    
+    var volumeSize: MFPFood.Size? {
+        /// prioritize getting the first volume with a `mL` unit, so that we avoid the assumptions we would otherwise be making when converting with descriptive units
+        guard let mlVolume = first(where: { $0.type == .volume && $0.volumeUnit == .mL }) else {
+            return first(where: { $0.type == .volume })
+        }
+        return mlVolume
     }
 }
 

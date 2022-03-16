@@ -17,6 +17,9 @@ extension MFPFood {
         food.servingWeightUnit = firstSize.weightUnit
         
         /// check for a volume based unit indicating a density
+        if let density = sizes.density {
+            food.density = density
+        }
         
         /// add all remaining sizes except for raw volumes and weights
         let types = Array(Set(ServingType.allCases).subtracting([ServingType.volume, ServingType.weight]))
