@@ -3,7 +3,7 @@ import PrepUnits
 
 extension MFPFood {
     var foodStartingWithWeight: Food? {
-        guard let firstSize = sizes.first else {
+        guard let firstSize = sizes.first, let weight = firstSize.weightConvertedForUnits else {
             return nil
         }
         
@@ -12,9 +12,9 @@ extension MFPFood {
         food.amount = 1
         food.amountUnit = .serving
         
-        food.servingValue = firstSize.trueValue
         food.servingUnit = .weight
-        food.servingWeightUnit = firstSize.weightUnit
+        food.servingValue = weight.amount
+        food.servingWeightUnit = weight.unit
         
         /// check for a volume based unit indicating a density
         //TODO: Density needs to be added if volume units are present, e.g "Drink, Yakult", "Gimbir"
