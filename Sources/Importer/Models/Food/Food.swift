@@ -98,3 +98,51 @@ extension Food {
         }
     }
 }
+
+import SwiftSugar
+
+public extension Food {
+    var amountDescription: String {
+        return "\(amount.clean) \(amountUnitString)"
+    }
+    
+    var servingDescription: String {
+        guard amountUnit == .serving else {
+            return "(not set)"
+        }
+        return "\(servingValue.clean) \(servingUnitString)"
+    }
+
+    var amountUnitString: String {
+        if amountUnit == .size {
+            return amountSizeUnit?.name ?? "(missing amount size)"
+        }
+        else if amountUnit == .volume, let volumeUnit = amountVolumeUnit {
+            return volumeUnit.volumeUnit.shortDescription(for: amount)
+        }
+        else if amountUnit == .weight, let weightUnit = amountWeightUnit {
+            return weightUnit.shortDescription(for: amount)
+        }
+        else if amountUnit == .serving {
+            return "serving".pluralizedFor(amount)
+        }
+        else {
+            return "Invalid amountUnit: \(amountUnit.description)"
+        }
+    }
+
+    var servingUnitString: String {
+        if servingUnit == .size {
+            return servingSizeUnit?.name ?? "(missing serving size)"
+        }
+        else if servingUnit == .volume, let volumeUnit = servingVolumeUnit {
+            return volumeUnit.volumeUnit.shortDescription(for: servingValue)
+        }
+        else if servingUnit == .weight, let weightUnit = servingWeightUnit {
+            return weightUnit.shortDescription(for: servingValue)
+        }
+        else {
+            return "Invalid servingUnit: \(servingUnit.description)"
+        }
+    }
+}

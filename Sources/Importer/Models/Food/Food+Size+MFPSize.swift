@@ -1,102 +1,76 @@
 import Foundation
 import PrepUnits
-
-extension Food {
-    func importMFPSizes(from sizes: [MFPFood.Size], ofTypes types: [ServingType], withFirstFoodSize firstFoodSize: Food.Size) {
-        
-        guard let firstSize = sizes.first else { return }
-        
-        let sizesToAdd = sizes.dropFirst().filter {
-            $0.type == .serving
-        }
-        self.sizes.append(
-            contentsOf: MFPFood.createSizes(from: sizesToAdd, unit: .volume, amount: firstFoodSize.amount * firstSize.value, baseFoodSize: firstFoodSize)
-        )
-        
-        //MARK: volumeWithServing
-        /// Add all remaining `volumeWithServing` sizes
-        self.sizes.append(contentsOf: sizes.dropFirst().filter {
-            $0.type == .volumeWithServing
-        }.compactMap {
-            Food.Size(volumeWithServing: $0, mfpSizes: sizes)
-        })
-        
-        self.sizes.append(contentsOf: sizes.filter {
-            $0.type == .servingWithVolume
-        }.compactMap {
-            Food.Size(servingWithVolume: $0, firstSize: firstFoodSize, mfpSizes: sizes)
-        })
-        
-        //MARK: servingWithServing
-        self.sizes.append(contentsOf: sizes.filter {
-            $0.type == .servingWithServing
-        }.compactMap {
-            Food.Size(servingWithServing: $0, baseFoodSize: firstFoodSize, mfpSizes: sizes)
-        })
-
-    }
-}
+import UIKit
 
 extension Food.Size {
-    
-    convenience init?(servingWithVolume mfpSize: MFPFood.Size, firstSize: Food.Size, mfpSizes: [MFPFood.Size]) {
+    convenience init(mfpSize: MFPFood.Size, unit: UnitType, amount: Double) {
         self.init()
-        let parsed = mfpSize.name.parsedServingWithVolume
-        guard let servingName = parsed.serving?.name else {
-            print("Couldn't parse servingWithVolume: \(mfpSize)")
-            return nil
-        }
-        name = servingName
-        amountUnit = .size
-//        amount = baseScrapedSize.multiplier * mfpSize.multiplier * baseVolume / firstSize.amount
-        amount = mfpSizes.containsWeightBasedSize ? mfpSizes.baseWeight * mfpSize.multiplier : mfpSize.multiplier
-        amountSizeUnit = firstSize
-    }
-    
-    convenience init?(mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
-        return nil
-    }
-    
-    convenience init?(servingWithServing mfpSize: MFPFood.Size, baseFoodSize: Food.Size, mfpSizes: [MFPFood.Size]) {
-        guard let baseScrapedSize = mfpSizes.first else {
-            return nil
-        }
-        self.init()
-        if let servingName = mfpSize.name.parsedServingWithServing.serving?.name {
-            name = servingName
-        } else {
+        
+        self.amountUnit = unit
+        self.amount = amount * mfpSize.multiplier
+
+        do {
+            switch mfpSize.type {
+            case .servingWithWeight:
+                try fillInServingWithWeight(named: mfpSize.name)
+            case .servingWithServing:
+                try fillInServingWithServing(named: mfpSize.name)
+            case .servingWithVolume:
+                try fillInServingWithVolume(mfpSize, unit: unit, amount: amount)
+            case .volumeWithWeight:
+                try fillInVolumeWithWeight(mfpSize, unit: unit, amount: amount)
+            default:
+                name = mfpSize.cleanedName
+            }
+        } catch {
             name = mfpSize.cleanedName
         }
-        amountUnit = .size
-        amountSizeUnit = baseFoodSize
         
-        //TODO: Do this for all other servingWithServings
-//            s.amount = firstSize.multiplier * mfpSize.multiplier * baseVolume
-        amount = baseScrapedSize.multiplier * mfpSize.multiplier
+        name = name.capitalized
     }
-    convenience init?(volumeWithServing mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
-        
-        self.init()
-        
-        let parsed = mfpSize.name.parsedVolumeWithServing
-        guard let servingName = parsed.serving?.name,
-              let volumeUnit = parsed.volume?.unit
-        else {
-            print("Couldn't parse volumeWithServing: \(mfpSize)")
-            return nil
+    
+    func fillInServingWithWeight(named name: String) throws {
+        guard let servingName = name.parsedServingWithWeight.serving?.name else {
+            throw ParseError.unableToParse
+        }
+        self.name = servingName
+    }
+
+    func fillInServingWithServing(named name: String) throws {
+        guard let servingName = name.parsedServingWithServing.serving?.name else {
+            throw ParseError.unableToParse
+        }
+        self.name = servingName
+    }
+    
+    func fillInVolumeWithWeight(_ mfpSize: MFPFood.Size, unit: UnitType, amount: Double) throws {
+        let parsed = mfpSize.name.parsedVolumeWithWeight
+        guard let volumeUnit = parsed.volume?.unit else {
+            throw ParseError.unableToParse
         }
         
-        //TODO: Do this test outside the initializer so that we can use it to create the firstSize itself
-        /// Make sure this isn't a repeat of the first size (with a different quantity)
-//        guard servingName.lowercased() != firstSize.name.lowercased() else {
-//            return nil
-//        }
+        self.name = mfpSize.cleanedName
+        self.amountUnit = .volume
+        self.amountVolumeUnit = volumeUnit
+        self.amount = mfpSize.trueValue
+    }
+    
+    func fillInServingWithVolume(_ mfpSize: MFPFood.Size, unit: UnitType, amount: Double) throws {
+        let parsed = mfpSize.name.parsedServingWithVolume
+        guard let serving = parsed.serving,
+              let servingAmount = serving.amount,
+              let volumeUnit = parsed.volume?.unit
+        else {
+            throw ParseError.unableToParse
+        }
         
-        name = servingName
-        nameVolumeUnit = volumeUnit
-        amountUnit = mfpSizes.containsWeightBasedSize ? .weight : .serving
-        
-        quantity = mfpSize.value
-        amount = mfpSizes.containsWeightBasedSize ? mfpSizes.baseWeight * mfpSize.multiplier : mfpSize.multiplier
+        self.name = serving.name
+        self.amountUnit = .volume
+        self.amountVolumeUnit = volumeUnit
+        self.amount = servingAmount
+    }
+
+    enum ParseError: Error {
+        case unableToParse
     }
 }

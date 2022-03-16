@@ -18,10 +18,6 @@ extension MFPFood {
 }
 
 extension MFPFood.Size {
-    /// Returns the `value` multiplied by the `multiplier`
-    var trueValue: Double {
-        value * multiplier
-    }
     
     var parsed: ParseResult? {
         switch type {
@@ -52,6 +48,20 @@ extension MFPFood.Size {
     
     var weightUnit: WeightUnit? {
         parsed?.weight?.unit
+    }
+    
+    var volumeUnit: VolumeUnit? {
+        parsed?.volume?.unit
+//        name.parsedServing(type: type).volume?.unit
+    }
+    
+    
+}
+
+extension MFPFood.Size {
+    /// Returns the `value` multiplied by the `multiplier`
+    var trueValue: Double {
+        value * multiplier
     }
 }
 
@@ -221,8 +231,3 @@ extension MFPFood.Size {
     }
 }
 
-extension MFPFood.Size {
-    var volumeUnit: VolumeUnit? {
-        name.parsedServing(type: type).volume?.unit
-    }
-}
