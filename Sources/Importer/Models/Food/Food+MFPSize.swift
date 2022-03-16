@@ -1,7 +1,7 @@
 import Foundation
 
 extension Food {
-    func importMFPSizes(from mfpSizes: [MFPFood.Size], ofTypes types: [ServingType], withFirstFoodSize firstFoodSize: Food.Size? = nil) {
+    func importMFPSizes(from mfpSizes: [MFPFood.Size], ofTypes types: [ServingType]) {
         
         let sizesToAdd = mfpSizes
             .filter { types.contains($0.type) }

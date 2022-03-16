@@ -29,7 +29,7 @@ extension MFPFood {
                                          .volumeWithServing,
                                          .servingWithVolume,
                                          .servingWithServing]
-        food.importMFPSizes(from: sizes, ofTypes: typesToAdd, withFirstFoodSize: firstFoodSize)
+        food.importMFPSizes(from: sizes, ofTypes: typesToAdd)
         
         return food
     }
