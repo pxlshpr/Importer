@@ -15,22 +15,15 @@ extension MFPFood {
         food.servingValue = firstSize.trueValue
         food.servingUnit = .weight
         food.servingWeightUnit = firstSize.weightUnit
-                
+        
+        /// check for a volume based unit indicating a density
+        
+        /// add all remaining sizes except for raw volumes and weights
         let types = Array(Set(ServingType.allCases).subtracting([ServingType.volume, ServingType.weight]))
         food.importMFPSizes(from: sizes, ofTypes: types)
         
-//        //TODO: Change this
-//        let sizesToAdd = sizes.dropFirst().filter {
-//            $0.type != .weight && $0.type != .volume
-//        }
-//        food.sizes.append(
-//            contentsOf: MFPFood.createSizes(
-//                from: sizesToAdd, unit: .weight, amount: firstSize.trueValue
-//            )
-//        )
-        
         return food
-    }
+     }
 }
 
 //TODO: Density needs to be added if volume units are present, e.g "Drink, Yakult", "Gimbir"

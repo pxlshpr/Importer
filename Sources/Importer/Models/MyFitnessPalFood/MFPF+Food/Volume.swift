@@ -201,7 +201,11 @@ public extension Array where Element == MFPFood.Size {
     
     //C796CF29
     /// The first density determined in the order that the sizes are presented (as there may be multiple for a given food)
+    //TODO: Rewrite this, rename it to simply "density"
     var baseDensity: Density? {
+        //TODO: Go through the and see if we have both a raw weight and a raw volume first—then use the multipliers to express the density
+        //TODO: If they're both not found, then look for a volumeWithWeight
+        //
         guard let firstSize = self.first else { return nil }
         
         /// volumeWithWeight
