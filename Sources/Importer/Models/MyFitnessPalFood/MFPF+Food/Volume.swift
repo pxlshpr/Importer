@@ -22,8 +22,7 @@ extension MFPFood {
             size.amount = baseWeight / firstSize.value
             food.sizes.append(size)
             
-            food.setAmount(basedOn: baseWeight)
-//            food.amount = baseWeight < 100 ? 100 / baseWeight : 1
+            food.amount = 1
             food.servingAmount = firstSize.value
             food.servingUnit = .size
             food.servingSize = size

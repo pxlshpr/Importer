@@ -19,8 +19,8 @@ extension MFPFood {
         
         food.servingUnit = .volume
         food.servingAmount = firstSize.processedSize.ml(for: firstSize.value, unit: volumeUnit)
-        food.setAmount(basedOn: food.servingAmount)
-//        food.amount = food.servingAmount < 100 ? 100 / food.servingAmount : 1
+        
+        food.amount = 1
         
         /// now get the weight unit
         let densityWeight = firstSize.processedSize.g(for: weightAmount, unit: weightUnit)

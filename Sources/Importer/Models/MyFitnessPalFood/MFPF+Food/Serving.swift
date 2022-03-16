@@ -9,7 +9,8 @@ extension MFPFood {
         let food = baseFood
         food.servingUnit = .size
         food.servingAmount = firstSize.value
-        
+        food.amount = 1
+
         let size = Food.Size()
         size.name = firstSize.cleanedName.capitalized
         
@@ -20,7 +21,6 @@ extension MFPFood {
             total = weight / weightSize.multiplier
             let baseWeight = total * firstSize.multiplier
             
-            food.setAmount(basedOn: baseWeight)
 //            food.amount = baseWeight < 100 ? 100 / baseWeight : 1
             size.amountUnitType = .weight
             size.amount = baseWeight / firstSize.value
@@ -29,7 +29,6 @@ extension MFPFood {
             food.servingSize = size
             
         } else {
-            food.amount = 1
             size.amountUnitType = .serving
             size.amount = 1.0/firstSize.value
             

@@ -23,8 +23,7 @@ extension MFPFood {
         size.amountUnitType = .weight
         size.amount = firstSize.processedSize.g(for: servingAmount, unit: weightUnit) / firstSize.value
         
-        food.setAmount(basedOn: size.amount)
-//        food.amount = size.amount < 100 ? 100 / size.amount : 1
+        food.amount = 1
         
         food.servingSize = size
         food.sizes.append(size)
