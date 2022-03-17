@@ -22,8 +22,8 @@ extension MFPFood {
         
         food.sizes.append(firstFoodSize)
                 
-//        let types = ServingType.all(excluding: [ServingType.volume, ServingType.weight])
-//        food.importMFPSizes(from: sizes, ofTypes: types)
+        let types = ServingType.all(excluding: [ServingType.volume, ServingType.weight])
+        food.importMFPSizes(from: sizes, ofTypes: types)
         
         return food
     }
