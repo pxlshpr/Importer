@@ -14,24 +14,25 @@ public extension Array where Element == MFPFood.Size {
     /// Returns the weight of 1x of this food OR 0 if it is not weight based
     var baseWeight: Double {
         //TODO: Consider size.multiplier for size that may be like 1g:0.01x
-        guard let size = first(where: { $0.isWeightBased }) else {
+        guard let firstSize = first(where: { $0.isWeightBased }) else {
             return 0
         }
         let parsed: ParseResult
-        switch size.type {
+        switch firstSize.type {
         case .weight:
-            parsed = size.name.parsedWeight
+            parsed = firstSize.name.parsedWeight
         case .weightWithVolume:
-            parsed = size.name.parsedWeightWithVolume
+            parsed = firstSize.name.parsedWeightWithVolume
         case .weightWithServing:
-            parsed = size.name.parsedWeightWithServing
+            parsed = firstSize.name.parsedWeightWithServing
         case .servingWithWeight:
-            parsed = size.name.parsedServingWithWeight
+            parsed = firstSize.name.parsedServingWithWeight
         default:
             return 0
         }
         guard let weight = parsed.weight?.amount else {
-            return 0
+            /// raw weight (like 'g') without an inferred weight within the name—so we use the trueValue of the size
+            return firstSize.trueValue
         }
         return weight
     }
