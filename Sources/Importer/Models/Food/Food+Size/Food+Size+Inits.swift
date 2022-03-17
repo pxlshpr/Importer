@@ -30,12 +30,13 @@ extension Food.Size {
             /// check if we have a weight size to base this off
             amountUnit = .weight
             amountWeightUnit = weightSize.weightUnit
-            amount = (weightSize.value * mfpSize.multiplier) / weightSize.multiplier
+            amount = weightSize.value / weightSize.multiplier * mfpSize.multiplier / mfpSize.value
         } else if let volumeSize = mfpSizes.volumeSize {
             /// or a volume size
             amountUnit = .volume
             amountVolumeUnit = volumeSize.volumeUnit
-            amount = (volumeSize.value * mfpSize.multiplier) / volumeSize.multiplier
+//            amount = (volumeSize.value * mfpSize.multiplier) / volumeSize.multiplier
+            amount = volumeSize.value / volumeSize.multiplier * mfpSize.multiplier / mfpSize.value
         } else {
             /// if neither weight or volume sizes are present—express it in terms of 'servings'
             amountUnit = .serving
