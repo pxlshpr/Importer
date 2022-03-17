@@ -128,13 +128,13 @@ public extension MFPFood.Size {
             || unit2 == "of \(unit1)"
     }
     
-//    var formattedName: String {
-//        if name.lowercased().hasPrefix("of ") {
-//            return name.replacingOccurrences(of: "of ", with: "").capitalized
-//        } else {
-//            return name.capitalized
-//        }
-//    }
+    var formattedName: String {
+        if name.lowercased().hasPrefix("of ") {
+            return name.replacingOccurrences(of: "of ", with: "").capitalized
+        } else {
+            return name.capitalized
+        }
+    }
 }
 
 extension String {
