@@ -115,13 +115,14 @@ public struct ParseResult {
             serving = parsed?.serving
             
         case .servingWithServing:
-            /// treat servings with a plain "serving" as the serving as a `serving` type
-            if name.isServingOfPlainServing {
-                serving = Self.parseServing(from: name)
-            } else {
-                let parsed = Self.parseServingWithServing(from: name)
-                serving = parsed?.serving
-                servingSize = parsed?.servingSize
+            let parsed = Self.parseServingWithServing(from: name)
+            serving = parsed?.serving
+            servingSize = parsed?.servingSize
+            
+            /// remove serving size if its a plain serving
+            if let servingSizeName = servingSize?.name,
+               servingSizeName.isPlainServing {
+                servingSize = nil
             }
             
         case .volumeWithWeight:
