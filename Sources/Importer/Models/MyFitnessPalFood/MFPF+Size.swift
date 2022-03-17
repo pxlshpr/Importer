@@ -137,14 +137,28 @@ public extension MFPFood.Size {
     }
 }
 
+extension String {
+    var isServing: Bool {
+        self.lowercased() == "serving"
+        || self.lowercased() == "servings"
+        || self.lowercased() == "serving(s)"
+    }
+}
+
 public extension MFPFood.Size {
     
     var type: ServingType {
+        
+        guard !name.isServing else {
+            return .unsupported
+        }
+        
         for type in ServingType.allCases {
             if name.matchesRegex(type.regex) {
                 return type
             }
         }
+        
         /// default to `serving` type so we can actually use it
         return .serving
 //        return .unsupported
