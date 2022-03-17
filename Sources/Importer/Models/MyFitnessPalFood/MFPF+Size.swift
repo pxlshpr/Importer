@@ -155,7 +155,13 @@ public extension MFPFood.Size {
         
         for type in ServingType.allCases {
             if name.matchesRegex(type.regex) {
-                return type
+                if let servingSizeName = self.parsed?.servingSize?.name,
+                   servingSizeName.isServing
+                {
+                    return .serving
+                } else {
+                    return type
+                }
             }
         }
         
