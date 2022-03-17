@@ -98,9 +98,7 @@ extension Food.Size {
         amountUnit = .size
         amountSizeUnit = firstFoodSize
         
-        //TODO: Do this for all other servingWithServings
-//            s.amount = firstSize.multiplier * mfpSize.multiplier * baseVolume
-        amount = baseScrapedSize.multiplier * mfpSize.multiplier
+        amount = baseScrapedSize.multiplier * mfpSize.multiplier * baseScrapedSize.value / mfpSize.value
     }
     
     convenience init?(volumeWithServing mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
