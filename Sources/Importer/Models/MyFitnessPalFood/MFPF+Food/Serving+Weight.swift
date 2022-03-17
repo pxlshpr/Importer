@@ -1,7 +1,34 @@
 import Foundation
 
 extension MFPFood {
+    
     var foodStartingWithServingWithWeight: Food? {
+        guard let firstSize = sizes.first,
+              let firstFoodSize = Food.Size(servingWithWeight: firstSize, firstMFPSize: firstSize)
+        else {
+            return nil
+        }
+        
+        let food = baseFood
+
+        food.amount = 1
+        food.amountUnit = .serving
+        
+        food.servingUnit = .size
+        food.servingValue = firstSize.value
+        food.servingSizeUnit = firstFoodSize
+
+        food.density = sizes.density
+        
+        food.sizes.append(firstFoodSize)
+                
+        let types = ServingType.all(excluding: [ServingType.volume, ServingType.weight])
+        food.importMFPSizes(from: sizes, ofTypes: types)
+        
+        return food
+    }
+    
+    var foodStartingWithServingWithWeight_legacy: Food? {
         /// protect against division by 0 with firstSize.value check
         guard let firstSize = sizes.first, firstSize.value > 0 else {
             return nil
