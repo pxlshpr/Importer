@@ -25,7 +25,7 @@ extension Food.Size {
     convenience init?(serving mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
         self.init()
 
-        name = mfpSize.cleanedName.capitalized
+        name = mfpSize.cleanedName.capitalizingFirstLetter()
         
         if name.isServingOfPlainServing, let servingName = name.parsedServingWithServing.serving?.name {
             name = servingName
