@@ -120,10 +120,10 @@ public struct ParseResult {
             servingSize = parsed?.servingSize
             
             /// remove serving size if its a plain serving
-            if let servingSizeName = servingSize?.name,
-               servingSizeName.isPlainServing {
-                servingSize = nil
-            }
+//            if let servingSizeName = servingSize?.name,
+//               servingSizeName.isPlainServing {
+//                servingSize = nil
+//            }
             
         case .volumeWithWeight:
             let parsed = Self.parseVolumeWithWeight(from: name)
