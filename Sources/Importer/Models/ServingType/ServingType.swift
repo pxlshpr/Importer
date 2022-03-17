@@ -61,6 +61,10 @@ extension ServingType {
         [.volume, .servingWithVolume, .volumeWithServing, .volumeWithWeight]
     }
 
+    var startsWithVolume: Bool {
+        [.volume, .volumeWithServing, .volumeWithWeight].contains(self)
+    }
+
     var startsWithWeight: Bool {
         [.weight, .weightWithServing, .weightWithVolume].contains(self)
     }
