@@ -10,7 +10,7 @@ extension Food.Size {
         case .servingWithWeight:
             self.init(servingWithWeight: mfpSize, firstMFPSize: firstSize)
         case .servingWithVolume:
-            self.init(servingWithVolume: mfpSize, mfpSizes: mfpSizes)
+            self.init(servingWithVolume: mfpSize, firstMFPSize: firstSize)
         case .servingWithServing:
             guard let firstFoodSize = mfpSizes.firstFoodSize else { return nil }
             self.init(servingWithServing: mfpSize, firstFoodSize: firstFoodSize, mfpSizes: mfpSizes)
@@ -19,18 +19,46 @@ extension Food.Size {
         }
     }
     
-    convenience init?(servingWithVolume mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
-        self.init()
-        let parsed = mfpSize.name.parsedServingWithVolume
-        guard let servingName = parsed.serving?.name else {
-            print("Couldn't parse servingWithVolume: \(mfpSize)")
+    convenience init?(servingWithWeight mfpSize: MFPFood.Size, firstMFPSize: MFPFood.Size) {
+        guard let servingName = mfpSize.parsed?.serving?.name,
+              let weightAmount = mfpSize.parsed?.weight?.amount
+        else {
             return nil
         }
+        
+        self.init()
         name = servingName
-        amountUnit = .volume
-        amount = mfpSizes.containsWeightBasedSize ? mfpSizes.baseWeight * mfpSize.multiplier : mfpSize.multiplier
-        amountVolumeUnit = parsed.volume?.unit
-//        amountSizeUnit = firstFoodSize
+        
+        if firstMFPSize.type.startsWithWeight {
+            /// for sizes like "Container (2250g) = 72x"—mark it as being 72 servings as opposed to 2.5 kg (as the weight gets inferred in the description either way)
+            amount = mfpSize.multiplier
+            amountUnit = .serving
+        } else {
+            amount = weightAmount
+            amountUnit = .weight
+            amountWeightUnit = mfpSize.weightUnit
+        }
+    }
+    
+    convenience init?(servingWithVolume mfpSize: MFPFood.Size, firstMFPSize: MFPFood.Size) {
+        guard let servingName = mfpSize.parsed?.serving?.name,
+              let volumeAmount = mfpSize.parsed?.volume?.amount
+        else {
+            return nil
+        }
+
+        self.init()
+        name = servingName
+        
+        if firstMFPSize.type.startsWithWeight {
+            /// for sizes like "Container (1000ml) = 10x"—mark it as being 10 servings as opposed to 1000 ml (as the volume gets inferred in the description either way)
+            amount = mfpSize.multiplier
+            amountUnit = .serving
+        } else {
+            amount = volumeAmount
+            amountUnit = .volume
+            amountVolumeUnit = mfpSize.volumeUnit
+        }
     }
     
     convenience init?(servingWithServing mfpSize: MFPFood.Size, firstFoodSize: Food.Size, mfpSizes: [MFPFood.Size]) {
