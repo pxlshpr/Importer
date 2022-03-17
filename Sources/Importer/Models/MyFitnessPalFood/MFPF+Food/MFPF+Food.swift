@@ -18,7 +18,7 @@ extension MFPFood {
 //            return foodStartingWithServingWithWeight
 //        case .servingWithVolume:
 //            return foodStartingWithServingWithVolume
-        case .serving, .servingWithWeight, .servingWithVolume, .weightWithServing:
+        case .serving, .servingWithWeight, .servingWithVolume:
             return servingBasedFood
 //        case .weightWithServing:
 //            return foodStartingWithWeightWithServing

@@ -10,9 +10,10 @@ extension Food.Size {
             self.init(serving: mfpSize, mfpSizes: mfpSizes)
         case .volumeWithServing:
             self.init(volumeWithServing: mfpSize, mfpSizes: mfpSizes)
-        case .servingWithWeight, .weightWithServing:
-            self.init(servingAndWeightBasedSize: mfpSize,
-                      firstMFPSize: firstSize)
+        case .servingWithWeight:
+            self.init(servingWithWeight: mfpSize, firstMFPSize: firstSize)
+        case .weightWithServing:
+            self.init(weightWithServing: mfpSize, firstMFPSize: firstSize)
         case .servingWithVolume:
             self.init(servingWithVolume: mfpSize, firstMFPSize: firstSize)
         case .servingWithServing:
@@ -49,7 +50,31 @@ extension Food.Size {
         }
     }
     
-    convenience init?(servingAndWeightBasedSize mfpSize: MFPFood.Size, firstMFPSize: MFPFood.Size) {
+    convenience init?(weightWithServing mfpSize: MFPFood.Size, firstMFPSize: MFPFood.Size) {
+        guard let servingName = mfpSize.parsed?.serving?.name,
+              let servingAmount = mfpSize.parsed?.serving?.amount
+        else {
+            return nil
+        }
+        
+        self.init()
+        name = servingName.capitalizingFirstLetter()
+        
+        if firstMFPSize.type.startsWithWeight {
+            /// for sizes like "Container (2250g) = 72x"—mark it as being 72 servings as opposed to 2.5 kg (as the weight gets inferred in the description either way)
+            amount = mfpSize.multiplier
+            amountUnit = .serving
+        } else {
+            guard mfpSize.value > 0 else {
+                return
+            }
+            amount = servingAmount / mfpSize.value * mfpSize.multiplier
+            amountUnit = .weight
+            amountWeightUnit = mfpSize.weightUnit
+        }
+    }
+    
+    convenience init?(servingWithWeight mfpSize: MFPFood.Size, firstMFPSize: MFPFood.Size) {
         guard let servingName = mfpSize.parsed?.serving?.name,
               let weightAmount = mfpSize.parsed?.weight?.amount
         else {
