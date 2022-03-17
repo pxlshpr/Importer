@@ -115,6 +115,7 @@ public struct ParseResult {
             serving = parsed?.serving
             
         case .servingWithServing:
+            /// treat servings with a plain "serving" as the serving as a `serving` type
             if name.isServingOfPlainServing {
                 serving = Self.parseServing(from: name)
             } else {
