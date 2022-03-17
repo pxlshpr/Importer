@@ -60,18 +60,18 @@ extension Food.Size {
         self.init()
         name = servingName.capitalizingFirstLetter()
         
-        if firstMFPSize.type.startsWithWeight {
-            /// for sizes like "Container (2250g) = 72x"—mark it as being 72 servings as opposed to 2.5 kg (as the weight gets inferred in the description either way)
-            amount = mfpSize.multiplier
-            amountUnit = .serving
-        } else {
+//        if firstMFPSize.type.startsWithWeight {
+//            /// for sizes like "Container (2250g) = 72x"—mark it as being 72 servings as opposed to 2.5 kg (as the weight gets inferred in the description either way)
+//            amount = mfpSize.multiplier
+//            amountUnit = .serving
+//        } else {
             guard mfpSize.value > 0 else {
                 return
             }
             amount = servingAmount / mfpSize.value * mfpSize.multiplier
             amountUnit = .weight
             amountWeightUnit = mfpSize.weightUnit
-        }
+//        }
     }
     
     convenience init?(servingWithWeight mfpSize: MFPFood.Size, firstMFPSize: MFPFood.Size) {
