@@ -72,7 +72,11 @@ extension MFPFood {
         food.amount = 1
         food.amountUnit = .serving
         food.servingUnit = .size
-        food.servingValue = firstSize.value
+        if firstSize.type == .weightWithServing {
+            food.servingValue = 1
+        } else {
+            food.servingValue = firstSize.value
+        }
         food.servingSizeUnit = firstFoodSize
         food.density = sizes.density
         food.sizes.append(firstFoodSize)
