@@ -39,7 +39,7 @@ extension Food.Size {
         } else {
             /// if neither weight or volume sizes are present—express it in terms of 'servings'
             amountUnit = .serving
-            amount = mfpSize.trueValue
+            amount = 1.0/mfpSize.trueValue
         }
     }
     
