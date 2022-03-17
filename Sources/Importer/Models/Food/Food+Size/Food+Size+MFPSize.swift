@@ -27,7 +27,7 @@ extension Food.Size {
             name = mfpSize.cleanedName
         }
         
-        name = name.capitalized
+        name = name.capitalizingFirstLetter()
     }
     
     func fillInServingWithWeight(named name: String) throws {
