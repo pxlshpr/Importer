@@ -149,21 +149,9 @@ extension String {
         }
         return false
     }
-}
-
-public extension MFPFood.Size {
     
-    /// returns true if its a type of `servingWithServing` where the `servingSize` is a plain serving (ie. "serving", "servings", or "serving(s)")
-    var isServingOfPlainServing: Bool {
-        guard let servingSizeName = self.name.parsedServingWithServing.servingSize?.name else {
-            return false
-        }
-        return servingSizeName.isPlainServing
-    }
-    
-    var type: ServingType {
-        
-        guard !name.isPlainServing else {
+    var servingType: ServingType {
+        guard !isPlainServing else {
             return .unsupported
         }
         
@@ -171,13 +159,51 @@ public extension MFPFood.Size {
             guard !(type == .servingWithServing && isServingOfPlainServing) else {
                 return .serving
             }
-            if name.matchesRegex(type.regex) {
+            if matchesRegex(type.regex) {
                 return type
             }
         }
         
         /// default to `serving` type so we can actually use it
         return .serving
+    }
+    
+    /// returns true if its a type of `servingWithServing` where the `servingSize` is a plain serving (ie. "serving", "servings", or "serving(s)")
+    var isServingOfPlainServing: Bool {
+        guard let servingSizeName = self.parsedServingWithServing.servingSize?.name else {
+            return false
+        }
+        return servingSizeName.isPlainServing
+    }
+}
+
+public extension MFPFood.Size {
+    
+//    /// returns true if its a type of `servingWithServing` where the `servingSize` is a plain serving (ie. "serving", "servings", or "serving(s)")
+//    var isServingOfPlainServing: Bool {
+//        guard let servingSizeName = self.name.parsedServingWithServing.servingSize?.name else {
+//            return false
+//        }
+//        return servingSizeName.isPlainServing
+//    }
+    
+    var type: ServingType {
+        name.servingType
+//        guard !name.isPlainServing else {
+//            return .unsupported
+//        }
+//
+//        for type in ServingType.allCases {
+//            guard !(type == .servingWithServing && isServingOfPlainServing) else {
+//                return .serving
+//            }
+//            if name.matchesRegex(type.regex) {
+//                return type
+//            }
+//        }
+//
+//        /// default to `serving` type so we can actually use it
+//        return .serving
     }
     
     var isWeightBased: Bool {

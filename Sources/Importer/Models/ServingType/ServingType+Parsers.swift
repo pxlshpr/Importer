@@ -92,7 +92,7 @@ public struct ParseResult {
             volume = Self.parseVolume(from: name)
             
         case .serving:
-            serving = ParsedServing(name: name)
+            serving = Self.parseServing(from: name)
             
         case .servingWithWeight:
             let parsed = Self.parseServingWithWeight(from: name)
@@ -152,6 +152,20 @@ public struct ParseResult {
             }
         }
         return nil
+    }
+    
+    static func parseServing(from string: String) -> ParsedServing {
+        /// edge case where we may have a serving of a serving where the servingSize is a plain serving
+        /// e.g. `container (1 serving(s))`
+        ///     in this case, we're only interested in the serving name—and not the serving size
+        if string.servingType == .servingWithServing,
+           string.isServingOfPlainServing,
+           let servingName = string.parsedServingWithServing.serving?.name
+        {
+            return ParsedServing(name: servingName)
+        } else {
+            return ParsedServing(name: string)
+        }
     }
     
     static func parseWeightWithServing(from string: String) -> (weight: ParsedWeight, serving: ParsedServing)? {
