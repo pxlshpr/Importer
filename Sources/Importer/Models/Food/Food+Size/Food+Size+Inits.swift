@@ -124,6 +124,7 @@ extension Food.Size {
         name = servingName.capitalized
         nameVolumeUnit = volumeUnit
         amountUnit = mfpSizes.containsWeightBasedSize ? .weight : .serving
+        amountWeightUnit = parsed.weight?.unit
         
         quantity = mfpSize.value
         amount = mfpSizes.containsWeightBasedSize ? mfpSizes.baseWeight * mfpSize.multiplier : mfpSize.multiplier
