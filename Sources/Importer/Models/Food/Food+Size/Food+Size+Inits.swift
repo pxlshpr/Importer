@@ -23,7 +23,9 @@ extension Food.Size {
     
     convenience init?(serving mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
         self.init()
-        
+
+        name = mfpSize.cleanedName
+
         if let weightSize = mfpSizes.weightSize {
             /// check if we have a weight size to base this off
             amountUnit = .weight
