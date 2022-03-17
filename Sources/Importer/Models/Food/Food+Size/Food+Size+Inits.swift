@@ -65,7 +65,7 @@ extension Food.Size {
             guard mfpSize.value > 0 else {
                 return
             }
-            amount = weightAmount / mfpSize.value
+            amount = weightAmount / mfpSize.value * mfpSize.multiplier
             amountUnit = .weight
             amountWeightUnit = mfpSize.weightUnit
         }
