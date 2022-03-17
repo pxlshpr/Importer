@@ -260,8 +260,8 @@ public struct ParseResult {
             return nil
         }
         
-        let serving = ParsedServing(name: name, amount: amountValue)
-        let volume = ParsedVolume(unit: volumeUnit)
+        let serving = ParsedServing(name: name)
+        let volume = ParsedVolume(unit: volumeUnit, amount: amountValue)
         return (serving, volume)
     }
 
