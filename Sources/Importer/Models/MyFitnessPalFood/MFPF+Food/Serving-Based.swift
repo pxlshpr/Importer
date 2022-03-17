@@ -52,7 +52,7 @@ extension MFPFood {
         switch firstSize.type {
         case .serving:
             return Food.Size(serving: firstSize, mfpSizes: sizes)
-        case .servingWithWeight, .weightWithServing:
+        case .servingWithWeight:
             return Food.Size(servingWithWeight: firstSize, firstMFPSize: firstSize)
         case .servingWithVolume:
             return Food.Size(servingWithVolume: firstSize, firstMFPSize: firstSize)
