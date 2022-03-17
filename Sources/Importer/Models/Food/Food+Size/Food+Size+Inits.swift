@@ -10,8 +10,9 @@ extension Food.Size {
             self.init(serving: mfpSize, mfpSizes: mfpSizes)
         case .volumeWithServing:
             self.init(volumeWithServing: mfpSize, mfpSizes: mfpSizes)
-        case .servingWithWeight:
-            self.init(servingWithWeight: mfpSize, firstMFPSize: firstSize)
+        case .servingWithWeight, .weightWithServing:
+            self.init(servingAndWeightBasedSize: mfpSize,
+                      firstMFPSize: firstSize)
         case .servingWithVolume:
             self.init(servingWithVolume: mfpSize, firstMFPSize: firstSize)
         case .servingWithServing:
@@ -48,7 +49,7 @@ extension Food.Size {
         }
     }
     
-    convenience init?(servingWithWeight mfpSize: MFPFood.Size, firstMFPSize: MFPFood.Size) {
+    convenience init?(servingAndWeightBasedSize mfpSize: MFPFood.Size, firstMFPSize: MFPFood.Size) {
         guard let servingName = mfpSize.parsed?.serving?.name,
               let weightAmount = mfpSize.parsed?.weight?.amount
         else {
