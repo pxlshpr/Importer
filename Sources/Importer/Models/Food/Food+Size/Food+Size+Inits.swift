@@ -25,6 +25,10 @@ extension Food.Size {
         self.init()
 
         name = mfpSize.cleanedName.capitalized
+        
+        if name.isServingOfPlainServing, let servingName = name.parsedServingWithServing.serving?.name {
+            name = servingName
+        }
 
         if let weightSize = mfpSizes.weightSize {
             /// check if we have a weight size to base this off
