@@ -53,9 +53,11 @@ extension MFPFood {
 //                    print("Consider: \(servingSizes.first!["unit"]!)")
                 }
                 
-                sizes.append(
-                    Size(name: cleanedUnit, value: value, multiplier: multiplier, index: index)
-                )
+                let size = Size(name: cleanedUnit, value: value, multiplier: multiplier, index: index)
+                /// disregard all unsupported sizes (which is currently only those that explicitly describe "serving" (see `String.isServing`)
+                if size.type != .unsupported {
+                    sizes.append(size)
+                }
             }
         }
         self.sizes = sizes
