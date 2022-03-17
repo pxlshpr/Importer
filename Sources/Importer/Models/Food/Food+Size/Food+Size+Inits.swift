@@ -24,7 +24,7 @@ extension Food.Size {
     convenience init?(serving mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
         self.init()
 
-        name = mfpSize.cleanedName
+        name = mfpSize.cleanedName.capitalized
 
         if let weightSize = mfpSizes.weightSize {
             /// check if we have a weight size to base this off
@@ -51,7 +51,7 @@ extension Food.Size {
         }
         
         self.init()
-        name = servingName
+        name = servingName.capitalized
         
         if firstMFPSize.type.startsWithWeight {
             /// for sizes like "Container (2250g) = 72x"—mark it as being 72 servings as opposed to 2.5 kg (as the weight gets inferred in the description either way)
@@ -72,7 +72,7 @@ extension Food.Size {
         }
 
         self.init()
-        name = servingName
+        name = servingName.capitalized
         
         if firstMFPSize.type.startsWithVolume {
             /// for sizes like "Container (1000ml) = 10x"—mark it as being 10 servings as opposed to 1000 ml (as the volume gets inferred in the description either way)
@@ -91,9 +91,9 @@ extension Food.Size {
         }
         self.init()
         if let servingName = mfpSize.name.parsedServingWithServing.serving?.name {
-            name = servingName
+            name = servingName.capitalized
         } else {
-            name = mfpSize.cleanedName
+            name = mfpSize.cleanedName.capitalized
         }
         amountUnit = .size
         amountSizeUnit = firstFoodSize
@@ -121,7 +121,7 @@ extension Food.Size {
 //            return nil
 //        }
         
-        name = servingName
+        name = servingName.capitalized
         nameVolumeUnit = volumeUnit
         amountUnit = mfpSizes.containsWeightBasedSize ? .weight : .serving
         
