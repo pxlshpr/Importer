@@ -50,7 +50,7 @@ extension Food.Size {
         self.init()
         name = servingName
         
-        if firstMFPSize.type.startsWithWeight {
+        if firstMFPSize.type.startsWithVolume {
             /// for sizes like "Container (1000ml) = 10x"—mark it as being 10 servings as opposed to 1000 ml (as the volume gets inferred in the description either way)
             amount = mfpSize.multiplier
             amountUnit = .serving
