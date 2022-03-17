@@ -1,4 +1,5 @@
 import Foundation
+import SwiftSugar
 
 extension Food.Size {
     
@@ -55,7 +56,7 @@ extension Food.Size {
         }
         
         self.init()
-        name = servingName.capitalized
+        name = servingName.capitalizingFirstLetter()
         
         if firstMFPSize.type.startsWithWeight {
             /// for sizes like "Container (2250g) = 72x"—mark it as being 72 servings as opposed to 2.5 kg (as the weight gets inferred in the description either way)
@@ -79,7 +80,7 @@ extension Food.Size {
         }
 
         self.init()
-        name = servingName.capitalized
+        name = servingName.capitalizingFirstLetter()
         
         if firstMFPSize.type.startsWithVolume {
             /// for sizes like "Container (1000ml) = 10x"—mark it as being 10 servings as opposed to 1000 ml (as the volume gets inferred in the description either way)
@@ -98,9 +99,9 @@ extension Food.Size {
         }
         self.init()
         if let servingName = mfpSize.name.parsedServingWithServing.serving?.name {
-            name = servingName.capitalized
+            name = servingName.capitalizingFirstLetter()
         } else {
-            name = mfpSize.cleanedName.capitalized
+            name = mfpSize.cleanedName.capitalizingFirstLetter()
         }
         amountUnit = .size
         amountSizeUnit = firstFoodSize
@@ -126,7 +127,7 @@ extension Food.Size {
 //            return nil
 //        }
         
-        name = servingName.capitalized
+        name = servingName.capitalizingFirstLetter()
         nameVolumeUnit = volumeUnit
         amountUnit = mfpSizes.containsWeightBasedSize ? .weight : .serving
         amountWeightUnit = mfpSizes.weightSize?.weightUnit
