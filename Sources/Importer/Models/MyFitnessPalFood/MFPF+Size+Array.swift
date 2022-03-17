@@ -91,6 +91,10 @@ public extension Array where Element == MFPFood.Size {
         return unitWeight
     }
     
+//    var firstWeightSize: Size? {
+//        sizes.first(where: { $0.type == .weight })
+//    }
+    
     var volumeSize: MFPFood.Size? {
         if let size = first(where: { $0.type == .volume && $0.multiplier >= 1 }) {
             return size

@@ -5,6 +5,8 @@ extension Food.Size {
     convenience init?(mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
         guard let firstSize = mfpSizes.first else { return nil }
         switch mfpSize.type {
+        case .serving:
+            self.init(serving: mfpSize, mfpSizes: mfpSizes)
         case .volumeWithServing:
             self.init(volumeWithServing: mfpSize, mfpSizes: mfpSizes)
         case .servingWithWeight:
@@ -16,6 +18,26 @@ extension Food.Size {
             self.init(servingWithServing: mfpSize, firstFoodSize: firstFoodSize, mfpSizes: mfpSizes)
         default:
             return nil
+        }
+    }
+    
+    convenience init?(serving mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
+        self.init()
+        
+        if let weightSize = mfpSizes.weightSize {
+            /// check if we have a weight size to base this off
+            amountUnit = .weight
+            amountWeightUnit = weightSize.weightUnit
+            amount = (weightSize.value * mfpSize.multiplier) / weightSize.multiplier
+        } else if let volumeSize = mfpSizes.volumeSize {
+            /// or a volume size
+            amountUnit = .volume
+            amountVolumeUnit = volumeSize.volumeUnit
+            amount = (volumeSize.value * mfpSize.multiplier) / volumeSize.multiplier
+        } else {
+            /// if neither weight or volume sizes are present—express it in terms of 'servings'
+            amountUnit = .serving
+            amount = mfpSize.trueValue
         }
     }
     

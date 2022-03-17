@@ -16,10 +16,6 @@ public extension MFPFood {
         return sizes[1]
     }
     
-    var firstWeightSize: Size? {
-        sizes.first(where: { $0.type == .weight })
-    }
-    
     var cleanedName: String {
         guard let name = name else {
             return ""
