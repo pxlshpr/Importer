@@ -98,8 +98,8 @@ extension ProcessedSize {
         switch unit {
         case .mL:
             multiplier = 1
-//        case .l:
-//            multiplier = 1000
+        case .liter:
+            multiplier = 1000
         case .cup:
             multiplier = 236.588
         case .teaspoon:

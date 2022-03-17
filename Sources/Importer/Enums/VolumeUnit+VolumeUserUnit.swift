@@ -6,6 +6,8 @@ extension VolumeUnit {
         switch self {
         case .mL:
             return VolumeMilliliterUserUnit.ml
+        case .liter:
+            return VolumeLiterUserUnit.liter
         case .teaspoon:
             return VolumeTeaspoonUserUnit.teaspoonMetric
         case .tablespoon:
