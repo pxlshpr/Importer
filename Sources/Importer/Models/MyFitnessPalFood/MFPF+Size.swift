@@ -138,38 +138,46 @@ public extension MFPFood.Size {
 }
 
 extension String {
-    var isServing: Bool {
-        self.lowercased() == "serving"
-        || self.lowercased() == "servings"
-        || self.lowercased() == "serving(s)"
+    var isPlainServing: Bool {
+        let strings = ["serving", "servings", "serving(s)"]
+        for string in strings {
+            if self.lowercased() == string
+                || self.lowercased() == "\(string))" /// special case for when we may have a serving of serving with the plain serving size (e.g. container(x serving(s))—in which case it's extracted with the last bracket
+            {
+                return true
+            }
+        }
+        return false
     }
 }
 
 public extension MFPFood.Size {
     
+    /// returns true if its a type of `servingWithServing` where the `servingSize` is a plain serving (ie. "serving", "servings", or "serving(s)")
+    var isServingOfPlainServing: Bool {
+        guard let servingSizeName = self.name.parsedServingWithServing.servingSize?.name else {
+            return false
+        }
+        return servingSizeName.isPlainServing
+    }
+    
     var type: ServingType {
         
-        guard !name.isServing else {
+        guard !name.isPlainServing else {
             return .unsupported
         }
         
         for type in ServingType.allCases {
+            guard !(type == .servingWithServing && isServingOfPlainServing) else {
+                return .serving
+            }
             if name.matchesRegex(type.regex) {
-                /// specical case for if we have a serving of a size named "serving", in which case we treat it as a serving, disregarding the size for "serving" as it wouldn't be included
-                ///     for e.g. container (serving(s)) → container
-                if let servingSizeName = self.name.parsedServingWithServing.servingSize?.name,
-                   servingSizeName.isServing
-                {
-                    return .serving
-                } else {
-                    return type
-                }
+                return type
             }
         }
         
         /// default to `serving` type so we can actually use it
         return .serving
-//        return .unsupported
     }
     
     var isWeightBased: Bool {
