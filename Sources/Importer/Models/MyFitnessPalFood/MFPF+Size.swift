@@ -155,7 +155,9 @@ public extension MFPFood.Size {
         
         for type in ServingType.allCases {
             if name.matchesRegex(type.regex) {
-                if let servingSizeName = self.parsed?.servingSize?.name,
+                /// specical case for if we have a serving of a size named "serving", in which case we treat it as a serving, disregarding the size for "serving" as it wouldn't be included
+                ///     for e.g. container (serving(s)) → container
+                if let servingSizeName = self.name.parsedServingWithServing.servingSize?.name,
                    servingSizeName.isServing
                 {
                     return .serving
