@@ -1,8 +1,44 @@
 import Foundation
 
 extension MFPFood {
-    
+
     var foodStartingWithVolumeWithServing: Food? {
+        guard let firstSize = sizes.first,
+              let servingName = firstSize.parsed?.serving?.name
+        else {
+            return nil
+        }
+        
+        let food = baseFood
+        food.amount = 1
+        food.servingUnit = .serving
+        
+        /// we're determining the following by checking if the `firstSize` is the `densitySize` in the array:
+        /// *if we also don't have any other `volumeWithWeight`'s or `volumeWithServing`s (indicating that this is the sole density for the food)—other meaning with a different `servingName` — since it could simply be expressed with different units in a different mfp.size.*
+        if firstSize == sizes.densitySize {
+            let name = servingName.cleaned.capitalizingFirstLetter()
+            if !name.isEmpty {
+                food.detail = name
+            }
+            food.servingUnit = .volume
+            food.servingVolumeUnit = firstSize.volumeUnit
+            food.servingValue = firstSize.trueValue
+        } else {
+            guard let firstFoodSize = firstFoodSize else {
+                return nil
+            }
+            food.servingUnit = .size
+            food.servingSizeUnit = firstFoodSize
+            food.sizes.append(firstFoodSize)
+        }
+
+        food.density = sizes.density
+        food.importMFPSizes(from: sizes, ofTypes: ServingType.allExceptMeasurements)
+        
+        return food
+    }
+    
+    var foodStartingWithVolumeWithServing_legacy: Food? {
         
         guard let firstSize = sizes.first,
               let firstFoodSize = Food.Size(volumeWithServing: firstSize, mfpSizes: sizes)
