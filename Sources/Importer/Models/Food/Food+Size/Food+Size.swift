@@ -3,6 +3,7 @@ import PrepUnits
 
 extension Food {
     public class Size: Identifiable {
+        
         public var id = UUID()
 
         public var quantity: Double = 1
