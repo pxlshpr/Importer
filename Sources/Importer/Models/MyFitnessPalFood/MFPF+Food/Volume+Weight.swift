@@ -15,7 +15,7 @@ extension MFPFood {
             /// we're determining the following by checking if the `firstSize` is the `densitySize` in the array:
             /// *if we also don't have any other `volumeWithWeight`'s or `volumeWithServing`s (indicating that this is the sole density for the food)—other meaning with a different `servingName` — since it could simply be expressed with different units in a different mfp.size.*
             if firstSize == sizes.densitySize {
-                food.detail = servingName
+                food.detail = servingName.capitalizingFirstLetter()
                 food.servingUnit = .volume
                 food.servingVolumeUnit = firstSize.volumeUnit
                 food.servingValue = firstSize.trueValue
