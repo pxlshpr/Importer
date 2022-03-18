@@ -3,8 +3,8 @@ import PrepUnits
 
 public class Food {
     public var name: String = ""
-    public var brand: String? = ""
-    public var detail: String? = ""
+    public var brand: String? = nil
+    public var detail: String? = nil
     
     public var amount: Double = 0.0
     public var amountUnit: UnitType = .weight
