@@ -58,8 +58,8 @@ extension MFPFood {
             return Food.Size(servingWithVolume: firstSize, firstMFPSize: firstSize)
         case .weightWithServing:
             return Food.Size(weightWithServing: firstSize, firstMFPSize: firstSize)
-//        case .volumeWithWeight:
-//            return Food.Size(volumeWithWeight: firstSize)
+        case .volumeWithServing:
+            return Food.Size(volumeWithServing: firstSize, mfpSizes: sizes)
         default:
             return nil
         }
