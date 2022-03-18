@@ -3,7 +3,7 @@ import PrepUnits
 
 extension Food {
     public class Size: Identifiable {
-        public var id = UUID()
+//        public var id = UUID()
 
         public var quantity: Double = 1
         
@@ -28,14 +28,14 @@ extension Food {
 
 extension Food.Size: Equatable {
     public static func ==(lhs: Food.Size, rhs: Food.Size) -> Bool {
-        lhs.name == rhs.name
+        lhs.quantity.rounded(toPlaces: 2) == rhs.quantity.rounded(toPlaces: 2)
+        && lhs.name == rhs.name
         && lhs.nameVolumeUnit == rhs.nameVolumeUnit
+        && lhs.amount.rounded(toPlaces: 2) == rhs.amount.rounded(toPlaces: 2)
         && lhs.amountUnit == rhs.amountUnit
         && lhs.amountVolumeUnit == rhs.amountVolumeUnit
         && lhs.amountWeightUnit == rhs.amountWeightUnit
         && lhs.amountSizeUnit == rhs.amountSizeUnit
-        && lhs.amount.rounded(toPlaces: 2) == rhs.amount.rounded(toPlaces: 2)
-        && lhs.quantity.rounded(toPlaces: 2) == rhs.quantity.rounded(toPlaces: 2)
     }
 }
 
