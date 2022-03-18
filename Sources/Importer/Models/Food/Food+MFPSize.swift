@@ -8,6 +8,7 @@ extension Food {
         }
         
         var sizesToAdd = mfpSizes
+            .removingDuplicateDensities()
             .dropFirst()
             .filter { types.contains($0.type) }
             .compactMap { Food.Size(mfpSize: $0, mfpSizes: mfpSizes) }
