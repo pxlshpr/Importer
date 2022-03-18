@@ -50,5 +50,5 @@ extension Food.Size: Hashable {
         hasher.combine(amountVolumeUnit)
         hasher.combine(amountWeightUnit)
         hasher.combine(amountSizeUnit)
-    }
+    }    
 }

@@ -124,7 +124,7 @@ public extension Array where Element == MFPFood.Size {
     
     var densitySize: MFPFood.Size? {
         let densityBasedSizes = filter({ $0.hasDensity })
-            .removingDuplicates()
+            .removingDuplicateDensities()
         
         /// if we only have one density based size
         ///     return that, regardless of whether it has a serving name or not
@@ -161,5 +161,18 @@ public extension Array where Element == MFPFood.Size {
         } else {
             return first(where: { $0.type == .volume })
         }
+    }
+    
+    func removingDuplicateDensities() -> [MFPFood.Size] {
+        var uniques: [MFPFood.Size] = []
+        for size in self {
+            if !uniques.contains(where: {
+                $0.name == size.name &&
+                ($0.multiplier/$0.value).rounded(toPlaces: 2) == (size.multiplier/size.value).rounded(toPlaces: 2)
+            }) {
+                uniques.append(size)
+            }
+        }
+        return uniques
     }
 }

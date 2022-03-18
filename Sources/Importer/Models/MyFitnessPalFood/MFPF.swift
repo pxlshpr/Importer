@@ -27,14 +27,6 @@ extension MFPFood: Equatable {
     }
 }
 
-extension MFPFood.Size: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(value)
-        hasher.combine(multiplier)
-        hasher.combine(index)
-    }
-}
 extension MFPFood: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
