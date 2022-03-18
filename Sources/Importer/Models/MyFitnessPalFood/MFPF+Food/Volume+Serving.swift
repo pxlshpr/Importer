@@ -9,8 +9,9 @@ extension MFPFood {
         else {
             return nil
         }
+
+        //TODO: Strip out serving name and set Detail for ones that have only one VolumeWithServing or VolumeWithWeight named unit
         
-        //MARK: Configure Food
         let food = baseFood
         food.amount = 1
         food.servingUnit = .size
@@ -21,10 +22,15 @@ extension MFPFood {
         } else {
             food.servingValue = 0
         }
+        
+        
+        //TODO: Do we need this?
         food.scaleNutrientsBy(scale: (food.amount * firstSize.multiplier))
+        
+        //TODO: Add density for ones where we have a density size (see Kale, generic)
+        
         food.sizes.append(firstFoodSize)
         
-        //MARK: Add Sizes
         let typesToAdd: [ServingType] = [.serving,
                                          .volumeWithServing,
                                          .servingWithVolume,

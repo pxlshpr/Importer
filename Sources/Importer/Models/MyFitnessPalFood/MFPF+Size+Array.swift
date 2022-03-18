@@ -41,29 +41,30 @@ public extension Array where Element == MFPFood.Size {
     //C796CF29
     /// The first density determined in the order that the sizes are presented (as there may be multiple for a given food)
     var density: Density? {
-        //TODO: Go through the and see if we have both a raw weight and a raw volume first—then use the multipliers to express the density
-        //TODO: If they're both not found, then look for a volumeWithWeight
-        //
         if let density = densityFromWeightAndVolumeSizes {
+            return density
+        }
+        
+        if let density = densityFromDensitySize {
             return density
         }
         
         return nil
         
-        guard let firstSize = self.first else { return nil }
-        
-        /// volumeWithWeight
-        if let size = first(where: { $0.type == .volumeWithWeight }),
-           let volumeUnit = size.name.parsedVolumeWithWeight.volume?.unit,
-           let weightAmount = size.name.parsedVolumeWithWeight.weight?.amount,
-           let weightUnit = size.name.parsedVolumeWithWeight.weight?.unit
-        {
-            /// determine the density of that particular size
-            let volume = size.processedSize.ml(for: size.value, unit: volumeUnit)
-            let weight = firstSize.processedSize.g(for: weightAmount, unit: weightUnit)
-            return Density(volumeAmount: volume, volumeUnit: .mL, weightAmount: weight, weightUnit: .g)
-        }
-        return nil
+//        guard let firstSize = self.first else { return nil }
+//        
+//        /// volumeWithWeight
+//        if let size = first(where: { $0.type == .volumeWithWeight }),
+//           let volumeUnit = size.name.parsedVolumeWithWeight.volume?.unit,
+//           let weightAmount = size.name.parsedVolumeWithWeight.weight?.amount,
+//           let weightUnit = size.name.parsedVolumeWithWeight.weight?.unit
+//        {
+//            /// determine the density of that particular size
+//            let volume = size.processedSize.ml(for: size.value, unit: volumeUnit)
+//            let weight = firstSize.processedSize.g(for: weightAmount, unit: weightUnit)
+//            return Density(volumeAmount: volume, volumeUnit: .mL, weightAmount: weight, weightUnit: .g)
+//        }
+//        return nil
     }
     
     var densityFromWeightAndVolumeSizes: Density? {
@@ -83,6 +84,58 @@ public extension Array where Element == MFPFood.Size {
             return Density(volumeAmount: volumeSize.value, volumeUnit: volumeUnit,
                            weightAmount: weight, weightUnit: weightUnit)
         }
+    }
+    
+    /// returns the density off a single size (of type `volumeWithServing`, `volumeWithWeight` or `weightWithVolume`
+    var densityFromDensitySize: Density? {
+        guard let densitySize = densitySize else {
+            return nil
+        }
+        switch densitySize.type {
+        case .weightWithVolume:
+            guard let volumeAmount = densitySize.volumeAmount,
+                  let volumeUnit = densitySize.volumeUnit,
+                  let weightUnit = densitySize.weightUnit
+            else {
+                return nil
+            }
+            return Density(volumeAmount: volumeAmount,
+                           volumeUnit: volumeUnit,
+                           weightAmount: densitySize.trueValue,
+                           weightUnit: weightUnit)
+        case .volumeWithWeight:
+            guard let weightAmount = densitySize.weightAmount,
+                  let volumeUnit = densitySize.volumeUnit,
+                  let weightUnit = densitySize.weightUnit
+            else {
+                return nil
+            }
+            return Density(volumeAmount: densitySize.trueValue,
+                           volumeUnit: volumeUnit,
+                           weightAmount: weightAmount,
+                           weightUnit: weightUnit)
+        case .volumeWithServing:
+            //TODO: Do this when implementing it
+            return nil
+        default:
+            return nil
+        }
+    }
+    
+    var densitySize: MFPFood.Size? {
+        /// if we only have one density based size
+        ///     return that, regardless of whether it has a serving name or not
+        guard filter({ $0.hasDensity }).count > 1 else {
+            return first(where: { $0.hasDensity })
+        }
+        
+        //TODO: multiple density based sizes
+        /// if we have multiple, then first check if they are technically all the same (ie. share the same density and `servingName` if present)
+        ///     if so, return that
+        /// otherwise check if any of them have no `servingName`
+        ///     if so return that
+        
+        return nil
     }
     
     var weightSize: MFPFood.Size? {

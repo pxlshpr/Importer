@@ -221,6 +221,11 @@ public extension MFPFood.Size {
     var isVolumeBased: Bool {
         type.isVolumeBased
     }
+    
+    var hasDensity: Bool {
+        let densityBasedTypes: [ServingType] = [.volumeWithWeight, .weightWithVolume, .volumeWithServing]
+        return densityBasedTypes.contains(type)
+    }
 
     /// e.g. `cups, shredded`
     var isDescriptiveCups: Bool {
