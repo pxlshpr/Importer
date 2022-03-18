@@ -29,6 +29,7 @@ extension MFPFood {
             }
             food.servingUnit = .size
             food.servingSizeUnit = firstFoodSize
+            food.servingValue = firstSize.trueValue
             food.sizes.append(firstFoodSize)
         }
 
