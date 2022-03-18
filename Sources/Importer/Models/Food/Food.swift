@@ -4,7 +4,7 @@ import PrepUnits
 public class Food {
     public var name: String = ""
     public var brand: String? = ""
-    public var description: String? = ""
+    public var detail: String? = ""
     
     public var amount: Double = 0.0
     public var amountUnit: UnitType = .weight

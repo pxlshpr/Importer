@@ -16,7 +16,6 @@ extension Food {
         if let firstFoodSize = Food.Size(mfpSize: firstSize, mfpSizes: mfpSizes) {
             sizesToAdd.removeAll(where: { $0 == firstFoodSize })
         }
-
         
         sizes.append(contentsOf: sizesToAdd)
     }

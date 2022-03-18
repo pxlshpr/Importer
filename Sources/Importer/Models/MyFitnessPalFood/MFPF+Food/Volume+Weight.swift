@@ -3,27 +3,40 @@ import Foundation
 extension MFPFood {
     
     var foodStartingWithVolumeWithWeight: Food? {
-        guard let firstSize = sizes.first, let firstFoodSize = firstFoodSize else {
+        guard let firstSize = sizes.first else {
             return nil
         }
+        let food = baseFood
+        food.amount = 1
+        food.amountUnit = .serving
         
         /// if we have a `servingName` for the `parsedVolumeWithWeight`
-        ///     if we also don't have any other `volumeWithWeight`'s or `volumeWithServing`s (indicating that this is the sole density for the food)—other meaning with a different `servingName` — since it could simply be expressed with different units in a different mfp.size
-        ///         - set the `servingName` as the food's description
-        ///         - set the serving unit for the food to be volume based
-        ///         - set the trueValue of the size as its amount
-        ///         - set the density based off the weight of the `parsedVolumeWithWeight`
-        ///     else
-        ///         - set the serving unit for the food to be size based
-        ///         - create a size with the `volumeWithWeight`
-        ///             - just like we would have with a `volumeWithServing`
-        ///         - add the size to the foods sizes
-        ///         - (don't set the density as we have other ones)
-        /// else (we don't have a `servingName`)
-        ///     - set the serving unit for the food to be volume based
-        ///     - set the trueValue of the size to be its amount
-        ///     - set the density based off the weight of the `parsedVolumeWithWeight`
-        return nil
+        if let servingName = firstSize.parsed?.serving?.name {
+            /// we're determining the following by checking if the `firstSize` is the `densitySize` in the array:
+            /// *if we also don't have any other `volumeWithWeight`'s or `volumeWithServing`s (indicating that this is the sole density for the food)—other meaning with a different `servingName` — since it could simply be expressed with different units in a different mfp.size.*
+            if firstSize == sizes.densitySize {
+                food.detail = servingName
+                food.servingUnit = .volume
+                food.servingVolumeUnit = firstSize.volumeUnit
+                food.servingValue = firstSize.trueValue
+            } else {
+                guard let firstFoodSize = firstFoodSize else {
+                    return nil
+                }
+                food.servingUnit = .size
+                food.servingSizeUnit = firstFoodSize
+                food.sizes.append(firstFoodSize)
+            }
+        } else {
+            /// we don't have a `servingName`
+            food.servingUnit = .volume
+            food.servingValue = firstSize.trueValue
+        }
+
+        food.density = sizes.density
+        food.importMFPSizes(from: sizes, ofTypes: ServingType.allExceptMeasurements)
+        
+        return food
     }
     
     

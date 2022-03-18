@@ -10,6 +10,8 @@ extension Food.Size {
             self.init(serving: mfpSize, mfpSizes: mfpSizes)
         case .volumeWithServing:
             self.init(volumeWithServing: mfpSize, mfpSizes: mfpSizes)
+        case .volumeWithWeight:
+            self.init(volumeWithWeight: mfpSize)
         case .servingWithWeight:
             self.init(servingWithWeight: mfpSize, firstMFPSize: firstSize)
         case .weightWithServing:
@@ -72,7 +74,7 @@ extension Food.Size {
 //            amount = 1.0/mfpSize.trueValue
 //        }
 //    }
-    
+
     convenience init?(weightWithServing mfpSize: MFPFood.Size, firstMFPSize: MFPFood.Size) {
         guard let servingName = mfpSize.parsed?.serving?.name,
               let servingAmount = mfpSize.parsed?.serving?.amount
@@ -83,18 +85,12 @@ extension Food.Size {
         self.init()
         name = servingName.capitalizingFirstLetter()
         
-//        if firstMFPSize.type.startsWithWeight {
-//            /// for sizes like "Container (2250g) = 72x"—mark it as being 72 servings as opposed to 2.5 kg (as the weight gets inferred in the description either way)
-//            amount = mfpSize.multiplier
-//            amountUnit = .serving
-//        } else {
-            guard mfpSize.value > 0 else {
-                return
-            }
-            amount = mfpSize.value / mfpSize.multiplier / servingAmount
-            amountUnit = .weight
-            amountWeightUnit = mfpSize.weightUnit
-//        }
+        guard mfpSize.value > 0 else {
+            return
+        }
+        amount = mfpSize.value / mfpSize.multiplier / servingAmount
+        amountUnit = .weight
+        amountWeightUnit = mfpSize.weightUnit
     }
     
     convenience init?(servingWithWeight mfpSize: MFPFood.Size, firstMFPSize: MFPFood.Size) {
@@ -184,4 +180,23 @@ extension Food.Size {
         quantity = mfpSize.value
         amount = mfpSizes.containsWeightBasedSize ? mfpSizes.baseWeight * mfpSize.multiplier : mfpSize.multiplier
     }
+    
+    convenience init?(volumeWithWeight mfpSize: MFPFood.Size) {
+        guard let servingName = mfpSize.parsed?.serving?.name,
+              let volumeUnit = mfpSize.volumeUnit,
+              let weightUnit = mfpSize.weightUnit,
+              let weightAmount = mfpSize.weightAmount
+        else {
+            return nil
+        }
+        self.init()
+        
+        name = servingName.capitalizingFirstLetter()
+        nameVolumeUnit = volumeUnit
+        amountUnit = .weight
+        amountWeightUnit = weightUnit
+        
+        quantity = 1
+        amount = weightAmount
+    }    
 }

@@ -17,8 +17,7 @@ extension MFPFood {
         food.servingVolumeUnit = firstSize.volumeUnit
         food.density = sizes.density
                 
-        let types = ServingType.all(excluding: [ServingType.volume, ServingType.weight])
-        food.importMFPSizes(from: sizes, ofTypes: types)
+        food.importMFPSizes(from: sizes, ofTypes: ServingType.allExceptMeasurements)
 
 //        //TODO: Descriptive cups is now invalid
 //        /// If the first size has format of `cup, shredded` **and** the next size is a weight size
