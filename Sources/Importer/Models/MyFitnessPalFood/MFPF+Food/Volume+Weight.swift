@@ -1,7 +1,32 @@
 import Foundation
 
 extension MFPFood {
+    
     var foodStartingWithVolumeWithWeight: Food? {
+        guard let firstSize = sizes.first, let firstFoodSize = firstFoodSize else {
+            return nil
+        }
+        
+        /// if we have a `servingName` for the `parsedVolumeWithWeight`
+        ///     if we also don't have any other `volumeWithWeight`'s or `volumeWithServing`s (indicating that this is the sole density for the food)—other meaning with a different `servingName` — since it could simply be expressed with different units in a different mfp.size
+        ///         - set the `servingName` as the food's description
+        ///         - set the serving unit for the food to be volume based
+        ///         - set the trueValue of the size as its amount
+        ///         - set the density based off the weight of the `parsedVolumeWithWeight`
+        ///     else
+        ///         - set the serving unit for the food to be size based
+        ///         - create a size with the `volumeWithWeight`
+        ///             - just like we would have with a `volumeWithServing`
+        ///         - add the size to the foods sizes
+        ///         - (don't set the density as we have other ones)
+        /// else (we don't have a `servingName`)
+        ///     - set the serving unit for the food to be volume based
+        ///     - set the trueValue of the size to be its amount
+        ///     - set the density based off the weight of the `parsedVolumeWithWeight`
+        return nil
+    }
+    
+    var foodStartingWithVolumeWithWeight_legacy: Food? {
         /// protect against division by 0 with firstSize.value check
         guard let firstSize = sizes.first, firstSize.value > 0 else {
             return nil
