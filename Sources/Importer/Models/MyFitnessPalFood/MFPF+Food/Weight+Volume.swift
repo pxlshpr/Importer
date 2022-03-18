@@ -16,6 +16,7 @@ extension MFPFood {
         food.amountUnit = .serving
         food.servingUnit = .weight
         food.servingValue = firstSize.trueValue
+        food.servingWeightUnit = weightUnit
         
 //        food.density = sizes.density
 //
