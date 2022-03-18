@@ -30,6 +30,7 @@ extension MFPFood {
         } else {
             /// we don't have a `servingName`
             food.servingUnit = .volume
+            food.servingVolumeUnit = firstSize.volumeUnit
             food.servingValue = firstSize.trueValue
         }
 
