@@ -303,6 +303,8 @@ public struct ParseResult {
             } else {
                 name = groups[4]
             }
+        } else if groups.count == 6 {
+            name = groups[5]
         }
         
         volume = volume.trimmingCharacters(in: .whitespaces)
