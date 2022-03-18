@@ -52,7 +52,7 @@ public extension Array where Element == MFPFood.Size {
         return nil
         
 //        guard let firstSize = self.first else { return nil }
-//        
+//
 //        /// volumeWithWeight
 //        if let size = first(where: { $0.type == .volumeWithWeight }),
 //           let volumeUnit = size.name.parsedVolumeWithWeight.volume?.unit,
@@ -123,9 +123,12 @@ public extension Array where Element == MFPFood.Size {
     }
     
     var densitySize: MFPFood.Size? {
+        let densityBasedSizes = filter({ $0.hasDensity })
+            .removingDuplicates()
+        
         /// if we only have one density based size
         ///     return that, regardless of whether it has a serving name or not
-        guard filter({ $0.hasDensity }).count > 1 else {
+        guard densityBasedSizes.count > 1 else {
             return first(where: { $0.hasDensity })
         }
         
