@@ -110,7 +110,8 @@ public extension Array where Element == MFPFood.Size {
             else {
                 return nil
             }
-            return Density(volumeAmount: densitySize.trueValue,
+//            return Density(volumeAmount: densitySize.trueValue,
+            return Density(volumeAmount: 1,
                            volumeUnit: volumeUnit,
                            weightAmount: weightAmount,
                            weightUnit: weightUnit)
