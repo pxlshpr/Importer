@@ -18,10 +18,10 @@ extension MFPFood {
         food.servingValue = firstSize.trueValue
         food.servingWeightUnit = weightUnit
         
-//        food.density = sizes.density
-//
-//        let types = ServingType.all(excluding: [ServingType.volume, ServingType.weight])
-//        food.importMFPSizes(from: sizes, ofTypes: types)
+        food.density = sizes.density
+        
+        let types = ServingType.all(excluding: [ServingType.volume, ServingType.weight])
+        food.importMFPSizes(from: sizes, ofTypes: types)
         
         return food
     }
