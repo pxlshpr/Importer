@@ -42,6 +42,8 @@ extension MFPFood {
         food.carbohydrate = carb ?? 0
         food.fat = fat ?? 0
         food.protein = protein ?? 0
+        
+        food.sourceUrl = "https://www.myfitnesspal.com\(urlSlug)"
         return food
     }
     

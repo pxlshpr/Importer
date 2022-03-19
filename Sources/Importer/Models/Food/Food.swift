@@ -24,6 +24,8 @@ public class Food {
     public var protein: Double = 0
     public var sizes: [Size] = []
     
+    public var sourceUrl: String?
+    
     func scaleNutrientsBy(scale: Double) {
         energy = energy * scale
         carbohydrate = carbohydrate * scale

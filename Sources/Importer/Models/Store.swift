@@ -48,8 +48,8 @@ public extension Engine {
                 print("Couldn't extract foodJSON")
                 continue
             }
-            let urlString = i < urlStrings.count ? urlStrings[i] : ""
-            guard let food = MFPFood(json: foodJson, urlString: urlString) else {
+            let urlSlug = i < urlStrings.count ? urlStrings[i] : ""
+            guard let food = MFPFood(json: foodJson, urlString: urlSlug) else {
                 print("Couldn't create MFPFood")
                 continue
             }
