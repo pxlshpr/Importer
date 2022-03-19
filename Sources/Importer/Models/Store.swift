@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftSugar
 
-public typealias MfpSearchCompletionHandler = (_ foods: [Food]) -> Void
+public typealias MfpSearchCompletionHandler = (_ results: [Food]) -> Void
 
 public class Engine: NSObject, ObservableObject {
 //    public static let shared = Engine()
@@ -43,6 +43,8 @@ public extension Engine {
             return food
         }
         
+        let urlStrings = html.capturedGroups(using: RxMfpUrlStrings)
+        
         let foods = mfpFoods.compactMap { $0.food }
         
         completion?(foods)
@@ -68,3 +70,4 @@ public extension Engine {
 
 let RxUpcLookup = #"\".* [0-9]+ is associated with product (.*), find [0-9]+"#
 let RxMfpResults = #"(\{\"items\"\:.*\])\,\"totalResultsCount\"\:"#
+let RxMfpUrlStrings = #"\"(\/food\/calories\/.*)\""#
