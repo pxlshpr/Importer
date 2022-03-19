@@ -45,7 +45,6 @@ public extension Engine {
         
         let urlStrings = html.capturedGroups(using: RxMfpUrlStrings)
         
-        
         let foods = mfpFoods.compactMap { $0.food }
         
         completion?(foods)
