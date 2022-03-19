@@ -31,20 +31,8 @@ public extension Engine {
             return
         }
         
-        ///convert JSON back to Data
-        let mfpFoods = items.compactMap { json -> MFPFood? in
-            guard let foodJson = json as? [String: Any],
-                  let food = MFPFood(json: foodJson, urlString: "")
-            else {
-                  print("Couldn't get food from: \(jsonString)")
-                  NotificationCenter.default.post(name: .didGetFoodResults, object: nil)
-                  return nil
-            }
-            return food
-        }
-        
+        /// get all the lines with the url's to the food pages (in the html itself) by separating the string up by each link's prefix, and running a regex on each line
         var urlStrings: [String] = []
-
         for line in html.components(separatedBy: #"<a target="_self""#) {
             guard let urlSlug = line.secondCapturedGroup(using: RxMfpUrlStrings) else {
                 continue
@@ -52,7 +40,32 @@ public extension Engine {
             urlStrings.append(urlSlug)
         }
 
-        let urlStrings2 = html.capturedGroups(using: RxMfpUrlStrings)
+        ///convert JSON back to Data
+        var mfpFoods: [MFPFood] = []
+        for i in items.indices {
+            let itemJson = items[i]
+            guard let foodJson = itemJson as? [String: Any] else {
+                print("Couldn't extract foodJSON")
+                continue
+            }
+            let urlString = i < urlStrings.count ? urlStrings[i] : ""
+            guard let food = MFPFood(json: foodJson, urlString: urlString) else {
+                print("Couldn't create MFPFood")
+                continue
+            }
+            mfpFoods.append(food)
+        }
+        
+//        let mfpFoods = items.compactMap { json -> MFPFood? in
+//            guard let foodJson = json as? [String: Any],
+//                  let food = MFPFood(json: foodJson, urlString: "")
+//            else {
+//                  print("Couldn't get food from: \(jsonString)")
+//                  NotificationCenter.default.post(name: .didGetFoodResults, object: nil)
+//                  return nil
+//            }
+//            return food
+//        }
 
         let foods = mfpFoods.compactMap { $0.food }
         
