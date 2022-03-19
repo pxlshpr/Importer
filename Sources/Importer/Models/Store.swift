@@ -16,8 +16,7 @@ public extension Engine {
         }
         return name
     }
-    
-    
+        
     static func getMfpSearchResults(for searchString: String, completion: MfpSearchCompletionHandler? = nil) {
         let urlString = searchString.mfpSearchUrlString
         guard let html = urlString.htmlContents, let jsonString = html.secondCapturedGroup(using: RxMfpResults) else {
