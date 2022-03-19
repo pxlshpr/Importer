@@ -7,6 +7,7 @@ extension MFPFood {
             print("No firstType from: \(sizes.count) sizes")
             return nil
         }
+        
         switch firstType {
         case .weight:
             return foodStartingWithWeight
