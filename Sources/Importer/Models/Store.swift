@@ -44,13 +44,16 @@ public extension Engine {
         }
         
         var urlStrings: [String] = []
-        for line in html.lines {
+
+        for line in html.components(separatedBy: #"<a target="_self""#) {
             guard let urlSlug = line.secondCapturedGroup(using: RxMfpUrlStrings) else {
                 continue
             }
             urlStrings.append(urlSlug)
         }
-        
+
+        let urlStrings2 = html.capturedGroups(using: RxMfpUrlStrings)
+
         let foods = mfpFoods.compactMap { $0.food }
         
         completion?(foods)
@@ -82,4 +85,4 @@ public extension String {
 
 let RxUpcLookup = #"\".* [0-9]+ is associated with product (.*), find [0-9]+"#
 let RxMfpResults = #"(\{\"items\"\:.*\])\,\"totalResultsCount\"\:"#
-let RxMfpUrlStrings = #"\"(\/food\/calories\/.*)\""#
+let RxMfpUrlStrings = #"\"(\/food\/calories\/[^>]*)\""#
