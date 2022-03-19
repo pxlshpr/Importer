@@ -43,7 +43,13 @@ public extension Engine {
             return food
         }
         
-        let urlStrings = html.capturedGroups(using: RxMfpUrlStrings)
+        var urlStrings: [String] = []
+        for line in html.lines {
+            guard let urlSlug = line.secondCapturedGroup(using: RxMfpUrlStrings) else {
+                continue
+            }
+            urlStrings.append(urlSlug)
+        }
         
         let foods = mfpFoods.compactMap { $0.food }
         
@@ -65,6 +71,12 @@ public extension Engine {
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: .didDownload, object: nil)
         }
+    }
+}
+
+public extension String {
+    var lines: [String] {
+        return self.components(separatedBy: "\n")
     }
 }
 
