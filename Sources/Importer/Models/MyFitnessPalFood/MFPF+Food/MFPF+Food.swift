@@ -13,9 +13,7 @@ extension MFPFood {
             return foodStartingWithWeight
         case .volume:
             return foodStartingWithVolume
-            //TODO: Finafuckingly
-            //TODO: Another one
-            //OK what now
+            //TODO: Emmefas
 //        case .serving:
 //            return foodStartingWithServing
 //        case .servingWithWeight:
