@@ -21,14 +21,15 @@ public extension Engine {
     
     static func getMfpFood(for urlString: String, completion: MfpFoodUrlCompletionHandler? = nil) {
         guard let html = urlString.htmlContents,
-              let foodContainerJson = html.secondCapturedGroup(using: RxMfpFoodContainer),
-              let foodJson = foodContainerJson.secondCapturedGroup(using: RxMfpFood)
+              let foodContainerJson = html.secondCapturedGroup(using: RxMfpFoodContainer)
+//              let foodJson = foodContainerJson.secondCapturedGroup(using: RxMfpFood)
         else {
             print("Couldn't parse MFP HTML: \(urlString)")
             return
         }
         
-        guard let json = foodJson.asJson else {
+        guard let json = foodContainerJson.asJson else {
+//        guard let json = foodJson.asJson else {
             print("Couldn't create json object from parsed food json")
             return
         }
