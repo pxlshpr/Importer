@@ -18,11 +18,37 @@ public extension Engine {
         return name
     }
     
+    
     static func getMfpFood(for urlString: String, completion: MfpFoodUrlCompletionHandler? = nil) {
-        guard let html = urlString.htmlContents else {
+        guard let html = urlString.htmlContents,
+              let foodContainerJson = html.secondCapturedGroup(using: RxMfpFoodContainer),
+              let foodJson = foodContainerJson.secondCapturedGroup(using: RxMfpFood)
+        else {
             print("Couldn't parse MFP HTML: \(urlString)")
             return
         }
+        
+        guard let json = foodJson.asJson else {
+            print("Couldn't create json object from parsed food json")
+            return
+        }
+        
+        guard let urlSlug = urlString.secondCapturedGroup(using: RxMfpSlug) else {
+            print("Couldn't extract url slug from mfp food url")
+            return
+        }
+        
+        guard let mfpFood = MFPFood(json: json, urlString: urlSlug) else {
+            print("Couldn't create MFPFood from json")
+            return
+        }
+        
+        guard let food = mfpFood.food else {
+            print("Couldn't extract food from MFPFood")
+            return
+        }
+        
+        completion?(food)
     }
     
     static func getMfpSearchResults(for searchString: String, completion: MfpSearchCompletionHandler? = nil) {
@@ -107,3 +133,6 @@ public extension String {
 let RxUpcLookup = #"\".* [0-9]+ is associated with product (.*), find [0-9]+"#
 let RxMfpResults = #"(\{\"items\"\:.*\])\,\"totalResultsCount\"\:"#
 let RxMfpUrlStrings = #"\"(\/food\/calories\/[^>]*)\""#
+let RxMfpFoodContainer = #"\"foods\"\:(.*)\,\"nutrition\"\:"#
+let RxMfpFood = #"\"item\"\:(.*)\,\"errors\""#
+let RxMfpSlug = #"(\/food\/calories.*)$"#
