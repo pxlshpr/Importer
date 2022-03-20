@@ -444,9 +444,9 @@ public struct ParseResult {
             servingSizeName.removeLast(1)
         }
         /// `of pan` → `pan`
-        if servingSizeName.hasPrefix("of ") {
-            servingSizeName.removeFirst(3)
-        }
+//        if servingSizeName.hasPrefix("of ") {
+//            servingSizeName.removeFirst(3)
+//        }
         
         servingSizeName = servingSizeName.trimmingCharacters(in: .whitespaces)
         servingSizeValue = servingSizeValue.trimmingCharacters(in: .whitespaces)

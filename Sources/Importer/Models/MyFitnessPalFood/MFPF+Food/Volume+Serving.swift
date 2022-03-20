@@ -16,7 +16,7 @@ extension MFPFood {
         /// we're determining the following by checking if the `firstSize` is the `densitySize` in the array:
         /// *if we also don't have any other `volumeWithWeight`'s or `volumeWithServing`s (indicating that this is the sole density for the food)—other meaning with a different `servingName` — since it could simply be expressed with different units in a different mfp.size.*
         if firstSize == sizes.densitySize {
-            let name = servingName.cleaned.capitalizingFirstLetter()
+            let name = servingName.formattedForSize
             if !name.isEmpty {
                 food.detail = name
             }
@@ -39,41 +39,42 @@ extension MFPFood {
         return food
     }
     
-    var foodStartingWithVolumeWithServing_legacy: Food? {
-        
-        guard let firstSize = sizes.first,
-              let firstFoodSize = Food.Size(volumeWithServing: firstSize, mfpSizes: sizes)
-        else {
-            return nil
-        }
-
-        //TODO: Strip out serving name and set Detail for ones that have only one VolumeWithServing or VolumeWithWeight named unit
-        
-        let food = baseFood
-        food.amount = 1
-        food.servingUnit = .size
-        if sizes.containsWeightBasedSize {
-            //TODO: Should this be 1 or firstSize.value?
-            food.servingValue = 1
-            food.servingSizeUnit = firstFoodSize
-        } else {
-            food.servingValue = 0
-        }
-        
-        
-        //TODO: Do we need this?
-        food.scaleNutrientsBy(scale: (food.amount * firstSize.multiplier))
-        
-        //TODO: Add density for ones where we have a density size (see Kale, generic)
-        
-        food.sizes.append(firstFoodSize)
-        
-        let typesToAdd: [ServingType] = [.serving,
-                                         .volumeWithServing,
-                                         .servingWithVolume,
-                                         .servingWithServing]
-        food.importMFPSizes(from: sizes, ofTypes: typesToAdd)
-        
-        return food
-    }
+    //TODO: Remove
+//    var foodStartingWithVolumeWithServing_legacy: Food? {
+//        
+//        guard let firstSize = sizes.first,
+//              let firstFoodSize = Food.Size(volumeWithServing: firstSize, mfpSizes: sizes)
+//        else {
+//            return nil
+//        }
+//
+//        //TODO: Strip out serving name and set Detail for ones that have only one VolumeWithServing or VolumeWithWeight named unit
+//        
+//        let food = baseFood
+//        food.amount = 1
+//        food.servingUnit = .size
+//        if sizes.containsWeightBasedSize {
+//            //TODO: Should this be 1 or firstSize.value?
+//            food.servingValue = 1
+//            food.servingSizeUnit = firstFoodSize
+//        } else {
+//            food.servingValue = 0
+//        }
+//        
+//        
+//        //TODO: Do we need this?
+//        food.scaleNutrientsBy(scale: (food.amount * firstSize.multiplier))
+//        
+//        //TODO: Add density for ones where we have a density size (see Kale, generic)
+//        
+//        food.sizes.append(firstFoodSize)
+//        
+//        let typesToAdd: [ServingType] = [.serving,
+//                                         .volumeWithServing,
+//                                         .servingWithVolume,
+//                                         .servingWithServing]
+//        food.importMFPSizes(from: sizes, ofTypes: typesToAdd)
+//        
+//        return food
+//    }
 }

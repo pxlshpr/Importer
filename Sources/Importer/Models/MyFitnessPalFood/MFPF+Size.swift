@@ -146,11 +146,11 @@ public extension MFPFood.Size {
     }
     
     var formattedName: String {
-        if name.lowercased().hasPrefix("of ") {
-            return name.replacingOccurrences(of: "of ", with: "").capitalized
-        } else {
+//        if name.lowercased().hasPrefix("of ") {
+//            return name.replacingOccurrences(of: "of ", with: "").capitalized
+//        } else {
             return name.capitalized
-        }
+//        }
     }
 }
 
@@ -316,14 +316,14 @@ extension MFPFood.Size: CustomStringConvertible {
         "\n"
     }
     
-    var cleanedName: String {
-        var cleanedName = name
-        /// deals with names that may be like → 'of pan'
-        if cleanedName.hasPrefix("of ") {
-            cleanedName.removeFirst(3)
-        }
-        return cleanedName.cleaned
-    }
+//    var cleanedName: String {
+//        var cleanedName = name
+//        /// deals with names that may be like → 'of pan'
+//        if cleanedName.hasPrefix("of ") {
+//            cleanedName.removeFirst(3)
+//        }
+//        return cleanedName.cleaned
+//    }
 }
 
 extension MFPFood.Size {

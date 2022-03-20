@@ -1,6 +1,11 @@
 import Foundation
 import SwiftSugar
 
+extension String {
+    var formattedForSize: String {
+        cleaned.capitalizingFirstLetter()
+    }
+}
 extension Food.Size {
     
     convenience init?(mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
@@ -29,10 +34,10 @@ extension Food.Size {
     convenience init?(serving mfpSize: MFPFood.Size, mfpSizes: [MFPFood.Size]) {
         self.init()
 
-        name = mfpSize.cleanedName.capitalizingFirstLetter()
+        name = mfpSize.name.formattedForSize
         
         if name.isServingOfPlainServing, let servingName = name.parsedServingWithServing.serving?.name {
-            name = servingName
+            name = servingName.formattedForSize
         }
 
         if let weightSize = mfpSizes.weightSize {
@@ -51,29 +56,6 @@ extension Food.Size {
             amount = 1.0/mfpSize.trueValue
         }
     }
-    
-//    convenience init?(volumeWithWeight mfpSize: MFPFood.Size) {
-//        
-//        name = mfpSize.cleanedName.capitalizingFirstLetter()
-//        
-//        amountUnit 
-//        
-//        if let weightSize = mfpSizes.weightSize {
-//            /// check if we have a weight size to base this off
-//            amountUnit = .weight
-//            amountWeightUnit = weightSize.weightUnit
-//            amount = (weightSize.value * mfpSize.multiplier) / weightSize.multiplier / mfpSize.value
-//        } else if let volumeSize = mfpSizes.volumeSize {
-//            /// or a volume size
-//            amountUnit = .volume
-//            amountVolumeUnit = volumeSize.volumeUnit
-//            amount = (volumeSize.value * mfpSize.multiplier) / volumeSize.multiplier / mfpSize.value
-//        } else {
-//            /// if neither weight or volume sizes are present—express it in terms of 'servings'
-//            amountUnit = .serving
-//            amount = 1.0/mfpSize.trueValue
-//        }
-//    }
 
     convenience init?(weightWithServing mfpSize: MFPFood.Size, firstMFPSize: MFPFood.Size) {
         guard let servingName = mfpSize.parsed?.serving?.name,
@@ -83,7 +65,7 @@ extension Food.Size {
         }
         
         self.init()
-        name = servingName.capitalizingFirstLetter()
+        name = servingName.formattedForSize
         
         guard mfpSize.value > 0 else {
             return
@@ -101,7 +83,7 @@ extension Food.Size {
         }
         
         self.init()
-        name = servingName.capitalizingFirstLetter()
+        name = servingName.formattedForSize
         
         if firstMFPSize.type.startsWithWeight {
             /// for sizes like "Container (2250g) = 72x"—mark it as being 72 servings as opposed to 2.5 kg (as the weight gets inferred in the description either way)
@@ -125,7 +107,7 @@ extension Food.Size {
         }
 
         self.init()
-        name = servingName.capitalizingFirstLetter()
+        name = servingName.formattedForSize
         
         if firstMFPSize.type.startsWithVolume {
             /// for sizes like "Container (1000ml) = 10x"—mark it as being 10 servings as opposed to 1000 ml (as the volume gets inferred in the description either way)
@@ -144,9 +126,9 @@ extension Food.Size {
         }
         self.init()
         if let servingName = mfpSize.name.parsedServingWithServing.serving?.name {
-            name = servingName.capitalizingFirstLetter()
+            name = servingName.formattedForSize
         } else {
-            name = mfpSize.cleanedName.capitalizingFirstLetter()
+            name = mfpSize.name.formattedForSize
         }
         amountUnit = .size
         amountSizeUnit = firstFoodSize
@@ -172,7 +154,7 @@ extension Food.Size {
 //            return nil
 //        }
         
-        name = servingName.capitalizingFirstLetter()
+        name = servingName.formattedForSize
         nameVolumeUnit = volumeUnit
         amountUnit = mfpSizes.containsWeightBasedSize ? .weight : .serving
         amountWeightUnit = mfpSizes.weightSize?.weightUnit
@@ -191,7 +173,7 @@ extension Food.Size {
         }
         self.init()
         
-        name = servingName.capitalizingFirstLetter()
+        name = servingName.formattedForSize
         nameVolumeUnit = volumeUnit
         amountUnit = .weight
         amountWeightUnit = weightUnit
