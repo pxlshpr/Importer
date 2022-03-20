@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftSugar
 
 public typealias MfpSearchCompletionHandler = (_ results: [Food]) -> Void
+public typealias MfpFoodUrlCompletionHandler = (_ food: Food) -> Void
 
 public class Engine: NSObject, ObservableObject {
 //    public static let shared = Engine()
@@ -16,7 +17,14 @@ public extension Engine {
         }
         return name
     }
-        
+    
+    static func getMfpFood(for urlString: String, completion: MfpFoodUrlCompletionHandler? = nil) {
+        guard let html = urlString.htmlContents else {
+            print("Couldn't parse MFP HTML: \(urlString)")
+            return
+        }
+    }
+    
     static func getMfpSearchResults(for searchString: String, completion: MfpSearchCompletionHandler? = nil) {
         let urlString = searchString.mfpSearchUrlString
         guard let html = urlString.htmlContents, let jsonString = html.secondCapturedGroup(using: RxMfpResults) else {
