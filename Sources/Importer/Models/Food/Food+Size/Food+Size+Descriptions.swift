@@ -27,9 +27,9 @@ public extension Food.Size {
     var nameDescription: String {
         
         if let nameVolumeUnit = nameVolumeUnit {
-            return "[\(quantity.clean) \(nameVolumeUnit.shortDescription(for: quantity))] \(name)"
+            return "[\(quantity.clean) \(nameVolumeUnit.shortDescription(for: quantity))] \(name.singular)"
         } else {
-            return name
+            return name.singular
         }
     }
 }
