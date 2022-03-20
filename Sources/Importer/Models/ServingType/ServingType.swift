@@ -12,11 +12,11 @@ public enum ServingType: Int, CaseIterable, Identifiable {
     case servingWithWeight
     case servingWithVolume
     case weightWithServing
-    case servingWithServing
-    case unsupported
     case volumeWithWeight
     case weightWithVolume
     case volumeWithServing
+    case servingWithServing
+    case unsupported
 
     public var description: String {
         switch self {
