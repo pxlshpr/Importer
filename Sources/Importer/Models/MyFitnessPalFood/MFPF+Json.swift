@@ -67,9 +67,11 @@ extension MFPFood {
            let date = timestamp.dateFromTimestamp
         {
             self.urlSlug = urlSlug
+            print("🟡 \(urlSlug)")
             self.createdAt = date
         } else {
             self.urlSlug = urlString
+            print("🔵 \(urlString)")
             self.createdAt = Date(timeIntervalSince1970: 0)
         }
     }
