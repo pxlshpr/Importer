@@ -67,12 +67,15 @@ extension MFPFood {
            let date = timestamp.dateFromTimestamp
         {
             self.urlSlug = urlSlug
-            print("🟡 \(urlSlug)")
             self.createdAt = date
+        } else if urlString.hasPrefix(MfpFoodPrefix) {
+            self.urlSlug = urlString.replacingOccurrences(of: MfpFoodPrefix, with: "")
+            self.createdAt = Date(timeIntervalSince1970: 0)
         } else {
             self.urlSlug = urlString
-            print("🔵 \(urlString)")
             self.createdAt = Date(timeIntervalSince1970: 0)
         }
     }
 }
+
+let MfpFoodPrefix = "https://www.myfitnesspal.com/food/calories/"
