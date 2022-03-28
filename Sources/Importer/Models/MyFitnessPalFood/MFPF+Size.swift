@@ -59,6 +59,10 @@ extension MFPFood.Size {
 //        parsed?.weight?.amount
 //    }
     
+    var trueMultiplier: Double {
+        multiplier * value
+    }
+    
     var weightUnit: WeightUnit? {
         parsed?.weight?.unit
     }

@@ -74,6 +74,7 @@ public extension Array where Element == MFPFood.Size {
             return nil
         }
         
+        //TODO: Shouldn't we account for the value when making the comparison here as we're essentially assuming them all to be 1.0?
         /// Scale the lesser size up to match the greatest multiplier
         if weightSize.multiplier > volumeSize.multiplier {
             let volume = (weightSize.multiplier * volumeSize.value)/volumeSize.multiplier
@@ -116,8 +117,22 @@ public extension Array where Element == MFPFood.Size {
                            weightAmount: weightAmount,
                            weightUnit: weightUnit)
         case .volumeWithServing:
-            //TODO: Do this when implementing it
-            return nil
+            guard let volumeUnit = densitySize.volumeUnit,
+                  let weightSize = weightSize,
+                  let weightUnit = weightSize.weightUnit
+            else {
+                return nil
+            }
+            
+            if weightSize.multiplier > densitySize.multiplier {
+                let volume = (weightSize.multiplier * densitySize.value)/densitySize.multiplier
+                return Density(volumeAmount: volume, volumeUnit: volumeUnit,
+                               weightAmount: weightSize.value, weightUnit: weightUnit)
+            } else {
+                let weight = (densitySize.multiplier * weightSize.value)/weightSize.multiplier
+                return Density(volumeAmount: densitySize.value, volumeUnit: volumeUnit,
+                               weightAmount: weight, weightUnit: weightUnit)
+            }
         default:
             return nil
         }
