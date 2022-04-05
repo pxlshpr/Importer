@@ -66,6 +66,14 @@ public struct ScreenshotFood {
     public let fat: Double
     public let protein: Double
     
+    public init(name: String, energy: Double, carbs: Double, fat: Double, protein: Double) {
+        self.name = name
+        self.energy = energy
+        self.carbs = carbs
+        self.fat = fat
+        self.protein = protein
+    }
+    
     func matchesNutrients(of food: Importer.Food) -> Bool {
         energy == food.energy
         && carbs == food.carbohydrate
