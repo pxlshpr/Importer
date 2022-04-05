@@ -13,6 +13,7 @@ public struct MyFitnessPalImporter {
     }
     
     public static func search(for screenshotFood: ScreenshotFood, page: Int, completion: @escaping MfpFoodUrlCompletionHandler) {
+        print("Searching page: \(page)")
         Engine.getMfpSearchResults(for: screenshotFood.name, page: page) { foods in
             if let match = foods.match(for: screenshotFood) {
                 completion(match)
