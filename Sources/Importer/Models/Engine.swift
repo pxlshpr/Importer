@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftSugar
 
 public typealias MfpSearchCompletionHandler = (_ results: [Food]) -> Void
-public typealias MfpFoodUrlCompletionHandler = (_ food: Food) -> Void
+public typealias MfpFoodUrlCompletionHandler = (_ food: Food?) -> Void
 
 public class Engine: NSObject, ObservableObject {
 //    public static let shared = Engine()
@@ -52,8 +52,8 @@ public extension Engine {
         completion?(food)
     }
     
-    static func getMfpSearchResults(for searchString: String, completion: MfpSearchCompletionHandler? = nil) {
-        let urlString = searchString.mfpSearchUrlString
+    static func getMfpSearchResults(for searchString: String, page: Int? = nil, completion: MfpSearchCompletionHandler? = nil) {
+        let urlString = searchString.mfpSearchUrlString(page: page)
         guard let html = urlString.htmlContents, let jsonString = html.secondCapturedGroup(using: RxMfpResults) else {
             print("Couldn't parse MFP HTML: \(urlString)")
             NotificationCenter.default.post(name: .didGetFoodResults, object: nil)

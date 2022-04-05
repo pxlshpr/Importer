@@ -22,8 +22,13 @@ extension String {
 }
 
 extension String {
-    var mfpSearchUrlString: String {
-        "https://www.myfitnesspal.com/food/search?search=\(self.percentEscaped)"
+    
+    func mfpSearchUrlString(page: Int? = nil) -> String {
+        if let page = page {
+            return "https://www.myfitnesspal.com/food/search?page=\(page)&search=\(self.percentEscaped)"
+        } else {
+            return "https://www.myfitnesspal.com/food/search?search=\(self.percentEscaped)"
+        }
     }
 }
 
