@@ -60,11 +60,11 @@ public extension Array where Element == Importer.Food {
 
 
 public struct ScreenshotFood {
-    let name: String
-    let energy: Double
-    let carbs: Double
-    let fat: Double
-    let protein: Double
+    public let name: String
+    public let energy: Double
+    public let carbs: Double
+    public let fat: Double
+    public let protein: Double
     
     func matchesNutrients(of food: Importer.Food) -> Bool {
         energy == food.energy
