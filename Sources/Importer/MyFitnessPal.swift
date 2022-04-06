@@ -15,8 +15,8 @@ public struct MyFitnessPalImporter {
         Engine.getMfpFood(for: url, completion: completion)
     }
     
-    public static func search(for screenshotFood: ScreenshotFood, completion: @escaping MfpFoodUrlCompletionHandler) {
-        search(for: screenshotFood, page: 1, completion: completion)
+    public static func search(for screenshotFood: ScreenshotFood, delegate: MFPImporterDelegate? = nil, completion: @escaping MfpFoodUrlCompletionHandler) {
+        search(for: screenshotFood, page: 1, delegate: delegate, completion: completion)
     }
     
     public static func search(for screenshotFood: ScreenshotFood, page: Int, delegate: MFPImporterDelegate? = nil, completion: @escaping MfpFoodUrlCompletionHandler) {
