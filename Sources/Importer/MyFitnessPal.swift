@@ -1,3 +1,10 @@
+
+public protocol MFPImporterDelegate {
+    func beganSearching(page: Int)
+    func matchFound()
+    func noMatchFound()
+}
+
 public struct MyFitnessPalImporter {
     
     public static func search(for searchText: String, page: Int? = nil, completion: @escaping MfpSearchCompletionHandler) {
@@ -12,14 +19,17 @@ public struct MyFitnessPalImporter {
         search(for: screenshotFood, page: 1, completion: completion)
     }
     
-    public static func search(for screenshotFood: ScreenshotFood, page: Int, completion: @escaping MfpFoodUrlCompletionHandler) {
+    public static func search(for screenshotFood: ScreenshotFood, page: Int, delegate: MFPImporterDelegate? = nil, completion: @escaping MfpFoodUrlCompletionHandler) {
         print("Searching page: \(page)")
+        delegate?.beganSearching(page: page)
         Engine.getMfpSearchResults(for: screenshotFood.name, page: page) { foods in
             if let match = foods.match(for: screenshotFood) {
+                delegate?.matchFound()
                 completion(match)
             } else if page < 5 {
-                search(for: screenshotFood, page: page + 1, completion: completion)
+                search(for: screenshotFood, page: page + 1, delegate: delegate, completion: completion)
             } else {
+                delegate?.noMatchFound()
                 completion(nil)
             }
         }
