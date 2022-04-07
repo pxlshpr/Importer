@@ -22,17 +22,18 @@ public class Food {
     public var carbohydrate: Double = 0
     public var fat: Double = 0
     public var protein: Double = 0
+    
+    public var nutrients: [Nutrient] = []
     public var sizes: [Size] = []
     
     public var sourceUrl: String?
     
-    func scaleNutrientsBy(scale: Double) {
-        energy = energy * scale
-        carbohydrate = carbohydrate * scale
-        fat = fat * scale
-        protein = protein * scale
-    }
-    
+//    func scaleNutrientsBy(scale: Double) {
+//        energy = energy * scale
+//        carbohydrate = carbohydrate * scale
+//        fat = fat * scale
+//        protein = protein * scale
+//    }
 }
 
 extension Food: Hashable {
@@ -51,7 +52,8 @@ extension Food: Hashable {
             lhs.protein == rhs.protein &&
 //            lhs.densityVolume == rhs.densityVolume &&
 //            lhs.densityWeight == rhs.densityWeight &&
-            lhs.sizes == rhs.sizes
+            lhs.sizes == rhs.sizes &&
+            lhs.nutrients == rhs.nutrients
         )
     }
     
@@ -70,6 +72,7 @@ extension Food: Hashable {
 //        hasher.combine(densityVolume)
 //        hasher.combine(densityWeight)
         hasher.combine(sizes)
+        hasher.combine(nutrients)
     }
 }
 
