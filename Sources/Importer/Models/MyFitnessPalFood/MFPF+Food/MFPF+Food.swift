@@ -39,10 +39,13 @@ extension MFPFood {
         food.name = cleanedName
         food.brand = cleanedBrand
         food.amountUnit = .serving
+        
         food.energy = energy ?? 0
         food.carbohydrate = carb ?? 0
         food.fat = fat ?? 0
         food.protein = protein ?? 0
+        
+        food.nutrients = nutrients.foodNutrients
         
         food.sourceUrl = "https://www.myfitnesspal.com\(urlSlug)"
         return food
@@ -58,4 +61,12 @@ extension MFPFood {
 //            .removingDuplicates()
 //            .filter { $0 != baseFoodSize }
 //    }
+}
+
+extension Array where Element == MFPFood.Nutrient {
+    var foodNutrients: [Food.Nutrient] {
+        map {
+            Food.Nutrient(type: $0.type, amount: $0.amount, unit: $0.unit)
+        }
+    }
 }
