@@ -1,4 +1,5 @@
 import Foundation
+import PrepUnits
 
 extension MFPFood {
     public init?(json: [String: Any], urlString: String) {
@@ -20,6 +21,8 @@ extension MFPFood {
             self.name = name
         }
         
+        //MARK: - Macro Nutrients
+
         if let energy = nutrients["energy"] as? [String: Any],
            let unit = energy["unit"] as? String,
            unit == "calories"
@@ -33,6 +36,86 @@ extension MFPFood {
         self.fat = nutrients["fat"] as? Double
         self.protein = nutrients["protein"] as? Double
         
+        //MARK: - Micro Nutrients
+        
+        var nutrientsArray = [Nutrient]()
+        if let amount = nutrients["fiber"] as? Double, amount > 0 {
+            nutrientsArray.append(
+                Nutrient(type: .dietaryFiber, amount: amount, unit: .g)
+            )
+        }
+        if let amount = nutrients["sugar"] as? Double, amount > 0 {
+            nutrientsArray.append(
+                Nutrient(type: .sugars, amount: amount, unit: .g)
+            )
+        }
+        if let amount = nutrients["saturated_fat"] as? Double, amount > 0 {
+            nutrientsArray.append(
+                Nutrient(type: .saturatedFat, amount: amount, unit: .g)
+            )
+        }
+        if let amount = nutrients["polyunsaturated_fat"] as? Double, amount > 0 {
+            nutrientsArray.append(
+                Nutrient(type: .polyunsaturatedFat, amount: amount, unit: .g)
+            )
+        }
+        if let amount = nutrients["monounsaturated_fat"] as? Double, amount > 0 {
+            nutrientsArray.append(
+                Nutrient(type: .monounsaturatedFat, amount: amount, unit: .g)
+            )
+        }
+        if let amount = nutrients["trans_fat"] as? Double, amount > 0 {
+            nutrientsArray.append(
+                Nutrient(type: .transFat, amount: amount, unit: .g)
+            )
+        }
+        if let amount = nutrients["cholesterol"] as? Double, amount > 0 {
+            nutrientsArray.append(
+                Nutrient(type: .cholesterol, amount: amount, unit: .mg)
+            )
+        }
+        if let amount = nutrients["sodium"] as? Double, amount > 0 {
+            nutrientsArray.append(
+                Nutrient(type: .sodium, amount: amount, unit: .mg)
+            )
+        }
+        if let amount = nutrients["potassium"] as? Double, amount > 0 {
+            nutrientsArray.append(
+                Nutrient(type: .potassium, amount: amount, unit: .mg)
+            )
+        }
+        if let amount = nutrients["vitamin_a"] as? Double, amount > 0,
+           let converted = NutrientType.vitaminA.convertRDApercentage(amount)
+        {
+            nutrientsArray.append(
+                Nutrient(type: .vitaminA, amount: converted.0, unit: converted.1)
+            )
+        }
+        if let amount = nutrients["vitamin_c"] as? Double, amount > 0,
+           let converted = NutrientType.vitaminC.convertRDApercentage(amount)
+        {
+            nutrientsArray.append(
+                Nutrient(type: .vitaminC, amount: converted.0, unit: converted.1)
+            )
+        }
+        if let amount = nutrients["calcium"] as? Double, amount > 0,
+           let converted = NutrientType.calcium.convertRDApercentage(amount)
+        {
+            nutrientsArray.append(
+                Nutrient(type: .calcium, amount: converted.0, unit: converted.1)
+            )
+        }
+        if let amount = nutrients["iron"] as? Double, amount > 0,
+           let converted = NutrientType.iron.convertRDApercentage(amount)
+        {
+            nutrientsArray.append(
+                Nutrient(type: .iron, amount: converted.0, unit: converted.1)
+            )
+        }
+
+        self.nutrients = nutrientsArray
+        
+        //MARK: - Sizes
         var sizes = [Size]()
         if let servingSizes = item["serving_sizes"] as? [[String: Any]] {
             for i in 0..<servingSizes.count {
@@ -62,6 +145,7 @@ extension MFPFood {
         }
         self.sizes = sizes
         
+        //MARK: - Metadata
         if let timestamp = urlString.firstCapturedGroup(using: RxFileWithTimestamp),
            let urlSlug = urlString.secondCapturedGroup(using: RxFileWithTimestamp),
            let date = timestamp.dateFromTimestamp

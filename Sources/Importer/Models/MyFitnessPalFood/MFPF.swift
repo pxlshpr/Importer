@@ -9,6 +9,7 @@ public struct MFPFood: Identifiable {
     public let fat: Double?
     public let protein: Double?
     public let sizes: [Size]
+    public let nutrients: [Nutrient]
     public let urlSlug: String
     public let createdAt: Date
     public var processedSizes: [ProcessedSize] = []
