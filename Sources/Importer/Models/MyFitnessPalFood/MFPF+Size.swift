@@ -51,7 +51,7 @@ extension MFPFood.Size {
         case .servingWithWeight:
             return name.parsedServingWithWeight
         default:
-            return nil
+            return name.parsedServing
         }
     }
     
