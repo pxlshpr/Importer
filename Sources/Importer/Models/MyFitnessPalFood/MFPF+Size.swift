@@ -51,7 +51,7 @@ extension MFPFood.Size {
         case .servingWithWeight:
             return name.parsedServingWithWeight
         default:
-            return name.parsedServing
+            return nil
         }
     }
     
@@ -172,9 +172,10 @@ extension String {
     }
     
     var servingType: ServingType {
-        guard !isPlainServing else {
-            return .unsupported
-        }
+        /// Removing this for now as it fails for foods that has only a serving size
+//        guard !isPlainServing else {
+//            return .unsupported
+//        }
         
         for type in ServingType.allCases {
             guard !(type == .servingWithServing && isServingOfPlainServing) else {
