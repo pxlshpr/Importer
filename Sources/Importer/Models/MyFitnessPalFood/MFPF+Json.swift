@@ -53,17 +53,14 @@ extension MFPFood {
             self.name = name
         }
         
-        //MARK: - Macros
+        //MARK: - Energy
         
         guard
             let unit = firstServingSize["unit"] as? String,
             let nutrition = firstServingSize["nutrition"] as? [String: Any],
             let energy = nutrition["energy"] as? [String: Any],
             let energyUnit = energy["unit"] as? String,
-            let energyValue = energy["value"] as? Double,
-            let carbs = nutrition["carbs"] as? Double,
-            let protein = nutrition["protein"] as? Double,
-            let fat = nutrition["fat"] as? Double
+            let energyValue = energy["value"] as? Double
         else {
             return nil
         }
@@ -76,9 +73,25 @@ extension MFPFood {
             baseEnergy = energyValue / 4.184
         }
         self.energy = baseEnergy
-        self.carb = carbs
-        self.fat = fat
-        self.protein = protein
+        
+        //MARK: - Macros
+        if let amount = nutrition["carbs"] as? Double, amount > 0 {
+            self.carb = amount
+        } else {
+            self.carb = 0
+        }
+
+        if let amount = nutrition["fat"] as? Double, amount > 0 {
+            self.fat = amount
+        } else {
+            self.fat = 0
+        }
+
+        if let amount = nutrition["protein"] as? Double, amount > 0 {
+            self.protein = amount
+        } else {
+            self.protein = 0
+        }
 
         //MARK: - Micros
         

@@ -13,4 +13,5 @@ final class ImporterTests: XCTestCase {
     }
 }
 
-let urlString = "https://www.myfitnesspal.com/food/calories/banana-1774572771"
+//let urlString = "https://www.myfitnesspal.com/food/calories/banana-1774572771"
+let urlString = "https://www.myfitnesspal.com/food/calories/banana-platano-1961211846"
