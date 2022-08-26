@@ -2,10 +2,15 @@ import XCTest
 @testable import Importer
 
 final class ImporterTests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-//        XCTAssertEqual(Importer().text, "Hello, World!")
+    
+    func testFoodFromJSON() async throws {
+        guard let mfpFood = await MFPFood.getFoodAt(urlString: urlString) else {
+            XCTFail("Couldn't get food json from json string")
+            return
+        }
+        
+        XCTAssertTrue(true)
     }
 }
+
+let urlString = "https://www.myfitnesspal.com/food/calories/banana-1774572771"

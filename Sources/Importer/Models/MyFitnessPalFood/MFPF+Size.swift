@@ -3,10 +3,10 @@ import PrepUnits
 
 extension MFPFood {
     public struct Size: Equatable {
-        public let name: String
-        public let value: Double
-        public let multiplier: Double
-        public let index: Int
+        public var name: String
+        public var value: Double
+        public var multiplier: Double
+        public var index: Int
         
         public static func ==(lhs: Size, rhs: Size) -> Bool {
             lhs.name == rhs.name
